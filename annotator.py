@@ -3,12 +3,14 @@
 
 import os
 import glob
+import sys
+sys.path.append(r"C:\\Users\\ingrj\\AppData\\Roaming\\Python\\Python312\\site-packages")
 import cv2 as cv
 from ultralytics import YOLO
 
 
 # input
-MODEL_PATH = "models/svk.pt"
+MODEL_PATH = "models/small_best.pt"
 IMAGE_FOLDER_PATH = "for_annotation"
 
 

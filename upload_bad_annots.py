@@ -10,7 +10,7 @@ from pathlib import Path
 
 if __name__ == "__main__":
     # Replace these values with your actual project ID and API token
-    project_id = "49"
+    project_id = "52"
     API_KEY = "206577e02d599ccf1ad22b516ade0579d1f2e425"  # replace by your Access Token (see Account & Settings)
     # folder with images to upload
     imgs_folder = Path(os.path.join("for_correction"))
