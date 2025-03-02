@@ -10,12 +10,12 @@ from pathlib import Path
 
 if __name__ == "__main__":
     # Replace these values with your actual project ID and API token
-    project_id = "52"
-    API_KEY = "206577e02d599ccf1ad22b516ade0579d1f2e425"  # replace by your Access Token (see Account & Settings)
+    project_id = ""
+    API_KEY = ""  # replace by your Access Token (see Account & Settings)
     # folder with images to upload
-    imgs_folder = Path(os.path.join("for_correction"))
+    imgs_folder = Path(os.path.join())
     # The LabelStudio API endpoint for uploading files
-    url = f"http://147.33.58.23:8080/api/projects/{project_id}/tasks"
+    url = f""
     # Prepare the headers with the API token
     headers = {
         "Authorization": f"Token {API_KEY}",
