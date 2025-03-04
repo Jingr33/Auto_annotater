@@ -26,7 +26,6 @@ class Prediction ():
 
         annotations = []
         for annot_line in enumerate(annot_lines):
-            #annot_id = annot_line[0]
             annot_data = annot_line[1]
             annot_data.replace("\n", "")
             annot_data = annot_data.split(" ")

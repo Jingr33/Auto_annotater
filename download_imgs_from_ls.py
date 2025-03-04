@@ -7,7 +7,7 @@ import requests
 
 
 API_KEY = "206577e02d599ccf1ad22b516ade0579d1f2e425" # your API Key
-PROJECT_ID = "26" # id (from URL) of your LabelStudio project
+PROJECT_ID = "27" # id (from URL) of your LabelStudio project
 BASE_URL = "http://147.33.58.23:8080" # LAbelStudio API endpoint for download
 
 headers = {"Authorization": f"Token {API_KEY}"} # API header

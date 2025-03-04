@@ -7,6 +7,7 @@ import sys
 sys.path.append(r"C:\\Users\\ingrj\\AppData\\Roaming\\Python\\Python312\\site-packages")
 import cv2 as cv
 from ultralytics import YOLO
+from icecream import ic
 
 
 # input
@@ -25,10 +26,13 @@ def _create_annotation(data : dict):
     """
     string = ""
     for one_annot in data:
+        ic(one_annot.boxes)
         for box in one_annot.boxes:
+            ic(box)
             class_index = int(box.cls.item())
-            x, y, w, h = box.xywhn[0]  # Souřadnice detekovaného objektu
-            string = string + f"{class_index} {x} {y} {w} {h}\n"
+            if not class_index in [1, 3]:
+                x, y, w, h = box.xywhn[0]  # Souřadnice detekovaného objektu
+                string = string + f"{class_index} {x} {y} {w} {h}\n"
     return string
 
 def _save(img, img_name, annots_string):
