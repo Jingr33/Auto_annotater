@@ -1,4 +1,4 @@
-""" Script for downloading image from LabelStudio projects.
+""" Script for downloading images from LabelStudio projects.
 """
 
 import base64
@@ -7,7 +7,7 @@ import requests
 
 
 API_KEY = "206577e02d599ccf1ad22b516ade0579d1f2e425" # your API Key
-PROJECT_ID = "27" # id (from URL) of your LabelStudio project
+PROJECT_ID = "59" # id (from URL) of your LabelStudio project
 BASE_URL = "http://147.33.58.23:8080" # LAbelStudio API endpoint for download
 
 headers = {"Authorization": f"Token {API_KEY}"} # API header
@@ -29,6 +29,7 @@ while True: # while loop due to paging
     all_tasks.extend(unannotated_tasks)
     PAGE += 1
 
+print("Staženo!")
 print(f"Počet neoanotovaných obrázků {len(all_tasks)}")
 
 # save each task as jpg file
@@ -38,3 +39,5 @@ for task in all_tasks:
 
     with open(os.path.join('for_annotation', f"{task['id']}.jpg"), "wb") as f:
         f.write(image_bytes)
+
+print("Uloženo!")

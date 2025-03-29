@@ -1,4 +1,4 @@
-""" Script for slection of annotated images in folder for_selection.
+""" Script for selection of annotated images in folder for_selection.
     Accepted images and annotations are moved into 'accepted/images' and 'aacepted/labels'.
     Rejected images and annotations are moved to for_correction folder.
 """
@@ -54,7 +54,7 @@ class Canvas():
         folder = "for_selection"
         self.images = list(os.listdir(os.path.join(folder, "images")))
         self.annotations = list(os.listdir(os.path.join(folder, "labels")))
-        self.predictions = self._load_predictions(folder)
+        self.predictions = self._load_predictions(folder) # load max 500 items
         self.id = 0
         self._event_manager()
 
@@ -152,8 +152,9 @@ class Canvas():
             list: all annotation predistions
         """
         predictions = {}
+        image_list = os.listdir(os.path.join(folder, "images"))
         pred_id = 0
-        for file_name in os.listdir(os.path.join(folder, "images")):
+        for file_name in image_list[0:500]:
             file_name = file_name.split(".")[0]
             predictions[pred_id] = Prediction(file_name)
             pred_id += 1
@@ -233,5 +234,12 @@ class Canvas():
             os.replace(os.path.join(images_from, img), os.path.join(dest_folder, img))
         for annot in annotations:
             os.replace(os.path.join(annotations_from, annot), os.path.join(dest_folder, annot))
+
+if os.listdir("for_correction") or os.listdir(os.path.join("accepted", "images")):
+    input_str = "Složky for_correction nebo accepted nejsou prázdé, chceš i přes to pokračovat? (y/n): "
+    if input(input_str) != "y":
+        raise SystemExit("Selekce přerušena")
+else:
+    print("Selector připraven!")
 
 Canvas()

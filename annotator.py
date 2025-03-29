@@ -1,17 +1,17 @@
-""" Script for annotating iamges from folder 'for_annotation' with selected YOLO model.
+""" Script for annotation of images from folder 'for_annotation' with selected YOLO model. 
+    It choose only best glottic slit, left vocal fold and right vocal fold annotation 
+    and create annotation file.
 """
 
 import os
-import glob
 import sys
+import glob
 sys.path.append(r"C:\\Users\\ingrj\\AppData\\Roaming\\Python\\Python312\\site-packages")
 import cv2 as cv
 from ultralytics import YOLO
-from icecream import ic
 
 
-# input
-MODEL_PATH = "models/small_best.pt"
+MODEL_PATH = "models/dataset4nano.pt"
 IMAGE_FOLDER_PATH = "for_annotation"
 
 
@@ -24,15 +24,20 @@ def _create_annotation(data : dict):
     Returns:
         str : an annotation file content
     """
-    string = ""
+    confs = {}
+    coords = {}
     for one_annot in data:
-        ic(one_annot.boxes)
         for box in one_annot.boxes:
-            ic(box)
             class_index = int(box.cls.item())
-            if not class_index in [1, 3]:
-                x, y, w, h = box.xywhn[0]  # Souřadnice detekovaného objektu
-                string = string + f"{class_index} {x} {y} {w} {h}\n"
+            if class_index not in [1, 3]:
+                if class_index not in confs.keys() or box.conf.item() > confs[class_index]:
+                    confs[class_index] = box.conf.item()
+                    coords[class_index] = box.xywhn[0]
+
+    string = ""
+    for class_idx in coords:
+        x, y, w, h = coords[class_idx]  # Souřadnice detekovaného objektu
+        string = string + f"{class_idx} {x} {y} {w} {h}\n"
     return string
 
 def _save(img, img_name, annots_string):
@@ -56,6 +61,12 @@ def _remove_orig_imgs():
     for img in orig_images:
         os.remove(img)
 
+# is for_selection folder empty?
+if (os.listdir(os.path.join("for_selection", "images"))
+    or os.listdir(os.path.join("for_selection", "labels"))):
+    raise SystemExit("Složka for_selection není vyprázdněna")
+else:
+    print("Annotator připraven.")
 
 COUNT = 0
 model = YOLO(MODEL_PATH)
@@ -67,6 +78,5 @@ for img_file in os.listdir(IMAGE_FOLDER_PATH):
     COUNT += 1
     print(f"POČET: {COUNT}")
 
-clear_orig_folder = bool(input("Remove images from origin folder (True / False): "))
-if clear_orig_folder:
+if input("Remove images from origin folder (y/n): ") == "y":
     _remove_orig_imgs()
