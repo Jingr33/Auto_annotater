@@ -6,9 +6,9 @@ import os
 import requests
 
 
-API_KEY = "206577e02d599ccf1ad22b516ade0579d1f2e425" # your API Key
-PROJECT_ID = "59" # id (from URL) of your LabelStudio project
-BASE_URL = "http://147.33.58.23:8080" # LAbelStudio API endpoint for download
+API_KEY = "" # your API Key
+PROJECT_ID = "" # id (from URL) of your LabelStudio project
+BASE_URL = "" # LAbelStudio API endpoint for download
 
 headers = {"Authorization": f"Token {API_KEY}"} # API header
 API_URL = f"{BASE_URL}/api/projects/{PROJECT_ID}/tasks?completed=false" # API url address
