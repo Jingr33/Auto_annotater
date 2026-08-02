@@ -1,5 +1,5 @@
-import os
 import queue
+import threading
 from typing import List
 
 from backend.core.frame_dto import FrameDTO
@@ -7,7 +7,8 @@ from backend.core.steps.source_step import SourceStep
 from backend.core.steps.step import Step
 from backend.core.runners.source_runner import SourceRunner
 from backend.core.runners.step_runner import StepRunner
-from backend.data_manager import DataManager
+from backend.core.data_manager import DataManager
+from backend.enums.image_prediction_status import ImagePredictionStatus
 
 QUEUE_MAXSIZE = 200
 
@@ -15,17 +16,26 @@ QUEUE_MAXSIZE = 200
 class PipelineManager:
     def __init__(
         self,
-        source_step: SourceStep,
+        source_step: SourceStep | None,
         pipeline_steps: List[Step],
         workspace: str,
         with_frontend: bool = False,
+        only_pending: bool = True,
     ):
         self.data_manager = DataManager(workspace)
+        self.only_pending = only_pending
 
         n_queues = len(pipeline_steps) + (1 if with_frontend else 0)
         queues = [queue.Queue(maxsize=QUEUE_MAXSIZE) for _ in range(n_queues)]
 
-        self._source_runner = SourceRunner(source_step, queues[0])
+        if source_step is None:
+            self._source_runner = threading.Thread(
+                target=self._enqueue_pending_items,
+                args=(queues[0],),
+                daemon=True,
+            )
+        else:
+            self._source_runner = SourceRunner(source_step, queues[0])
 
         self._step_runners: List[StepRunner] = []
         for i, step in enumerate(pipeline_steps):
@@ -48,10 +58,13 @@ class PipelineManager:
             r.start()
         self._started = True
 
+    def wait(self) -> None:
+        self._source_runner.join()
+        for runner in self._step_runners:
+            runner.join()
+
     def finalize(self) -> None:
-        rejected = self.data_manager.get_items("rejected")
-        for item in rejected:
-            self.data_manager.remove_item(item["id"])
+        self.data_manager.close()
 
     def get_current(self) -> FrameDTO | None:
         if self._current_dto is not None:
@@ -85,7 +98,7 @@ class PipelineManager:
         if dto is None:
             return
         self._history.append(dto.item_id)
-        self.data_manager.set_status(dto.item_id, "accepted")
+        self.data_manager.set_status(dto.item_id, ImagePredictionStatus.ACCEPTED)
         self._current_dto = None
 
     def reject(self) -> None:
@@ -93,7 +106,7 @@ class PipelineManager:
         if dto is None:
             return
         self._history.append(dto.item_id)
-        self.data_manager.set_status(dto.item_id, "rejected")
+        self.data_manager.set_status(dto.item_id, ImagePredictionStatus.REJECTED)
         self._current_dto = None
 
     def skip(self) -> None:
@@ -106,6 +119,18 @@ class PipelineManager:
         if not self._history:
             return False
         item_id = self._history.pop()
-        self.data_manager.set_status(item_id, "pending")
+        self.data_manager.set_status(item_id, ImagePredictionStatus.PENDING)
         self._current_dto = FrameDTO(item_id=item_id, workspace=self.data_manager.workspace)
         return True
+
+    def _enqueue_pending_items(self, output_queue: queue.Queue) -> None:
+        if self.only_pending:
+            items = self.data_manager.get_items(ImagePredictionStatus.PENDING)
+        else:
+            items = self.data_manager.get_items()
+        self._total = len(items)
+        for item in items:
+            output_queue.put(
+                FrameDTO(item_id=item["id"], workspace=self.data_manager.workspace)
+            )
+        output_queue.put(None)

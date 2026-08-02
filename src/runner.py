@@ -8,53 +8,75 @@ from src.backend.config.ssh_config import SSHConfig
 from src.backend.core.pipeline_manager import PipelineManager
 from src.backend.enums.model_type import ModelType
 from src.backend.enums.step_type import StepType
-from src.backend.prediction_manager import PredictionManager
-from src.backend.registry import create_step
-from src.frontend.pyqt_frontend import PyQtFrontend
+from src.backend.core.registry import StepRegistry
+from src.frontend.pyqt.pyqt_frontend import PyQtFrontend
 
 
-def _config(name: StepType, args):
-    if name is StepType.IMAGE_LOADER:
-        model_type = ModelType(args.model) if args.model else None
-        return ImageLoaderConfig(source_path=args.source, output_path=args.output, model_type=model_type)
-    elif name is StepType.ANNOTATE:
-        model_type = ModelType(args.model) if args.model else None
-        ssh = SSHConfig(
-            host=args.ssh_host or "",
-            port=args.ssh_port,
-            user=args.ssh_user or "",
-            key_path=args.ssh_key_path or "",
-            remote_work_dir=args.remote_work_dir,
-            remote_model_path=args.remote_model_path or "",
-            remote_python=args.remote_python,
-        ) if args.ssh_host else None
-        return AnnotateStepConfig(model_type=model_type, model_path=args.model_path, ssh=ssh)
+class Runner:
 
+    def __init__(self, args):
+        self.args = args
 
-def run(args) -> None:
-    steps = [StepType(s) for s in args.steps]
+    def run(self) -> None:
+        steps = [StepType(s) for s in self.args.steps]
 
-    app = QApplication(sys.argv)
+        if steps == [StepType.SELECT]:
+            manager = PipelineManager(
+                source_step=None,
+                pipeline_steps=[],
+                workspace=self.args.output,
+                with_frontend=True,
+                only_pending=self.args.only_pending,
+            )
+            manager.start()
+            has_frontend = True
+        else:
+            has_frontend = steps[-1] is StepType.SELECT
+            pipeline_names = steps[:-1] if has_frontend else steps
 
-    if steps == [StepType.SELECT]:
-        manager = PredictionManager(args.output)
-    else:
-        has_frontend = steps[-1] is StepType.SELECT
-        pipeline_names = steps[:-1] if has_frontend else steps
+            source_step = None
+            step_instances = []
+            for i, name in enumerate(pipeline_names):
+                instance = StepRegistry.create_step(name, self._build_config(name))
+                if i == 0:
+                    source_step = instance
+                else:
+                    step_instances.append(instance)
 
-        source_step = None
-        step_instances = []
-        for i, name in enumerate(pipeline_names):
-            instance = create_step(name, _config(name, args))
-            if i == 0:
-                source_step = instance
-            else:
-                step_instances.append(instance)
+            manager = PipelineManager(source_step, step_instances,
+                                      workspace=self.args.output,
+                                      with_frontend=has_frontend)
+            manager.start()
 
-        manager = PipelineManager(source_step, step_instances, workspace=args.output,
-                                  with_frontend=has_frontend)
-        manager.start()
+        if has_frontend:
+            app = QApplication(sys.argv)
+            window = PyQtFrontend(manager)
+            window.show()
+            app.exec()
+        else:
+            manager.wait()
 
-    window = PyQtFrontend(manager)
-    window.show()
-    app.exec()
+    def _build_config(self, name: StepType):
+        if name is StepType.IMAGE_LOADER:
+            model_type = ModelType(self.args.model) if self.args.model else None
+            return ImageLoaderConfig(
+                source_path=self.args.source,
+                output_path=self.args.output,
+                model_type=model_type,
+            )
+        elif name is StepType.ANNOTATE:
+            model_type = ModelType(self.args.model) if self.args.model else None
+            ssh = SSHConfig(
+                host=self.args.ssh_host or "",
+                port=self.args.ssh_port,
+                user=self.args.ssh_user or "",
+                key_path=self.args.ssh_key_path or "",
+                remote_work_dir=self.args.remote_work_dir,
+                remote_model_path=self.args.remote_model_path or "",
+                remote_python=self.args.remote_python,
+            ) if self.args.ssh_host else None
+            return AnnotateStepConfig(
+                model_type=model_type,
+                model_path=self.args.model_path,
+                ssh=ssh,
+            )

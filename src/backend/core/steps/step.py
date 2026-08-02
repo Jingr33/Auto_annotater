@@ -4,11 +4,9 @@ from backend.core.frame_dto import FrameDTO
 
 
 class Step(ABC):
-    name: str = "step"
-
     @abstractmethod
     def process(self, dto: FrameDTO) -> FrameDTO | None:
-        ...
+        pass
 
     def postprocess(self) -> None:
-        ...
+        pass

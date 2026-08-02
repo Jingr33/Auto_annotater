@@ -5,7 +5,7 @@ import tempfile
 from typing import List, Optional, Tuple
 
 from backend.annotations.polygon_annotation import PolygonAnnotation
-from backend.base_annotator import BaseAnnotator
+from backend.annotators.base_annotator import BaseAnnotator
 from backend.config.medsam2_config import MedSAM2Config
 from backend.config.ssh_config import SSHConfig
 from backend.enums.run_mode import RunMode
@@ -98,8 +98,7 @@ class MedSAM2Annotator(BaseAnnotator):
     ) -> str:
         output_path = remote_image_path.rsplit(".", 1)[0] + "_result.json"
         python = self.ssh.remote_python
-        lines = [f"cd {self.ssh.remote_work_dir}"]
-        return " && ".join(lines) + f" && {python} -c 'import json; result={{\"polygons\": []}}; open(\"{output_path}\", \"w\").write(json.dumps(result))'"
+        return f"cd {self.ssh.remote_work_dir} && {python} -c 'import json; result={{\"polygons\": []}}; open(\"{output_path}\", \"w\").write(json.dumps(result))'"
 
     def _fetch_result(self, remote_image_path: str) -> str:
         result_name = os.path.basename(remote_image_path).rsplit(".", 1)[0] + "_result.json"

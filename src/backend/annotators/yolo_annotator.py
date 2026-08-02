@@ -4,7 +4,7 @@ import cv2 as cv
 from ultralytics import YOLO
 
 from backend.annotations.bbox_annotation import BBoxAnnotation
-from backend.base_annotator import BaseAnnotator
+from backend.annotators.base_annotator import BaseAnnotator
 from backend.config.annotate_step_config import AnnotateStepConfig
 from backend.config.yolo_config import YOLOConfig
 

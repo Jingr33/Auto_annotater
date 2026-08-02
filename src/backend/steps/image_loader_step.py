@@ -5,13 +5,11 @@ from typing import Generator
 from backend.config.image_loader_config import ImageLoaderConfig
 from backend.core.frame_dto import FrameDTO
 from backend.core.steps.source_step import SourceStep
-from backend.data_manager import DataManager
+from backend.core.data_manager import DataManager
 from backend.enums.model_type import ModelType
 
 
 class ImageLoaderStep(SourceStep):
-    name = "image_loader"
-
     def __init__(self, config: ImageLoaderConfig):
         self.config = config
 
