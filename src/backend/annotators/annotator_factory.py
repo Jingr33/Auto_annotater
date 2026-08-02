@@ -7,7 +7,6 @@ from backend.enums.run_mode import RunMode
 
 
 class AnnotatorFactory:
-
     @staticmethod
     def create(config: AnnotateStepConfig) -> BaseAnnotator:
         if config.model_type is ModelType.YOLO:

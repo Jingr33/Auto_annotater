@@ -7,7 +7,6 @@ from backend.annotations.polygon_annotation import PolygonAnnotation
 
 
 class AnnotationParser:
-
     @staticmethod
     def load(file_path: str) -> List[Annotation]:
         if not os.path.exists(file_path):

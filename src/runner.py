@@ -13,7 +13,6 @@ from src.frontend.pyqt.pyqt_frontend import PyQtFrontend
 
 
 class Runner:
-
     def __init__(self, args):
         self.args = args
 

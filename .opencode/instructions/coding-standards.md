@@ -38,6 +38,7 @@
 - All imports must be at the top of the file, before any function or class definition. Group them: standard library, third-party, local.
 - Never write an import inside a function or method body. If a circular dependency makes a top-level import impossible, create a new file that both modules can import from, and put the import there at the top.
 - Empty function or method bodies (e.g. abstract method stubs, no-op implementations) must use `pass`, never `...`.
+- Do not leave a blank line after a class definition. The class body starts immediately on the next line.
 
 ## Comments
 

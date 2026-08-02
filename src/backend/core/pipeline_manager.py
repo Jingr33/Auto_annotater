@@ -9,8 +9,7 @@ from backend.core.runners.source_runner import SourceRunner
 from backend.core.runners.step_runner import StepRunner
 from backend.core.data_manager import DataManager
 from backend.enums.image_prediction_status import ImagePredictionStatus
-
-QUEUE_MAXSIZE = 200
+from config import QUEUE_MAXSIZE
 
 
 class PipelineManager:
