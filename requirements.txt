@@ -2,4 +2,5 @@ opencv-python
 ultralytics
 requests
 numpy
+Pillow
 PyQt6

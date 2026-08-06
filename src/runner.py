@@ -78,4 +78,6 @@ class Runner:
                 model_type=model_type,
                 model_path=self.args.model_path,
                 ssh=ssh,
+                source_workspace=self.args.source or self.args.output,
+                medsam_image_size=self.args.medsam_image_size,
             )

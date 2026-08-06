@@ -9,3 +9,5 @@ class AnnotateStepConfig:
     model_type: ModelType
     model_path: str = ""
     ssh: SSHConfig = None
+    source_workspace: str = ""
+    medsam_image_size: int = 1024

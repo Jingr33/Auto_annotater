@@ -49,4 +49,7 @@ class CLIArgumentParser:
         parser.add_argument("--only-pending", action="store_true", default=True,
                             help="Show only pending items in SELECT step (default: True)")
 
+        parser.add_argument("--medsam-image-size", type=int, default=1024,
+                            help="Image size for MEDSAM npy export (default: 1024)")
+
         return parser

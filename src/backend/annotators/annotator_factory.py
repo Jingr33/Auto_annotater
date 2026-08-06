@@ -9,9 +9,9 @@ from backend.enums.run_mode import RunMode
 class AnnotatorFactory:
     @staticmethod
     def create(config: AnnotateStepConfig) -> BaseAnnotator:
-        if config.model_type is ModelType.YOLO:
+        if config.model_type == ModelType.YOLO:
             return YOLOAnnotator(config)
-        elif config.model_type is ModelType.MEDSAM2:
+        elif config.model_type == ModelType.MEDSAM2:
             return MedSAM2Annotator(
                 model_path=config.model_path,
                 run=RunMode.REMOTE if config.ssh and config.ssh.host else RunMode.LOCAL,
