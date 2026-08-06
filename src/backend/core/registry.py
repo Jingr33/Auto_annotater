@@ -5,7 +5,7 @@ from backend.enums.step_type import StepType
 
 class StepRegistry:
     _registry = {
-        StepType.IMAGE_LOADER: ("backend.steps.image_loader_step", "ImageLoaderStep"),
+        StepType.LOAD: ("backend.steps.image_loader_step", "ImageLoaderStep"),
         StepType.ANNOTATE: ("backend.steps.annotate_step", "AnnotateStep"),
     }
 

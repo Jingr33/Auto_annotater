@@ -56,7 +56,7 @@ class Runner:
             manager.wait()
 
     def _build_config(self, name: StepType):
-        if name is StepType.IMAGE_LOADER:
+        if name is StepType.LOAD:
             model_type = ModelType(self.args.model) if self.args.model else None
             return ImageLoaderConfig(
                 source_path=self.args.source,
