@@ -1,11 +1,5 @@
-accepted
-for_annotation
-for_correction
-for_selection
-models
-venv
-transfered
-rejected
-auto_annotate
-vid*
 __pycache__
+.venv
+test_datasets
+models
+output

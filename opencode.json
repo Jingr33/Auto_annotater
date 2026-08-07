@@ -1,0 +1,25 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "share": "disabled",
+  "instructions": [
+    ".opencode/instructions/coding-standards-python.md",
+    ".opencode/instructions/coding-standards-react.md",
+    ".opencode/instructions/general.md"
+  ],
+  "model": "opencode-go/mimo-v2.5",
+  "provider": {
+    "deepseek": {},
+    "ollama": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Ollama (local)",
+      "options": {
+        "baseURL": "http://localhost:11434/v1"
+      },
+      "models": {
+        "qwen3:1.7b": {
+          "name": "Qwen3 1.7B (local)"
+        }
+      }
+    }
+  }
+}
