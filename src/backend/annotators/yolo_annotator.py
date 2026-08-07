@@ -36,7 +36,7 @@ class YOLOAnnotator(BaseAnnotator):
         for result in results:
             for box in result.boxes:
                 cls_idx = int(box.cls.item())
-                if cls_idx not in YOLOConfig.CLASSES_OF_INTEREST:
+                if YOLOConfig.CLASSES_OF_INTEREST and cls_idx not in YOLOConfig.CLASSES_OF_INTEREST:
                     continue
                 conf = box.conf.item()
                 if cls_idx not in confs or conf > confs[cls_idx]:

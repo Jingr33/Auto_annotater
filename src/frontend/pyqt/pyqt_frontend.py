@@ -30,7 +30,7 @@ class PyQtFrontend(QMainWindow):
         self.image_label = QLabel()
         self.image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.image_label.setStyleSheet("background-color: #333;")
-        self.image_label.setMinimumSize(900, 700)
+        self.image_label.setFixedSize(CFG.WIN_WIDTH - 2 * CFG.BAR_WIDTH, CFG.WIN_HEIGHT - CFG.BAR_HEIGHT)
 
         side = QVBoxLayout()
         self.stats_label = QLabel("Total: 0\nAccepted: 0\nRejected: 0")
@@ -128,7 +128,7 @@ class PyQtFrontend(QMainWindow):
         label_w = self.image_label.width()
         label_h = self.image_label.height()
         scaled = qimage.scaled(label_w, label_h, Qt.AspectRatioMode.KeepAspectRatio,
-                               Qt.TransformationMode.SmoothTransformation)
+                               Qt.TransformationMode.FastTransformation)
 
         pixmap = QPixmap.fromImage(scaled)
         painter = QPainter(pixmap)
