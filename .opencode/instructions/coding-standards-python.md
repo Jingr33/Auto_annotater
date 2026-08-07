@@ -1,24 +1,24 @@
-# Coding Standards
+# Coding Standards — Python Backend
 
 ## Naming Convention
 
 - Folders and files use `snake_case` always.
 - Class names use `PascalCase`.
-- Runnable folders (files intended to be executed from console) are named with an `-or` suffix: `processors`, `predictors`, `trainers`, etc.
-- Non-runnable folders holding reusable classes or utilities (e.g. `loss_functions`, `datasets`) do not follow the `-or` rule.
+- Runnable folders (files intended to be executed from console) are named with an `-or` suffix: `processors`, `annotators`, etc.
+- Non-runnable folders holding reusable classes or utilities (e.g. `annotations`, `enums`) do not follow the `-or` rule.
 
 ## Project Structure
 
-- All source code lives under `src/`.
-- Runnable files (`train_one_gpu_custom_loss.py`) are placed in `-or` folders such as `trainers/`.
-- Utility files (`custom_loss.py`) are placed in descriptive folders such as `loss_functions/`.
+- All backend source code lives under `src/backend/`.
+- Runnable files (`main.py`) are placed in the project root or in `-or` folders.
+- Utility files are placed in descriptive folders such as `annotations/`, `config/`.
 
 ## File Organization
 
 - Every class, enum, dataclass, or type alias must have its own file.
-- Enums go in an `enums/` folder, one file per enum.
+- Enums go in `enums/`, one file per enum.
 - Structurally related dataclasses go in a descriptive folder (e.g. `annotations/`), one file per dataclass.
-- Groups of simple config classes go in a `config/` folder, one file per class.
+- Groups of simple config classes go in `config/`, one file per class.
 - Only pure-function modules may contain multiple functions in one file.
 
 ## Code Style
