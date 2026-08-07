@@ -3,3 +3,5 @@ __pycache__
 test_datasets
 models
 output
+frontend/node_modules
+frontend/dist
