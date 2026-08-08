@@ -1,4 +1,6 @@
-from fastapi import APIRouter
+import os
+
+from fastapi import APIRouter, HTTPException
 from fastapi.responses import FileResponse
 
 from backend.core.pipeline_manager import PipelineManager
@@ -15,7 +17,7 @@ def set_pipeline_manager(manager: PipelineManager) -> None:
 
 def _get_manager() -> PipelineManager:
     if _manager is None:
-        raise RuntimeError("PipelineManager not initialized")
+        raise HTTPException(status_code=503, detail="PipelineManager not initialized")
     return _manager
 
 
@@ -37,6 +39,8 @@ async def get_item_image(item_id: str) -> dict:
 async def get_item_image_file(item_id: str) -> FileResponse:
     manager = _get_manager()
     path = manager.data_manager.image_path(item_id)
+    if not os.path.isfile(path):
+        raise HTTPException(status_code=404, detail="Image not found")
     return FileResponse(path, media_type="image/jpeg")
 
 
