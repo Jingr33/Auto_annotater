@@ -18,3 +18,12 @@ app.add_middleware(
 app.add_middleware(LicenseMiddleware)
 
 app.include_router(router, prefix="/api")
+
+
+def initialize_controllers(pipeline_manager=None) -> None:
+    from backend.api.controllers.pipeline_controller import PipelineController
+    from backend.api.controllers.license_controller import LicenseController
+    from backend.license.license_manager import LicenseManager
+
+    PipelineController.initialize(pipeline_manager)
+    LicenseController.initialize(LicenseManager.get_instance())

@@ -5,8 +5,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
 
 import uvicorn
 
-from src.backend.api.app import app
-from src.backend.api.routes import set_pipeline_manager
+from src.backend.api.app import app, initialize_controllers
 from src.runner import Runner
 from src.cli_argument_parser import CLIArgumentParser
 from src.backend.enums.step_type import StepType
@@ -23,7 +22,7 @@ def main() -> None:
     runner = Runner(args)
     runner.start_pipeline()
 
-    set_pipeline_manager(runner.manager)
+    initialize_controllers(runner.manager)
 
     uvicorn.run(app, host="0.0.0.0", port=8000)
 

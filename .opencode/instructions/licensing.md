@@ -13,7 +13,6 @@
 
 ## Implementation
 
-- License classes are real, not mocked
 - Validation functions use `PRO_LICENSE` config as result
 - All validator results are logged
 
