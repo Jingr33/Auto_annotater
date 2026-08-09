@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.api.routes import router
 from backend.api.containers import Container
 from backend.license.middleware import LicenseMiddleware
 
@@ -23,7 +22,11 @@ def create_app() -> FastAPI:
 
     app.add_middleware(LicenseMiddleware)
 
-    app.include_router(router, prefix="/api")
+    pipeline_controller = container.pipeline_controller()
+    license_controller = container.license_controller()
+
+    app.include_router(pipeline_controller.router, prefix="/api")
+    app.include_router(license_controller.router, prefix="/api")
 
     return app
 

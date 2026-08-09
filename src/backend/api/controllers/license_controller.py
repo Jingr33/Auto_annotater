@@ -1,13 +1,30 @@
+from fastapi import APIRouter
+from pydantic import BaseModel
+
 from backend.license.license_manager import LicenseManager
 from backend.api.dto.license_dto import LicenseStatusResponseDTO, LicenseActivateResponseDTO
+
+
+class LicenseActivateRequest(BaseModel):
+    token: str
 
 
 class LicenseController:
     def __init__(self, license_manager: LicenseManager | None = None):
         self._license_manager = license_manager
+        self._router = APIRouter()
+        self._setup_routes()
 
     def set_license_manager(self, license_manager: LicenseManager) -> None:
         self._license_manager = license_manager
+
+    @property
+    def router(self) -> APIRouter:
+        return self._router
+
+    def _setup_routes(self) -> None:
+        self._router.get("/license/status")(self.get_license_status)
+        self._router.post("/license/activate")(self.activate_license)
 
     def get_license_status(self) -> LicenseStatusResponseDTO:
         manager = self._get_license_manager()
@@ -19,9 +36,9 @@ class LicenseController:
             email=status.email,
         )
 
-    def activate_license(self, token: str) -> LicenseActivateResponseDTO:
+    def activate_license(self, request: LicenseActivateRequest) -> LicenseActivateResponseDTO:
         manager = self._get_license_manager()
-        result = manager.activate(token)
+        result = manager.activate(request.token)
         return LicenseActivateResponseDTO(
             valid=result.valid,
             features=(

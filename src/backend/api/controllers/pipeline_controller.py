@@ -1,7 +1,8 @@
 import os
 
-from fastapi import HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from fastapi.responses import FileResponse
+from dependency_injector.wiring import Provide
 
 from backend.core.pipeline_manager import PipelineManager
 from backend.api.dto.item_dto import ItemDTO, ItemListResponseDTO
@@ -13,14 +14,30 @@ from backend.api.dto.action_dto import ActionResultDTO
 class PipelineController:
     def __init__(self, manager: PipelineManager | None = None):
         self._manager = manager
+        self._router = APIRouter()
+        self._setup_routes()
 
     def set_manager(self, manager: PipelineManager) -> None:
         self._manager = manager
+
+    @property
+    def router(self) -> APIRouter:
+        return self._router
 
     def _get_manager(self) -> PipelineManager:
         if self._manager is None:
             raise HTTPException(status_code=503, detail="PipelineManager not initialized")
         return self._manager
+
+    def _setup_routes(self) -> None:
+        self._router.get("/items")(self.get_items)
+        self._router.get("/items/{item_id}/image")(self.get_item_image)
+        self._router.get("/items/{item_id}/image/file")(self.get_item_image_file)
+        self._router.get("/pipeline/status")(self.get_pipeline_status)
+        self._router.post("/pipeline/accept")(self.accept_item)
+        self._router.post("/pipeline/reject")(self.reject_item)
+        self._router.post("/pipeline/skip")(self.skip_item)
+        self._router.post("/pipeline/back")(self.go_back)
 
     def get_items(self) -> ItemListResponseDTO:
         manager = self._get_manager()
