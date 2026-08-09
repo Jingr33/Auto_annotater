@@ -2,20 +2,11 @@ from backend.license.license_manager import LicenseManager
 
 
 class LicenseController:
-    _instance = None
-
     def __init__(self, license_manager: LicenseManager | None = None):
         self._license_manager = license_manager
 
-    @classmethod
-    def get_instance(cls) -> "LicenseController":
-        if cls._instance is None:
-            cls._instance = cls()
-        return cls._instance
-
-    @classmethod
-    def initialize(cls, license_manager: LicenseManager) -> None:
-        cls._instance = cls(license_manager)
+    def set_license_manager(self, license_manager: LicenseManager) -> None:
+        self._license_manager = license_manager
 
     def get_license_status(self) -> dict:
         manager = self._get_license_manager()

@@ -7,20 +7,11 @@ from backend.core.pipeline_manager import PipelineManager
 
 
 class PipelineController:
-    _instance = None
-
     def __init__(self, manager: PipelineManager | None = None):
         self._manager = manager
 
-    @classmethod
-    def get_instance(cls) -> "PipelineController":
-        if cls._instance is None:
-            cls._instance = cls()
-        return cls._instance
-
-    @classmethod
-    def initialize(cls, manager: PipelineManager) -> None:
-        cls._instance = cls(manager)
+    def set_manager(self, manager: PipelineManager) -> None:
+        self._manager = manager
 
     def _get_manager(self) -> PipelineManager:
         if self._manager is None:
