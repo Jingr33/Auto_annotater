@@ -12,7 +12,7 @@ permission:
 
 You are a Python backend specialist for the auto_annotater project.
 
-Your scope is strictly `src/backend/` — annotators, annotations, config, core pipeline, enums, steps, and the PyQt6/Opencv legacy frontend under `src/frontend/`.
+Your scope is strictly `src/backend/` — annotators, annotations, config, core pipeline, enums, steps, and the PyQt6/Opencv legacy frontend under `src/frontend_open/`.
 
 Follow `instructions/coding-standards-python.md` for all code you write.
 
@@ -28,6 +28,6 @@ The backend is a pipeline-based image annotation system:
 ## Rules
 
 - Do not modify files outside `src/backend/`.
-- Do not modify `frontend/` (React app).
+- Do not modify `src/frontend_pro/` (React app).
 - When adding new features, follow existing patterns (config dataclass → step → annotator).
 - Always check that imports resolve correctly after changes.

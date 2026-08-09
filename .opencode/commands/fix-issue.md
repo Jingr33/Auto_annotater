@@ -18,7 +18,7 @@ Given an issue number (e.g. `001`):
    - Follow the appropriate coding standards:
      - Python backend code: `instructions/coding-standards-python.md`
      - React TypeScript frontend code: `instructions/coding-standards-react.md`
-   - Modify files in place in the relevant directory (`src/backend/` or `frontend/`).
+   - Modify files in place in the relevant directory (`src/backend/` or `src/frontend_pro/`).
    - If the fix requires a new package, add it to the relevant dependency file (do NOT install).
 
 6. After implementation, create `fix.md` inside the same issue directory using the template at `.opencode/templates/fix.md`. Load the template file and follow its structure exactly.

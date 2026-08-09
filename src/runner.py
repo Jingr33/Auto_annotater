@@ -9,7 +9,7 @@ from src.backend.core.pipeline_manager import PipelineManager
 from src.backend.enums.model_type import ModelType
 from src.backend.enums.step_type import StepType
 from src.backend.core.registry import StepRegistry
-from src.frontend.pyqt.pyqt_frontend import PyQtFrontend
+from src.frontend_open.pyqt.pyqt_frontend import PyQtFrontend
 
 
 class Runner:

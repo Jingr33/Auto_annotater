@@ -104,7 +104,7 @@ The `scope` field in task frontmatter indicates which part of the codebase the t
 | Scope | Meaning | Coding standards |
 |-------|---------|-----------------|
 | `backend` | Python code in `src/backend/` | `coding-standards-python.md` |
-| `frontend` | React TS code in `frontend/` | `coding-standards-react.md` |
+| `frontend` | React TS code in `src/frontend_pro/` | `coding-standards-react.md` |
 | `both` | Spans both backend and frontend | Both standards apply |
 
 ## Rules for All Agents
