@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { api } from '../services/api'
-import { PipelineStatusResponse } from '../types/types'
+import { PipelineStatusResponse } from '../types/PipelineStatusResponse'
 
 export const usePipelineStatus = () => {
   const [status, setStatus] = useState<PipelineStatusResponse | null>(null)

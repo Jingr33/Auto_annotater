@@ -2,10 +2,43 @@ import os
 
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import FileResponse
+from pydantic import BaseModel
 
 from backend.core.pipeline_manager import PipelineManager
+from backend.license.license_manager import LicenseManager
 
 router = APIRouter()
+
+
+class LicenseActivateRequest(BaseModel):
+    token: str
+
+
+@router.get("/license/status")
+async def get_license_status() -> dict:
+    manager = LicenseManager.get_instance()
+    status = manager.get_status()
+    return {
+        "valid": status.valid,
+        "features": [f.value for f in status.features],
+        "expires_at": status.expires_at.isoformat() if status.expires_at else None,
+        "email": status.email,
+    }
+
+
+@router.post("/license/activate")
+async def activate_license(request: LicenseActivateRequest) -> dict:
+    manager = LicenseManager.get_instance()
+    result = manager.activate(request.token)
+    return {
+        "valid": result.valid,
+        "features": (
+            [f.value for f in result.license_status.features]
+            if result.license_status
+            else []
+        ),
+        "error": result.error,
+    }
 
 _manager: PipelineManager | None = None
 

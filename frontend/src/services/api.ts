@@ -1,15 +1,40 @@
-import { Item, ItemListResponse, ImageUrlResponse, PipelineStatusResponse, ActionResult } from '../types/types'
+import { ItemListResponse } from '../types/ItemListResponse'
+import { ImageUrlResponse } from '../types/ImageUrlResponse'
+import { PipelineStatusResponse } from '../types/PipelineStatusResponse'
+import { ActionResult } from '../types/ActionResult'
 
 const BASE_URL = '/api'
+const LICENSE_STORAGE_KEY = 'licenseToken'
+
+function getLicenseToken(): string | null {
+  return localStorage.getItem(LICENSE_STORAGE_KEY)
+}
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
+  const token = getLicenseToken()
+  const headers: Record<string, string> = {
+    'Content-Type': 'application/json',
+  }
+
+  if (token) {
+    headers['X-License-Token'] = token
+  }
+
   const response = await fetch(`${BASE_URL}${path}`, {
-    headers: { 'Content-Type': 'application/json' },
+    headers,
     ...options,
   })
+
+  if (response.status === 401 || response.status === 403) {
+    localStorage.removeItem(LICENSE_STORAGE_KEY)
+    window.location.reload()
+    throw new Error('License invalid or expired')
+  }
+
   if (!response.ok) {
     throw new Error(`API error: ${response.status}`)
   }
+
   return response.json()
 }
 
