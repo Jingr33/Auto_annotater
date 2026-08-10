@@ -1,5 +1,5 @@
 ---
-description: Fix all code review comments on current PR (dry-run first)
+description: Fix all code review comments on current PR
 agent: dev
 subtask: true
 ---
@@ -9,7 +9,7 @@ Fix all code review comments for the current branch's PR.
 ## Setup
 
 1. Load the **project-management** skill.
-2. Load the **code-review** skill (for review context).
+2. Load the **code-review** skill.
 3. Identify the current branch and task.
 
 ## Workflow
@@ -60,95 +60,67 @@ For each unresolved thread, determine action:
 - **Acknowledgment** — trivial, resolve without reply
 - **Outdated** — already fixed by other changes, just resolve
 
-### 6. DRY-RUN: Preview Changes
+### 6. Implement ALL Changes (NO PAUSE YET)
 
-**DO NOT commit or push yet.** Show user what will be changed:
+**DO NOT show preview or ask for confirmation yet.** Implement everything first.
 
-```
-=== CR-FIX DRY-RUN ===
-
-Threads to process: N
-
-1. [CODE FIX] <file>:<line>
-   - @<reviewer>: "<comment>"
-   - Fix: <description>
-   - Commit: <commit message>
-
-2. [QUESTION] <file>:<line>
-   - @<reviewer>: "<comment>"
-   - Reply: "<explanation>"
-
-3. [ACKNOWLEDGE] <file>:<line>
-   - @<reviewer>: "<comment>"
-   - Action: Resolve without reply
-
-4. [OUTDATED] <file>:<line>
-   - @<reviewer>: "<comment>"
-   - Action: Already fixed, resolve
-
-Files to modify:
-- <file1> (<N> changes)
-- <file2> (<N> changes)
-
-Commits to create:
-- <commit message 1>
-- <commit message 2>
-
-=== END DRY-RUN ===
-```
-
-### 7. Wait for User Confirmation
-
-**STOP here.** Wait for user to review the dry-run output.
-
-User options:
-- **"continue"** — Apply changes, commit, push
-- **"edit"** — User wants to modify the plan
-- **"cancel"** — Stop without making changes
-
-### 8. Apply Changes (only on "continue")
-
-For each thread marked as code fix:
+For code fixes:
 1. Read the file at the specified line
 2. Understand the reviewer's concern
 3. Implement the fix following coding standards
-4. Stage the changes (do not commit yet)
+4. Stage the changes (git add)
 
-For each thread marked as question:
+For questions:
 1. Analyze the question
 2. Formulate clear explanation
 3. Reply using: `gh api repos/{owner}/{repo}/pulls/comments/<comment-id>/replies -f body="<explanation>"`
 4. Resolve thread
 
-For each thread marked as acknowledgment:
+For acknowledgments:
 1. Reply with brief acknowledgment if needed
 2. Resolve thread
 
-For each thread marked as outdated:
+For outdated:
 1. Verify the issue is actually fixed
 2. Reply: "This has been addressed in commit <hash>"
 3. Resolve thread
 
-### 9. Commit and Push
+### 7. PAUSE for Confirmation (AFTER all implementations)
+
+**Show user counts only:**
+
+```
+=== CR-FIX COMPLETE (NOT COMMITTED YET) ===
+
+Threads processed: N
+
+Code fixes applied: N
+Questions answered: N
+Threads resolved: N
+
+Files modified: N
+
+Type "continue" to commit and push, "cancel" to stop.
+```
+
+### 8. Commit and Push (only on "continue")
 
 - Commit all staged changes with descriptive messages
 - Push to branch: `git push origin <branch>`
 - Verify push succeeded
 
-### 10. Resolve All Threads
+### 9. On "cancel"
 
-For each processed thread, mark as resolved:
-```bash
-gh api repos/{owner}/{repo}/pulls/comments/<comment-id>/resolve -X PATCH
-```
+- Stop without committing
+- Inform user changes are staged but not committed
 
-### 11. Create cr-fix.md
+### 10. Create cr-fix.md
 
 - Location: `dev_items/<task-folder>/cr-fix.md`
 - Use template: `.opencode/templates/cr-fix.md`
 - Fill all sections with actual data
 
-### 12. Report Summary
+### 11. Report Summary
 
 Report to user:
 - Number of threads processed
@@ -159,7 +131,9 @@ Report to user:
 
 ## Rules
 
-- NEVER commit automatically — always show dry-run first
+- NEVER commit before user confirmation
+- NEVER pause before implementing fixes
+- Process ALL threads before showing summary
 - NEVER modify `task.md` or `summary.md`
 - Follow coding standards for all fixes
 - All replies must be professional and clear
