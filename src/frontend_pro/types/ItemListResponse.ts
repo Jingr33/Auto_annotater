@@ -1,6 +1,6 @@
-import { Item } from './Item'
+import { AnnotationItem } from './AnnotationItem'
 
 export interface ItemListResponse {
-  items: Item[]
+  items: AnnotationItem[]
   total: number
 }

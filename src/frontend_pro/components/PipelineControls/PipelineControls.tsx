@@ -1,5 +1,7 @@
 import { usePipelineStatus } from '../../hooks/usePipelineStatus'
 import { api } from '../../services/api'
+import { LoadingIndicator } from '../LoadingIndicator/LoadingIndicator'
+import { translations } from '../../translations/translations'
 
 export interface PipelineControlsProps {
   onRefresh: () => void
@@ -18,20 +20,20 @@ export const PipelineControls = ({ onRefresh }: PipelineControlsProps) => {
   }
 
   if (loading) {
-    return <div className="pipeline-controls">Loading pipeline status...</div>
+    return <LoadingIndicator message={translations.pipeline.loadingStatus} />
   }
 
   return (
     <div className="pipeline-controls">
       <div className="status-info">
         {status?.is_finished ? (
-          <span className="status-badge finished">Pipeline finished</span>
+          <span className="status-badge finished">{translations.pipeline.finished}</span>
         ) : status?.current_item_id ? (
           <span className="status-badge active">
-            Current: {status.current_item_id} ({status.total} total)
+            {translations.pipeline.currentPrefix} {status.current_item_id} ({status.total} {translations.pipeline.totalSuffix})
           </span>
         ) : status?.is_waiting ? (
-          <span className="status-badge waiting">Waiting for items...</span>
+          <span className="status-badge waiting">{translations.pipeline.waiting}</span>
         ) : null}
       </div>
 
@@ -40,25 +42,25 @@ export const PipelineControls = ({ onRefresh }: PipelineControlsProps) => {
           onClick={() => handleAction(api.goBack)}
           disabled={!status?.current_item_id}
         >
-          Back
+          {translations.pipeline.backButton}
         </button>
         <button
           onClick={() => handleAction(api.skipItem)}
           disabled={!status?.current_item_id}
         >
-          Skip
+          {translations.pipeline.skipButton}
         </button>
         <button
           onClick={() => handleAction(api.rejectItem)}
           disabled={!status?.current_item_id}
         >
-          Reject
+          {translations.pipeline.rejectButton}
         </button>
         <button
           onClick={() => handleAction(api.acceptItem)}
           disabled={!status?.current_item_id}
         >
-          Accept
+          {translations.pipeline.acceptButton}
         </button>
       </div>
     </div>

@@ -1,8 +1,12 @@
 import logging
 
+from dataclasses import asdict
+
 from fastapi import Request
 from fastapi.middleware.base import BaseHTTPMiddleware
 from fastapi.responses import JSONResponse
+
+from backend.license.models import LicenseErrorResponse
 
 logger = logging.getLogger(__name__)
 
@@ -25,7 +29,7 @@ class LicenseMiddleware(BaseHTTPMiddleware):
             logger.warning("No license token provided for: %s", request.url.path)
             return JSONResponse(
                 status_code=401,
-                content={"detail": "License token required"},
+                content=asdict(LicenseErrorResponse(detail="License token required")),
             )
 
         from backend.license.license_manager import LicenseManager
@@ -37,7 +41,7 @@ class LicenseMiddleware(BaseHTTPMiddleware):
             logger.warning("Invalid license token for: %s", request.url.path)
             return JSONResponse(
                 status_code=403,
-                content={"detail": "Invalid license token"},
+                content=asdict(LicenseErrorResponse(detail="Invalid license token")),
             )
 
         request.state.license = result.license_status

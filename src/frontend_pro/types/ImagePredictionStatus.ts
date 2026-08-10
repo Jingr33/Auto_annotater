@@ -1,1 +1,5 @@
-export type ImagePredictionStatus = 'pending' | 'accepted' | 'rejected'
+export enum ImagePredictionStatus {
+  Pending = 'pending',
+  Accepted = 'accepted',
+  Rejected = 'rejected',
+}

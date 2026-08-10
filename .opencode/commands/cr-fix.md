@@ -114,10 +114,12 @@ Type "continue" to commit and push, "cancel" to stop.
 - Stop without committing
 - Inform user changes are staged but not committed
 
-### 10. Create cr-fix.md
+### 10. Create fix-cr.md
 
-- Location: `dev_items/<task-folder>/cr-fix.md`
-- Use template: `.opencode/templates/cr-fix.md`
+- Location: `dev_items/<task-folder>/fix-cr.md`
+- For multiple CR rounds, name sequentially: `fix-cr.md`, `fix-cr-1.md`, `fix-cr-2.md`, etc.
+- Check existing files to determine the next number
+- Use template: `.opencode/templates/fix-cr.md`
 - Fill all sections with actual data
 
 ### 11. Report Summary
@@ -138,5 +140,5 @@ Report to user:
 - Follow coding standards for all fixes
 - All replies must be professional and clear
 - Always resolve threads after processing
-- Document everything in `cr-fix.md`
+- Document everything in `fix-cr.md`
 - Update existing PR, never create new one

@@ -1,8 +1,10 @@
 import { useState, useEffect, useCallback } from 'react'
 import { PipelineControls } from './components/PipelineControls'
 import { LicenseInputScreen } from './components/LicenseInputScreen'
+import { AppLayout } from './components/AppLayout/AppLayout'
 import { LicenseProvider } from './contexts/LicenseContext'
 import { Theme } from './theme/theme'
+import { translations } from './translations/translations'
 
 const LICENSE_STORAGE_KEY = 'licenseToken'
 
@@ -39,12 +41,12 @@ function App() {
         setLicenseValid(false)
         setLicenseToken(null)
         localStorage.removeItem(LICENSE_STORAGE_KEY)
-        setLicenseError('Invalid license token. Please try again.')
+        setLicenseError(translations.license.invalidError)
       }
     } catch {
       setLicenseValid(false)
       setLicenseToken(null)
-      setLicenseError('Failed to validate license. Please try again.')
+      setLicenseError(translations.license.validationError)
     }
   }
 
@@ -77,7 +79,7 @@ function App() {
         <Theme />
         <div className="license-screen">
           <div className="license-container">
-            <p>Loading...</p>
+            <p>{translations.loading.default}</p>
           </div>
         </div>
       </>
@@ -96,17 +98,9 @@ function App() {
   return (
     <LicenseProvider initialToken={licenseToken} onTokenChange={handleTokenChange}>
       <Theme />
-      <div className="app">
-        <header className="app-header">
-          <h1>Auto Annotater</h1>
-          <button className="logout-button" onClick={handleLogout}>
-            Logout
-          </button>
-        </header>
-        <main className="app-main">
-          <PipelineControls key={refreshKey} onRefresh={handleRefresh} />
-        </main>
-      </div>
+      <AppLayout onLogout={handleLogout}>
+        <PipelineControls key={refreshKey} onRefresh={handleRefresh} />
+      </AppLayout>
     </LicenseProvider>
   )
 }

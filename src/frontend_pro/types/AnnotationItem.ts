@@ -1,6 +1,6 @@
 import { ImagePredictionStatus } from './ImagePredictionStatus'
 
-export interface Item {
+export interface AnnotationItem {
   id: string
   status: ImagePredictionStatus
   created_at: string

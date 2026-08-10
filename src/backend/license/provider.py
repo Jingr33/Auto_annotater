@@ -15,7 +15,3 @@ class LicenseProvider(ABC):
     @abstractmethod
     def activate(self, token: str) -> LicenseValidationResult:
         pass
-
-    @abstractmethod
-    def deactivate(self) -> None:
-        pass

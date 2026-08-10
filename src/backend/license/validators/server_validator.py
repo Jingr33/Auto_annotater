@@ -72,6 +72,3 @@ class ServerValidator(LicenseProvider):
 
     def activate(self, token: str) -> LicenseValidationResult:
         return self.validate_token(token)
-
-    def deactivate(self) -> None:
-        pass
