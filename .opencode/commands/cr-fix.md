@@ -10,7 +10,8 @@ Fix all code review comments for the current branch's PR.
 
 1. Load the **project-management** skill.
 2. Load the **code-review** skill.
-3. Identify the current branch and task.
+3. Load the **github-operations** skill (for resolving threads).
+4. Identify the current branch and task.
 
 ## Workflow
 
@@ -107,9 +108,35 @@ Type "continue" to commit and push, "cancel" to stop.
 
 **Every comment that was fixed, answered, or acknowledged MUST be resolved.**
 
-For each processed thread, mark as resolved:
+Use the **github-operations** skill to resolve threads:
+
 ```bash
-gh api repos/{owner}/{repo}/pulls/comments/<comment-id>/resolve -X PATCH
+# Get thread IDs and resolve them
+gh api graphql -f query='
+{
+  repository(owner: "OWNER", name: "REPO") {
+    pullRequest(number: PR_NUMBER) {
+      reviewThreads(first: 100, states: UNRESOLVED) {
+        nodes {
+          id
+        }
+      }
+    }
+  }
+}'
+```
+
+Then resolve each thread:
+```bash
+gh api graphql -f query="
+mutation {
+  resolveReviewThread(input: {threadId: \"THREAD_ID\"}) {
+    thread {
+      id
+      isResolved
+    }
+  }
+}"
 ```
 
 **Skipped comments:**
