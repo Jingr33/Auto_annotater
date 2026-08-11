@@ -111,33 +111,17 @@ Type "continue" to commit and push, "cancel" to stop.
 Use the **github-operations** skill to resolve threads:
 
 ```bash
-# Get thread IDs and resolve them
-gh api graphql -f query='
-{
-  repository(owner: "OWNER", name: "REPO") {
-    pullRequest(number: PR_NUMBER) {
-      reviewThreads(first: 100, states: UNRESOLVED) {
-        nodes {
-          id
-        }
-      }
-    }
-  }
-}'
+# Get all unresolved thread IDs (use query.graphql file)
+gh api graphql -F query=@query.graphql
+
+# Create mutation file for each thread
+echo 'mutation { resolveReviewThread(input: {threadId: "THREAD_ID"}) { thread { id isResolved } } }' | Out-File "q.txt" -Encoding ascii -NoNewline
+
+# Resolve thread
+gh api graphql -F query=@q.txt
 ```
 
-Then resolve each thread:
-```bash
-gh api graphql -f query="
-mutation {
-  resolveReviewThread(input: {threadId: \"THREAD_ID\"}) {
-    thread {
-      id
-      isResolved
-    }
-  }
-}"
-```
+**Important:** Use `-F query=@file.txt` format, not `-F query=-` to avoid encoding issues.
 
 **Skipped comments:**
 - If you skip a comment (don't fix/answer), you MUST provide a reason
