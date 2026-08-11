@@ -11,15 +11,17 @@ This skill provides instructions for interacting with GitHub PRs using the `gh` 
 
 ## Resolving PR Review Comments
 
-### Method 1: Reply to a comment and resolve the thread
+### Method 1: Reply to a comment (REST API)
 
-To reply to a comment and resolve it in one step:
+To reply to a comment:
 
 ```bash
-gh api repos/{owner}/{repo}/pulls/comments/{comment_id}/replies -f body="Your reply message"
+gh api repos/{owner}/{repo}/pulls/{pr_number}/comments/{comment_id}/replies -f body="Your reply message"
 ```
 
-Then resolve the thread using GraphQL:
+### Method 2: Resolve thread via GraphQL
+
+To resolve a thread, you need the thread ID (not comment ID):
 
 ```bash
 gh api graphql -f query='
@@ -33,7 +35,7 @@ mutation {
 }'
 ```
 
-### Method 2: Get thread ID from comment
+### Method 3: Get thread ID from comment
 
 To get the thread ID for a comment:
 
@@ -77,7 +79,7 @@ done
 To reply to a specific comment:
 
 ```bash
-gh api repos/{owner}/{repo}/pulls/comments/{comment_id}/replies -f body="Your reply"
+gh api repos/{owner}/{repo}/pulls/{pr_number}/comments/{comment_id}/replies -f body="Your reply"
 ```
 
 ## Fetching PR Comments
