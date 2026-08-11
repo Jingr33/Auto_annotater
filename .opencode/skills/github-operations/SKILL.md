@@ -144,6 +144,15 @@ for THREAD_ID in $THREAD_IDS; do
 done
 ```
 
+## Example Workflow: Reply to All Comments
+
+```bash
+# Reply to all comments on a PR
+gh api repos/{owner}/{repo}/pulls/{pr_number}/comments --jq '.[].id' | while read comment_id; do
+  gh api repos/{owner}/{repo}/pulls/{pr_number}/comments/$comment_id/replies -f body="Resolved: This comment has been addressed."
+done
+```
+
 ## Notes
 
 - The `gh` CLI must be authenticated (`gh auth login`)
