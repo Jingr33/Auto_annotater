@@ -43,6 +43,14 @@
 - **Reviewer**: @<username>
 - **Reason**: <why no reply needed>
 
+## Skipped Comments
+
+### Comment: <brief description>
+- **File**: `<file_path>`
+- **Reviewer**: @<username>
+- **Original Comment**: "<comment text>"
+- **Reason**: <why this comment was skipped>
+
 ## Files Changed
 
 | File | Changes |

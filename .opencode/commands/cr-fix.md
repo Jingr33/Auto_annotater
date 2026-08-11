@@ -103,7 +103,20 @@ Files modified: N
 Type "continue" to commit and push, "cancel" to stop.
 ```
 
-### 8. Commit and Push (only on "continue")
+### 8. Resolve ALL Processed Threads
+
+**Every comment that was fixed, answered, or acknowledged MUST be resolved.**
+
+For each processed thread, mark as resolved:
+```bash
+gh api repos/{owner}/{repo}/pulls/comments/<comment-id>/resolve -X PATCH
+```
+
+**Skipped comments:**
+- If you skip a comment (don't fix/answer), you MUST provide a reason
+- Add skipped comments to the `fix-cr.md` under "Skipped Comments" section
+
+### 9. Commit and Push (only on "continue")
 
 - Commit all staged changes with descriptive messages
 - Push to branch: `git push origin <branch>`
@@ -140,5 +153,7 @@ Report to user:
 - Follow coding standards for all fixes
 - All replies must be professional and clear
 - Always resolve threads after processing
+- ALL processed threads MUST be resolved (fixed, answered, or acknowledged)
+- If skipping a comment, provide a reason in fix-cr.md
 - Document everything in `fix-cr.md`
 - Update existing PR, never create new one
