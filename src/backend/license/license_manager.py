@@ -1,24 +1,21 @@
 import json
 import logging
 import os
-import sys
-from pathlib import Path
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
-
+from backend.config.license_config import LICENSE_FILE_PATH
 from backend.license.models import Feature, LicenseStatus, LicenseValidationResult
 from backend.license.provider import LicenseProvider
-
-logger = logging.getLogger(__name__)
+from backend.license.validators.jwt_validator import JWTValidator
+from backend.license.validators.server_validator import ServerValidator
 
 
 class LicenseManager:
     _instance = None
-    _LICENSE_FILE = Path.home() / ".auto_annotater" / "license.json"
 
     def __init__(self):
         self._provider = self._create_provider()
         self._current_status: LicenseStatus | None = None
+        self._logger = logging.getLogger(__name__)
         self._load_saved_license()
 
     @classmethod
@@ -31,47 +28,43 @@ class LicenseManager:
         provider_type = os.getenv("LICENSE_PROVIDER", "jwt")
 
         if provider_type == "jwt":
-            from backend.license.validators.jwt_validator import JWTValidator
-
             return JWTValidator()
         elif provider_type == "server":
-            from backend.license.validators.server_validator import ServerValidator
-
             return ServerValidator()
         else:
             raise ValueError(f"Unknown license provider: {provider_type}")
 
     def _load_saved_license(self) -> None:
-        if self._LICENSE_FILE.exists():
+        if LICENSE_FILE_PATH.exists():
             try:
-                data = json.loads(self._LICENSE_FILE.read_text())
+                data = json.loads(LICENSE_FILE_PATH.read_text())
                 token = data.get("token")
                 if token:
                     result = self._provider.validate_token(token)
                     if result.valid:
                         self._current_status = result.license_status
-                        logger.info(
+                        self._logger.info(
                             "Loaded saved license for: %s",
                             result.license_status.email,
                         )
             except Exception as e:
-                logger.warning("Failed to load saved license: %s", e)
+                self._logger.warning("Failed to load saved license: %s", e)
 
     def _save_license(self, token: str) -> None:
-        self._LICENSE_FILE.parent.mkdir(parents=True, exist_ok=True)
-        self._LICENSE_FILE.write_text(json.dumps({"token": token}))
-        logger.info("License saved to: %s", self._LICENSE_FILE)
+        LICENSE_FILE_PATH.parent.mkdir(parents=True, exist_ok=True)
+        LICENSE_FILE_PATH.write_text(json.dumps({"token": token}))
+        self._logger.info("License saved to: %s", LICENSE_FILE_PATH)
 
     def validate(self, token: str) -> LicenseValidationResult:
-        logger.info("Validating license token...")
+        self._logger.info("Validating license token...")
         result = self._provider.validate_token(token)
 
         if result.valid:
             self._current_status = result.license_status
             self._save_license(token)
-            logger.info("License valid for: %s", result.license_status.email)
+            self._logger.info("License valid for: %s", result.license_status.email)
         else:
-            logger.warning("License validation failed: %s", result.error)
+            self._logger.warning("License validation failed: %s", result.error)
 
         return result
 
@@ -87,9 +80,3 @@ class LicenseManager:
 
     def activate(self, token: str) -> LicenseValidationResult:
         return self.validate(token)
-
-    def deactivate(self) -> None:
-        self._current_status = None
-        if self._LICENSE_FILE.exists():
-            self._LICENSE_FILE.unlink()
-        logger.info("License deactivated")

@@ -6,9 +6,8 @@ from fastapi import Request
 from fastapi.middleware.base import BaseHTTPMiddleware
 from fastapi.responses import JSONResponse
 
+from backend.license.license_manager import LicenseManager
 from backend.license.models import LicenseErrorResponse
-
-logger = logging.getLogger(__name__)
 
 
 class LicenseMiddleware(BaseHTTPMiddleware):
@@ -19,6 +18,10 @@ class LicenseMiddleware(BaseHTTPMiddleware):
         "/openapi.json",
     ]
 
+    def __init__(self, app):
+        super().__init__(app)
+        self._logger = logging.getLogger(__name__)
+
     async def dispatch(self, request: Request, call_next):
         if request.url.path in self.EXEMPT_PATHS:
             return await call_next(request)
@@ -26,19 +29,17 @@ class LicenseMiddleware(BaseHTTPMiddleware):
         license_token = request.headers.get("X-License-Token")
 
         if not license_token:
-            logger.warning("No license token provided for: %s", request.url.path)
+            self._logger.warning("No license token provided for: %s", request.url.path)
             return JSONResponse(
                 status_code=401,
                 content=asdict(LicenseErrorResponse(detail="License token required")),
             )
 
-        from backend.license.license_manager import LicenseManager
-
         manager = LicenseManager.get_instance()
         result = manager.validate(license_token)
 
         if not result.valid:
-            logger.warning("Invalid license token for: %s", request.url.path)
+            self._logger.warning("Invalid license token for: %s", request.url.path)
             return JSONResponse(
                 status_code=403,
                 content=asdict(LicenseErrorResponse(detail="Invalid license token")),

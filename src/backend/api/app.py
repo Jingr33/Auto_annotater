@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from backend.api.containers import Container
-from backend.license.middleware import LicenseMiddleware
+from backend.license.license_middleware import LicenseMiddleware
 
 
 def create_app() -> FastAPI:
