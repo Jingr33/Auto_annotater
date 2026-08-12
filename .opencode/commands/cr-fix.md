@@ -6,6 +6,9 @@ subtask: true
 
 Fix all code review comments for the current branch's PR.
 
+**Parameters:**
+- `force` — Skip confirmation pause and commit/push immediately after implementation.
+
 ## Setup
 
 1. Load the **project-management** skill.
@@ -14,6 +17,11 @@ Fix all code review comments for the current branch's PR.
 4. Identify the current branch and task.
 
 ## Workflow
+
+### 0. Parse Parameters
+
+- Check if prompt contains the word `force`
+- Set `FORCE_PUSH` flag accordingly
 
 ### 1. Identify PR
 
@@ -86,7 +94,9 @@ For outdated:
 2. Reply: "This has been addressed in commit <hash>"
 3. Resolve thread
 
-### 7. PAUSE for Confirmation (AFTER all implementations)
+### 7. PAUSE for Confirmation (AFTER all implementations, skip if force)
+
+If `FORCE_PUSH` is NOT set:
 
 **Show user counts only:**
 
@@ -103,6 +113,8 @@ Files modified: N
 
 Type "continue" to commit and push, "cancel" to stop.
 ```
+
+If `FORCE_PUSH` IS set: Skip pause, proceed directly to step 8.
 
 ### 8. Resolve ALL Processed Threads
 
@@ -127,13 +139,13 @@ gh api graphql -F query=@q.txt
 - If you skip a comment (don't fix/answer), you MUST provide a reason
 - Add skipped comments to the `fix-cr.md` under "Skipped Comments" section
 
-### 9. Commit and Push (only on "continue")
+### 9. Commit and Push (only on "continue" or if force)
 
 - Commit all staged changes with descriptive messages
 - Push to branch: `git push origin <branch>`
 - Verify push succeeded
 
-### 9. On "cancel"
+### 9a. On "cancel" (only when not force)
 
 - Stop without committing
 - Inform user changes are staged but not committed
@@ -157,7 +169,7 @@ Report to user:
 
 ## Rules
 
-- NEVER commit before user confirmation
+- NEVER commit before user confirmation (unless `force` parameter is used)
 - NEVER pause before implementing fixes
 - Process ALL threads before showing summary
 - NEVER modify `task.md` or `summary.md`
@@ -168,3 +180,4 @@ Report to user:
 - If skipping a comment, provide a reason in fix-cr.md
 - Document everything in `fix-cr.md`
 - Update existing PR, never create new one
+- When `force` is used, skip confirmation and commit/push immediately
