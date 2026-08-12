@@ -52,23 +52,5 @@ class ServerValidator(LicenseProvider):
             logger.error("ServerValidator: Validation error: %s", e)
             return LicenseValidationResult(valid=False, error=str(e))
 
-    def get_current_status(self) -> LicenseStatus:
-        logger.info("ServerValidator: Getting current status...")
-
-        if PRO_LICENSE:
-            return LicenseStatus(
-                valid=True,
-                features=[
-                    Feature.PRO,
-                    Feature.API,
-                    Feature.REACT_UI,
-                    Feature.ADVANCED_ANNOTATION,
-                ],
-                expires_at=datetime.now() + timedelta(days=365),
-                email="licensed@auto-annotater.local",
-            )
-        else:
-            return LicenseStatus(valid=False, features=[])
-
     def activate(self, token: str) -> LicenseValidationResult:
         return self.validate_token(token)
