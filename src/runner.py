@@ -9,29 +9,39 @@ from src.backend.core.pipeline_manager import PipelineManager
 from src.backend.enums.model_type import ModelType
 from src.backend.enums.step_type import StepType
 from src.backend.core.registry import StepRegistry
-from src.frontend.pyqt.pyqt_frontend import PyQtFrontend
+from src.frontend_open.pyqt.pyqt_frontend import PyQtFrontend
 
 
 class Runner:
     def __init__(self, args):
         self.args = args
+        self.manager = None
 
     def run(self) -> None:
+        self.start_pipeline()
+        if self._has_frontend:
+            app = QApplication(sys.argv)
+            window = PyQtFrontend(self.manager)
+            window.show()
+            app.exec()
+        else:
+            self.manager.wait()
+
+    def start_pipeline(self) -> None:
         steps = [StepType(s) for s in self.args.steps]
 
         if steps == [StepType.SELECT]:
-            manager = PipelineManager(
+            self.manager = PipelineManager(
                 source_step=None,
                 pipeline_steps=[],
                 workspace=self.args.output,
                 with_frontend=True,
                 only_pending=self.args.only_pending,
             )
-            manager.start()
-            has_frontend = True
+            self._has_frontend = True
         else:
-            has_frontend = steps[-1] is StepType.SELECT
-            pipeline_names = steps[:-1] if has_frontend else steps
+            self._has_frontend = steps[-1] is StepType.SELECT
+            pipeline_names = steps[:-1] if self._has_frontend else steps
 
             source_step = None
             step_instances = []
@@ -42,18 +52,14 @@ class Runner:
                 else:
                     step_instances.append(instance)
 
-            manager = PipelineManager(source_step, step_instances,
-                                      workspace=self.args.output,
-                                      with_frontend=has_frontend)
-            manager.start()
+            self.manager = PipelineManager(
+                source_step,
+                step_instances,
+                workspace=self.args.output,
+                with_frontend=self._has_frontend,
+            )
 
-        if has_frontend:
-            app = QApplication(sys.argv)
-            window = PyQtFrontend(manager)
-            window.show()
-            app.exec()
-        else:
-            manager.wait()
+        self.manager.start()
 
     def _build_config(self, name: StepType):
         if name is StepType.LOAD:

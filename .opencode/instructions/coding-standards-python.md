@@ -18,6 +18,7 @@
 - Every class, enum, dataclass, or type alias must have its own file.
 - Enums go in `enums/`, one file per enum.
 - Structurally related dataclasses go in a descriptive folder (e.g. `annotations/`), one file per dataclass.
+- Model classes (dataclasses, exceptions, enums used as domain models) go in a `models/` folder, one file per class. The `models/` folder must have an `__init__.py` that re-exports all classes for backward-compatible imports.
 - Groups of simple config classes go in `config/`, one file per class.
 - Only pure-function modules may contain multiple functions in one file.
 
@@ -39,6 +40,7 @@
 - Never write an import inside a function or method body. If a circular dependency makes a top-level import impossible, create a new file that both modules can import from, and put the import there at the top.
 - Empty function or method bodies (e.g. abstract method stubs, no-op implementations) must use `pass`, never `...`.
 - Do not leave a blank line after a class definition. The class body starts immediately on the next line.
+- Do not leave a blank line before a `return` statement. The `return` follows directly after the preceding statement.
 
 ## Comments
 

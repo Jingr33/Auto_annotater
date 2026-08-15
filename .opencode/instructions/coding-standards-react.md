@@ -10,10 +10,10 @@
 
 ## Project Structure
 
-- All frontend source code lives under `frontend/`.
+- All frontend source code lives under `src/frontend_pro/`.
 - React app follows standard Vite + React structure:
   ```
-  frontend/
+  src/frontend_pro/
   ├── src/
   │   ├── components/       # Reusable UI components
   │   │   └── ComponentName/
@@ -35,6 +35,7 @@
 
 ## Component Rules
 
+- Each class, component, type, and any other structure must be in its own separate file.
 - One component per file. Component name matches file name.
 - Use functional components with hooks, never class components.
 - Props must be defined as a named interface or type, exported from the same file:

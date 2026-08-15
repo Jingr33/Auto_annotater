@@ -28,7 +28,7 @@ Parse the prompt:
    New-Item -ItemType Directory -Path "dev_items/<NNN>-<slug>" -Force
    ```
 
-5. Read `.opencode/templates/task.md` and write it to `dev_items/<NNN>-<slug>/task.md` with filled frontmatter.
+5. Read `.opencode/templates/task.md` and write it to `dev_items/<NNN>-<slug>/task.md` with filled frontmatter. If the resolved `type` is `feature`, drop the bug-only section (`## Repro Steps`, `## Expected Behavior`, `## Actual Behavior`) from the written file. Keep it only for `bug` / `hotfix` types.
 
 6. Create and switch to the branch:
    ```bash
@@ -37,4 +37,10 @@ Parse the prompt:
 
 7. Print confirmation: created path, branch name, and basic info.
 
-8. **Stop.** Do not implement the PBI. Do not change its status to `commited`. Do not edit any source code, write tests, or otherwise work on the task described in the dev item. Only the creation above is requested.
+8. **STOP. NEVER IMPLEMENT.** After creating the PBI, you MUST NOT:
+   - Implement the feature or task described in the dev item
+   - Change its status to `commited`
+   - Edit any source code, write tests, or install dependencies
+   - Continue working on the task in any way
+
+   The `/create-dev-item` command ONLY creates the PBI structure and branch. Implementation is a separate step done later by the user or in a different session.

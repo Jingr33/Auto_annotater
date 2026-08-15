@@ -17,5 +17,6 @@ compatibility: opencode
    - `type:` default `feature` (or `bug` / `hotfix` if specified)
    - `status:` default `new` (or `commited` / `done` / `block` if specified)
    - `scope:` default `backend` (or `frontend` / `both` if specified)
+   - If `type` is `feature`, **omit** the bug-only section (`## Repro Steps`, `## Expected Behavior`, `## Actual Behavior`). Include it only for `bug` / `hotfix` types.
 5. Create a git branch: `git checkout -b <type>/<NNN>-<slug>` (e.g. `feature/004-my-task`).
 6. Print a summary of what was created.

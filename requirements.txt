@@ -4,3 +4,6 @@ requests
 numpy
 Pillow
 PyQt6
+fastapi
+uvicorn
+dependency-injector
