@@ -52,6 +52,11 @@
 - Keep components small and focused. If a component exceeds ~150 lines, split it.
 - Co-locate component-specific types, hooks, and utilities with the component.
 
+## Styling
+
+- Use **Material UI only** (`@mui/material`) for all styling and UI components.
+- Do **not** use Emotion (`@emotion/react`, `@emotion/styled`) or any other styling library. Use MUI's `sx` prop, `styled`, and components exclusively.
+
 ## Code Style
 
 - Use `const` by default. Use `let` only when reassignment is necessary. Never use `var`.
