@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import { translations } from '../../translations/translations'
+import { useTranslation } from 'react-i18next'
 
 export interface AppLayoutProps {
   children: ReactNode
@@ -7,12 +7,14 @@ export interface AppLayoutProps {
 }
 
 export const AppLayout = ({ children, onLogout }: AppLayoutProps) => {
+  const { t } = useTranslation()
+
   return (
     <div className="app">
       <header className="app-header">
-        <h1>{translations.app.title}</h1>
+        <h1>{t('app.title')}</h1>
         <button className="logout-button" onClick={onLogout}>
-          {translations.app.logout}
+          {t('app.logout')}
         </button>
       </header>
       <main className="app-main">

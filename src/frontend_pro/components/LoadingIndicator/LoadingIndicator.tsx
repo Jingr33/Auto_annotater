@@ -1,13 +1,15 @@
-import { translations } from '../../translations/translations'
+import { useTranslation } from 'react-i18next'
 
 export interface LoadingIndicatorProps {
   message?: string
 }
 
-export const LoadingIndicator = ({ message = translations.loading.default }: LoadingIndicatorProps) => {
+export const LoadingIndicator = ({ message }: LoadingIndicatorProps) => {
+  const { t } = useTranslation()
+
   return (
     <div className="loading-indicator">
-      <p>{message}</p>
+      <p>{message ?? t('loading.default')}</p>
     </div>
   )
 }

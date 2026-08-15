@@ -1,7 +1,7 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { LicenseHeader } from './LicenseHeader'
 import { LicenseForm } from './LicenseForm'
-import { translations } from '../../translations/translations'
 
 export interface LicenseInputScreenProps {
   onActivate: (token: string) => void
@@ -9,6 +9,7 @@ export interface LicenseInputScreenProps {
 }
 
 export const LicenseInputScreen = ({ onActivate, error }: LicenseInputScreenProps) => {
+  const { t } = useTranslation()
   const [token, setToken] = useState('')
 
   const handleSubmit = () => {
@@ -19,8 +20,8 @@ export const LicenseInputScreen = ({ onActivate, error }: LicenseInputScreenProp
     <div className="license-screen">
       <div className="license-container">
         <LicenseHeader
-          title={translations.license.screenTitle}
-          subtitle={translations.license.subtitle}
+          title={t('license.screenTitle')}
+          subtitle={t('license.subtitle')}
         />
         <LicenseForm
           token={token}
@@ -29,7 +30,7 @@ export const LicenseInputScreen = ({ onActivate, error }: LicenseInputScreenProp
           error={error}
         />
         <p className="license-help">
-          {translations.license.helpText}
+          {t('license.helpText')}
         </p>
       </div>
     </div>

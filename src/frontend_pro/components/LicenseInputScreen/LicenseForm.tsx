@@ -1,4 +1,4 @@
-import { translations } from '../../translations/translations'
+import { useTranslation } from 'react-i18next'
 
 export interface LicenseFormProps {
   token: string
@@ -8,6 +8,8 @@ export interface LicenseFormProps {
 }
 
 export const LicenseForm = ({ token, onTokenChange, onSubmit, error }: LicenseFormProps) => {
+  const { t } = useTranslation()
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (token.trim()) {
@@ -21,12 +23,12 @@ export const LicenseForm = ({ token, onTokenChange, onSubmit, error }: LicenseFo
         type="text"
         value={token}
         onChange={(e) => onTokenChange(e.target.value)}
-        placeholder={translations.license.inputPlaceholder}
+        placeholder={t('license.inputPlaceholder')}
         className="license-input"
         autoFocus
       />
       <button type="submit" className="license-button" disabled={!token.trim()}>
-        {translations.license.activateButton}
+        {t('license.activateButton')}
       </button>
       {error && <p className="license-error">{error}</p>}
     </form>

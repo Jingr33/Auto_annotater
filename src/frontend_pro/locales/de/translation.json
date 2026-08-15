@@ -1,0 +1,29 @@
+{
+  "app": {
+    "title": "Auto Annotater",
+    "logout": "Abmelden"
+  },
+  "license": {
+    "screenTitle": "Auto Annotater Pro",
+    "subtitle": "Geben Sie Ihren Lizenz-Token ein, um Pro-Funktionen zu aktivieren",
+    "inputPlaceholder": "Lizenz-Token hier einfügen",
+    "activateButton": "Aktivieren",
+    "helpText": "Keine Lizenz? Wenden Sie sich an den Support.",
+    "invalidError": "Ungültiger Lizenz-Token. Bitte versuchen Sie es erneut.",
+    "validationError": "Lizenz konnte nicht überprüft werden. Bitte versuchen Sie es erneut."
+  },
+  "pipeline": {
+    "loadingStatus": "Pipeline-Status wird geladen...",
+    "finished": "Pipeline abgeschlossen",
+    "currentPrefix": "Aktuell:",
+    "totalSuffix": "gesamt",
+    "waiting": "Warte auf Elemente...",
+    "backButton": "Zurück",
+    "skipButton": "Überspringen",
+    "rejectButton": "Ablehnen",
+    "acceptButton": "Annehmen"
+  },
+  "loading": {
+    "default": "Lädt..."
+  }
+}

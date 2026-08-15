@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useState } from 'react'
-import { translations } from '../translations/translations'
+import { useTranslation } from 'react-i18next'
 
 const LICENSE_STORAGE_KEY = 'licenseToken'
 
 export const useLicenseValidation = () => {
+  const { t } = useTranslation()
   const [licenseValid, setLicenseValid] = useState<boolean | null>(null)
   const [licenseToken, setLicenseToken] = useState<string | null>(null)
   const [licenseError, setLicenseError] = useState<string | null>(null)
@@ -26,14 +27,14 @@ export const useLicenseValidation = () => {
         setLicenseValid(false)
         setLicenseToken(null)
         localStorage.removeItem(LICENSE_STORAGE_KEY)
-        setLicenseError(translations.license.invalidError)
+        setLicenseError(t('license.invalidError'))
       }
     } catch {
       setLicenseValid(false)
       setLicenseToken(null)
-      setLicenseError(translations.license.validationError)
+      setLicenseError(t('license.validationError'))
     }
-  }, [])
+  }, [t])
 
   useEffect(() => {
     const storedToken = localStorage.getItem(LICENSE_STORAGE_KEY)
