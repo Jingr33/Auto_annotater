@@ -12,22 +12,17 @@ export const AppLayout = ({ children, onLogout }: AppLayoutProps) => {
 
   return (
     <Box sx={{ maxWidth: '1200px', mx: 'auto', px: 2, display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      <AppBar
-        position="static"
-        color="transparent"
-        elevation={0}
-        sx={{ borderBottom: 1, borderColor: 'divider' }}
-      >
-        <Toolbar sx={{ position: 'relative' }}>
+      <AppBar>
+        <Toolbar>
           <Typography variant="h6" sx={{ flexGrow: 1, textAlign: 'center' }}>
             {t('app.title')}
           </Typography>
-          <Button onClick={onLogout} sx={{ position: 'absolute', right: 0 }}>
-            {t('app.logout')}
-          </Button>
+
+          <Button onClick={onLogout}>{t('app.logout')}</Button>
         </Toolbar>
       </AppBar>
-      <Container maxWidth="lg" sx={{ py: 3, flexGrow: 1 }}>
+
+      <Container maxWidth="lg" sx={{ flexGrow: 1 }}>
         {children}
       </Container>
     </Box>

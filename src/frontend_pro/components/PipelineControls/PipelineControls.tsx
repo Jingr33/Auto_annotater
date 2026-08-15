@@ -50,18 +50,22 @@ export const PipelineControls = ({ onRefresh }: PipelineControlsProps) => {
   const canAct = Boolean(status?.current_item_id)
 
   return (
-    <Paper variant="outlined" sx={{ p: 2 }}>
+    <Paper variant="outlined">
       <Box sx={{ mb: 1.5 }}>{renderBadge()}</Box>
+
       <Stack direction="row" spacing={1}>
         <Button onClick={() => handleAction(api.goBack)} disabled={!canAct}>
           {t('pipeline.backButton')}
         </Button>
+
         <Button onClick={() => handleAction(api.skipItem)} disabled={!canAct}>
           {t('pipeline.skipButton')}
         </Button>
+
         <Button onClick={() => handleAction(api.rejectItem)} disabled={!canAct}>
           {t('pipeline.rejectButton')}
         </Button>
+
         <Button onClick={() => handleAction(api.acceptItem)} variant="contained" disabled={!canAct}>
           {t('pipeline.acceptButton')}
         </Button>

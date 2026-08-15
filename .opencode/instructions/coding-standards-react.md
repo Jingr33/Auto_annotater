@@ -55,7 +55,6 @@
 ## Styling
 
 - Use **Material UI only** (`@mui/material`) for all styling and UI components.
-- Do **not** use Emotion (`@emotion/react`, `@emotion/styled`) or any other styling library. Use MUI's `sx` prop, `styled`, and components exclusively.
 
 ## Code Style
 
@@ -70,6 +69,7 @@
 - Use TypeScript `interface` for object shapes, `type` for unions/intersections.
 - Always specify return types on non-trivial functions.
 - Use optional chaining (`?.`) and nullish coalescing (`??`) instead of manual null checks.
+- Add an empty line between JSX components and siblings to improve readability.
 
 ## Comments
 

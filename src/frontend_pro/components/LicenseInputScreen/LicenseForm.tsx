@@ -1,6 +1,6 @@
 import type { FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Alert, Box, Button, TextField } from '@mui/material'
+import { Alert, Button, Stack, TextField } from '@mui/material'
 
 export interface LicenseFormProps {
   token: string
@@ -20,11 +20,7 @@ export const LicenseForm = ({ token, onTokenChange, onSubmit, error }: LicenseFo
   }
 
   return (
-    <Box
-      component="form"
-      onSubmit={handleSubmit}
-      sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
-    >
+    <Stack component="form" onSubmit={handleSubmit} spacing={2}>
       <TextField
         value={token}
         onChange={(e) => onTokenChange(e.target.value)}
@@ -32,10 +28,12 @@ export const LicenseForm = ({ token, onTokenChange, onSubmit, error }: LicenseFo
         autoFocus
         fullWidth
       />
+
       <Button type="submit" variant="contained" disabled={!token.trim()} fullWidth>
         {t('license.activateButton')}
       </Button>
+
       {error && <Alert severity="error">{error}</Alert>}
-    </Box>
+    </Stack>
   )
 }

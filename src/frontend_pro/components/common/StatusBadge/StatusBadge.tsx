@@ -7,22 +7,12 @@ export interface StatusBadgeProps {
   tone: StatusTone
 }
 
-const toneStyles: Record<StatusTone, { backgroundColor: string; color: string }> = {
-  finished: { backgroundColor: '#d4edda', color: '#155724' },
-  active: { backgroundColor: '#cce5ff', color: '#004085' },
-  waiting: { backgroundColor: '#fff3cd', color: '#856404' },
+const toneColor: Record<StatusTone, 'success' | 'info' | 'warning'> = {
+  finished: 'success',
+  active: 'info',
+  waiting: 'warning',
 }
 
 export const StatusBadge = ({ label, tone }: StatusBadgeProps) => {
-  return (
-    <Chip
-      label={label}
-      size="small"
-      sx={{
-        backgroundColor: toneStyles[tone].backgroundColor,
-        color: toneStyles[tone].color,
-        fontWeight: 500,
-      }}
-    />
-  )
+  return <Chip label={label} size="small" color={toneColor[tone]} />
 }

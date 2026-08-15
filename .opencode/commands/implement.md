@@ -29,7 +29,7 @@ Implement task $ARGUMENTS from `dev_items/`.
 - You may introduce new packages. **Do not** install them, except `@mui/material`, which you **may** install via npm. Add every new dependency to the relevant requirements/package file.
 
 ### Styling
-- Use **Material UI only** (`@mui/material`). Do **not** use Emotion (`@emotion/react`, `@emotion/styled`) or any other styling library — use MUI's `sx` prop, `styled`, and components exclusively.
+- Use **Material UI only** (`@mui/material`).
 
 ### 4. Document
 - Review the changes you made. Update relevant documentation in `docs/` if anything changed.
