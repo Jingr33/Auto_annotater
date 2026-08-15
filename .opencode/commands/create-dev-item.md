@@ -28,7 +28,7 @@ Parse the prompt:
    New-Item -ItemType Directory -Path "dev_items/<NNN>-<slug>" -Force
    ```
 
-5. Read `.opencode/templates/task.md` and write it to `dev_items/<NNN>-<slug>/task.md` with filled frontmatter.
+5. Read `.opencode/templates/task.md` and write it to `dev_items/<NNN>-<slug>/task.md` with filled frontmatter. If the resolved `type` is `feature`, drop the bug-only section (`## Repro Steps`, `## Expected Behavior`, `## Actual Behavior`) from the written file. Keep it only for `bug` / `hotfix` types.
 
 6. Create and switch to the branch:
    ```bash
