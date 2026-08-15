@@ -1,7 +1,9 @@
 import { useTranslation } from 'react-i18next'
+import { Box, Button, Paper, Stack } from '@mui/material'
 import { usePipelineStatus } from '../../hooks/usePipelineStatus'
 import { api } from '../../services/api'
 import { LoadingIndicator } from '../LoadingIndicator/LoadingIndicator'
+import { StatusBadge } from '../common/StatusBadge'
 
 export interface PipelineControlsProps {
   onRefresh: () => void
@@ -24,46 +26,46 @@ export const PipelineControls = ({ onRefresh }: PipelineControlsProps) => {
     return <LoadingIndicator message={t('pipeline.loadingStatus')} />
   }
 
-  return (
-    <div className="pipeline-controls">
-      <div className="status-info">
-        {status?.is_finished ? (
-          <span className="status-badge finished">{t('pipeline.finished')}</span>
-        ) : status?.current_item_id ? (
-          <span className="status-badge active">
-            {t('pipeline.currentPrefix')} {status.current_item_id} ({status.total} {t('pipeline.totalSuffix')})
-          </span>
-        ) : status?.is_waiting ? (
-          <span className="status-badge waiting">{t('pipeline.waiting')}</span>
-        ) : null}
-      </div>
+  const renderBadge = () => {
+    if (status?.is_finished) {
+      return <StatusBadge label={t('pipeline.finished')} tone="finished" />
+    }
 
-      <div className="controls">
-        <button
-          onClick={() => handleAction(api.goBack)}
-          disabled={!status?.current_item_id}
-        >
+    if (status?.current_item_id) {
+      return (
+        <StatusBadge
+          label={`${t('pipeline.currentPrefix')} ${status.current_item_id} (${status.total} ${t('pipeline.totalSuffix')})`}
+          tone="active"
+        />
+      )
+    }
+
+    if (status?.is_waiting) {
+      return <StatusBadge label={t('pipeline.waiting')} tone="waiting" />
+    }
+
+    return null
+  }
+
+  const canAct = Boolean(status?.current_item_id)
+
+  return (
+    <Paper variant="outlined" sx={{ p: 2 }}>
+      <Box sx={{ mb: 1.5 }}>{renderBadge()}</Box>
+      <Stack direction="row" spacing={1}>
+        <Button onClick={() => handleAction(api.goBack)} disabled={!canAct}>
           {t('pipeline.backButton')}
-        </button>
-        <button
-          onClick={() => handleAction(api.skipItem)}
-          disabled={!status?.current_item_id}
-        >
+        </Button>
+        <Button onClick={() => handleAction(api.skipItem)} disabled={!canAct}>
           {t('pipeline.skipButton')}
-        </button>
-        <button
-          onClick={() => handleAction(api.rejectItem)}
-          disabled={!status?.current_item_id}
-        >
+        </Button>
+        <Button onClick={() => handleAction(api.rejectItem)} disabled={!canAct}>
           {t('pipeline.rejectButton')}
-        </button>
-        <button
-          onClick={() => handleAction(api.acceptItem)}
-          disabled={!status?.current_item_id}
-        >
+        </Button>
+        <Button onClick={() => handleAction(api.acceptItem)} variant="contained" disabled={!canAct}>
           {t('pipeline.acceptButton')}
-        </button>
-      </div>
-    </div>
+        </Button>
+      </Stack>
+    </Paper>
   )
 }

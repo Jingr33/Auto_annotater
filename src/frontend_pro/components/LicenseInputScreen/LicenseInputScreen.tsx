@@ -1,7 +1,9 @@
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Container, Paper, Typography } from '@mui/material'
 import { LicenseHeader } from './LicenseHeader'
 import { LicenseForm } from './LicenseForm'
+import { PageContainer } from '../common/PageContainer'
 
 export interface LicenseInputScreenProps {
   onActivate: (token: string) => void
@@ -17,22 +19,16 @@ export const LicenseInputScreen = ({ onActivate, error }: LicenseInputScreenProp
   }
 
   return (
-    <div className="license-screen">
-      <div className="license-container">
-        <LicenseHeader
-          title={t('license.screenTitle')}
-          subtitle={t('license.subtitle')}
-        />
-        <LicenseForm
-          token={token}
-          onTokenChange={setToken}
-          onSubmit={handleSubmit}
-          error={error}
-        />
-        <p className="license-help">
-          {t('license.helpText')}
-        </p>
-      </div>
-    </div>
+    <PageContainer>
+      <Container maxWidth="sm">
+        <Paper elevation={3} sx={{ p: 5, textAlign: 'center' }}>
+          <LicenseHeader title={t('license.screenTitle')} subtitle={t('license.subtitle')} />
+          <LicenseForm token={token} onTokenChange={setToken} onSubmit={handleSubmit} error={error} />
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 3 }}>
+            {t('license.helpText')}
+          </Typography>
+        </Paper>
+      </Container>
+    </PageContainer>
   )
 }

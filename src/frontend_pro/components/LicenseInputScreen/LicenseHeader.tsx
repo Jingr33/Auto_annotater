@@ -1,3 +1,5 @@
+import { Typography } from '@mui/material'
+
 export interface LicenseHeaderProps {
   title: string
   subtitle: string
@@ -5,9 +7,13 @@ export interface LicenseHeaderProps {
 
 export const LicenseHeader = ({ title, subtitle }: LicenseHeaderProps) => {
   return (
-    <div className="license-header">
-      <h1>{title}</h1>
-      <p className="license-subtitle">{subtitle}</p>
-    </div>
+    <>
+      <Typography variant="h4" component="h1" sx={{ mb: 1 }}>
+        {title}
+      </Typography>
+      <Typography variant="body1" color="text.secondary" sx={{ mb: 4 }}>
+        {subtitle}
+      </Typography>
+    </>
   )
 }
