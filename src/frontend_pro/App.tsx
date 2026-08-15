@@ -3,8 +3,9 @@ import { useTranslation } from 'react-i18next'
 import { PipelineControls } from './components/PipelineControls'
 import { LicenseInputScreen } from './components/LicenseInputScreen'
 import { AppLayout } from './components/AppLayout/AppLayout'
+import { LoadingIndicator } from './components/LoadingIndicator/LoadingIndicator'
+import { PageContainer } from './components/common/PageContainer'
 import { LicenseProvider } from './contexts/LicenseContext'
-import { Theme } from './theme/theme'
 import { useLicenseValidation } from './hooks/useLicenseValidation'
 
 function App() {
@@ -19,29 +20,18 @@ function App() {
 
   if (licenseValid === null) {
     return (
-      <>
-        <Theme />
-        <div className="license-screen">
-          <div className="license-container">
-            <p>{t('loading.default')}</p>
-          </div>
-        </div>
-      </>
+      <PageContainer>
+        <LoadingIndicator message={t('loading.default')} />
+      </PageContainer>
     )
   }
 
   if (!licenseValid) {
-    return (
-      <>
-        <Theme />
-        <LicenseInputScreen onActivate={handleActivate} error={licenseError} />
-      </>
-    )
+    return <LicenseInputScreen onActivate={handleActivate} error={licenseError} />
   }
 
   return (
     <LicenseProvider initialToken={licenseToken} onTokenChange={handleTokenChange}>
-      <Theme />
       <AppLayout onLogout={handleLogout}>
         <PipelineControls key={refreshKey} onRefresh={handleRefresh} />
       </AppLayout>
