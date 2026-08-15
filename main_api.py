@@ -4,9 +4,10 @@ import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
 
 import uvicorn
+from dependency_injector import providers
 
 from src.backend.api.app import app
-from src.backend.api.containers import Container
+from src.backend.api.containers import Container, register_routes
 from src.runner import Runner
 from src.cli_argument_parser import CLIArgumentParser
 from src.backend.enums.step_type import StepType
@@ -24,10 +25,8 @@ def main() -> None:
     runner.start_pipeline()
 
     container: Container = app.container
-    container.wire(modules=[__name__])
-
-    pipeline_controller = container.pipeline_controller()
-    pipeline_controller.set_manager(runner.manager)
+    container.pipeline_manager.override(providers.Object(runner.manager))
+    register_routes(app)
 
     uvicorn.run(app, host="0.0.0.0", port=8000)
 

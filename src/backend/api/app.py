@@ -22,12 +22,6 @@ def create_app() -> FastAPI:
 
     app.add_middleware(LicenseMiddleware)
 
-    pipeline_controller = container.pipeline_controller()
-    license_controller = container.license_controller()
-
-    app.include_router(pipeline_controller.router, prefix="/api")
-    app.include_router(license_controller.router, prefix="/api")
-
     return app
 
 

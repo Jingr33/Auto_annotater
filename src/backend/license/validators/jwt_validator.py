@@ -1,27 +1,23 @@
 import logging
 import os
-import sys
 from datetime import datetime, timedelta
-
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
 
 from license_config import PRO_LICENSE
 from backend.license.models import Feature, LicenseStatus, LicenseValidationResult
 from backend.license.provider import LicenseProvider
 
-logger = logging.getLogger(__name__)
-
 
 class JWTValidator(LicenseProvider):
-    def __init__(self):
+    def __init__(self, logger: logging.Logger | None = None):
+        self._logger = logger or logging.getLogger(__name__)
         self._public_key = os.getenv("LICENSE_PUBLIC_KEY", "")
 
     def validate_token(self, token: str) -> LicenseValidationResult:
         try:
-            logger.info("JWTValidator: Validating token...")
+            self._logger.info("JWTValidator: Validating token...")
 
             if PRO_LICENSE:
-                logger.info("JWTValidator: PRO_LICENSE=True, returning valid")
+                self._logger.info("JWTValidator: PRO_LICENSE=True, returning valid")
                 return LicenseValidationResult(
                     valid=True,
                     license_status=LicenseStatus(
@@ -38,14 +34,14 @@ class JWTValidator(LicenseProvider):
                     ),
                 )
             else:
-                logger.info("JWTValidator: PRO_LICENSE=False, returning invalid")
+                self._logger.info("JWTValidator: PRO_LICENSE=False, returning invalid")
                 return LicenseValidationResult(
                     valid=False,
                     error="No valid license (PRO_LICENSE=False)",
                 )
 
         except Exception as e:
-            logger.error("JWTValidator: Validation error: %s", e)
+            self._logger.error("JWTValidator: Validation error: %s", e)
             return LicenseValidationResult(valid=False, error=str(e))
 
     def activate(self, token: str) -> LicenseValidationResult:
