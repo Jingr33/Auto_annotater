@@ -13,8 +13,7 @@
       },
       "style": {
         "noNonNullAssertion": "warn",
-        "useConst": "error",
-        "useArrowFunction": "error"
+        "useConst": "error"
       },
       "suspicious": {
         "noExplicitAny": "warn"
@@ -34,11 +33,6 @@
     }
   },
   "files": {
-    "ignore": [
-      "node_modules",
-      "dist",
-      "build",
-      "*.min.js"
-    ]
+    "ignore": ["node_modules", "dist", "build", "*.min.js", "tsconfig*.json"]
   }
 }

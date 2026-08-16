@@ -1,5 +1,8 @@
-export enum ImagePredictionStatus {
-  Pending = 'pending',
-  Accepted = 'accepted',
-  Rejected = 'rejected',
-}
+export const ImagePredictionStatus = {
+  Pending: "pending",
+  Accepted: "accepted",
+  Rejected: "rejected",
+} as const;
+
+export type ImagePredictionStatus =
+  (typeof ImagePredictionStatus)[keyof typeof ImagePredictionStatus];

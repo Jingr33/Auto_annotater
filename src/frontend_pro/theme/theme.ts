@@ -1,11 +1,11 @@
-import { createTheme } from '@mui/material/styles'
+import { createTheme } from "@mui/material/styles";
 
-export const createAppTheme = (mode: 'light' | 'dark') =>
+export const createAppTheme = (mode: "light" | "dark") =>
   createTheme({
     palette: {
       mode,
       primary: {
-        main: mode === 'dark' ? '#c084fc' : '#aa3bff',
+        main: mode === "dark" ? "#c084fc" : "#aa3bff",
       },
     },
     typography: {
@@ -14,13 +14,13 @@ export const createAppTheme = (mode: 'light' | 'dark') =>
     components: {
       MuiAppBar: {
         defaultProps: {
-          position: 'static',
-          color: 'transparent',
+          position: "static",
+          color: "transparent",
           elevation: 0,
         },
         styleOverrides: {
           root: ({ theme }) => ({
-            borderBottom: '1px solid',
+            borderBottom: "1px solid",
             borderColor: theme.palette.divider,
           }),
         },
@@ -48,4 +48,4 @@ export const createAppTheme = (mode: 'light' | 'dark') =>
         },
       },
     },
-  })
+  });

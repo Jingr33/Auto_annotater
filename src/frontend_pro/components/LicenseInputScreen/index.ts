@@ -1,2 +1,2 @@
-export { LicenseInputScreen } from './LicenseInputScreen'
-export type { LicenseInputScreenProps } from './LicenseInputScreen'
+export { LicenseInputScreen } from "./LicenseInputScreen";
+export type { LicenseInputScreenProps } from "./LicenseInputScreen";

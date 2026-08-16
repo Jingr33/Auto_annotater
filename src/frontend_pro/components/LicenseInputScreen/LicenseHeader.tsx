@@ -1,8 +1,8 @@
-import { Stack, Typography } from '@mui/material'
+import { Stack, Typography } from "@mui/material";
 
 export interface LicenseHeaderProps {
-  title: string
-  subtitle: string
+  title: string;
+  subtitle: string;
 }
 
 export const LicenseHeader = ({ title, subtitle }: LicenseHeaderProps) => {
@@ -14,5 +14,5 @@ export const LicenseHeader = ({ title, subtitle }: LicenseHeaderProps) => {
         {subtitle}
       </Typography>
     </Stack>
-  )
-}
+  );
+};

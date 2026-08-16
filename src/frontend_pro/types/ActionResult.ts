@@ -1,3 +1,3 @@
 export interface ActionResult {
-  success: boolean
+  success: boolean;
 }
