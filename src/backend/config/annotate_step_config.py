@@ -7,5 +7,5 @@ from backend.enums.model_type import ModelType
 @dataclass
 class AnnotateStepConfig:
     model_type: ModelType
-    model_path: str = ""
+    model_path: str = ''
     ssh: SSHConfig = None

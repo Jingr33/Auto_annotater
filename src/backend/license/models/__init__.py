@@ -5,9 +5,9 @@ from backend.license.models.license_status import LicenseStatus
 from backend.license.models.license_validation_result import LicenseValidationResult
 
 __all__ = [
-    "Feature",
-    "LicenseError",
-    "LicenseErrorResponse",
-    "LicenseStatus",
-    "LicenseValidationResult",
+    'Feature',
+    'LicenseError',
+    'LicenseErrorResponse',
+    'LicenseStatus',
+    'LicenseValidationResult',
 ]

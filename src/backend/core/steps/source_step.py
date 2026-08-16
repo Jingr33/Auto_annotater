@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Generator
+from collections.abc import Generator
 
 from backend.core.frame_dto import FrameDTO
 

@@ -1,16 +1,16 @@
-import sys
 import os
+import sys
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src'))
 
 import uvicorn
 from dependency_injector import providers
 
 from src.backend.api.app import app
 from src.backend.api.containers import Container, register_routes
-from src.runner import Runner
-from src.cli_argument_parser import CLIArgumentParser
 from src.backend.enums.step_type import StepType
+from src.cli_argument_parser import CLIArgumentParser
+from src.runner import Runner
 
 
 def main() -> None:
@@ -28,8 +28,8 @@ def main() -> None:
     container.pipeline_manager.override(providers.Object(runner.manager))
     register_routes(app)
 
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host='0.0.0.0', port=8000)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

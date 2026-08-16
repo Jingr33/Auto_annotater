@@ -1,8 +1,8 @@
 from backend.annotators.annotator_factory import AnnotatorFactory
 from backend.config.annotate_step_config import AnnotateStepConfig
+from backend.core.data_manager import DataManager
 from backend.core.frame_dto import FrameDTO
 from backend.core.steps.step import Step
-from backend.core.data_manager import DataManager
 from backend.enums.annotation_label import AnnotationLabel
 
 
