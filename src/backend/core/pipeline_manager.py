@@ -1,13 +1,12 @@
 import queue
 import threading
-from typing import List
 
+from backend.core.data_manager import DataManager
 from backend.core.frame_dto import FrameDTO
-from backend.core.steps.source_step import SourceStep
-from backend.core.steps.step import Step
 from backend.core.runners.source_runner import SourceRunner
 from backend.core.runners.step_runner import StepRunner
-from backend.core.data_manager import DataManager
+from backend.core.steps.source_step import SourceStep
+from backend.core.steps.step import Step
 from backend.enums.image_prediction_status import ImagePredictionStatus
 from config import QUEUE_MAXSIZE
 
@@ -16,7 +15,7 @@ class PipelineManager:
     def __init__(
         self,
         source_step: SourceStep | None,
-        pipeline_steps: List[Step],
+        pipeline_steps: list[Step],
         workspace: str,
         with_frontend: bool = False,
         only_pending: bool = True,
@@ -36,7 +35,7 @@ class PipelineManager:
         else:
             self._source_runner = SourceRunner(source_step, queues[0])
 
-        self._step_runners: List[StepRunner] = []
+        self._step_runners: list[StepRunner] = []
         for i, step in enumerate(pipeline_steps):
             runner = StepRunner(
                 step=step,
@@ -129,7 +128,5 @@ class PipelineManager:
             items = self.data_manager.get_items()
         self._total = len(items)
         for item in items:
-            output_queue.put(
-                FrameDTO(item_id=item["id"], workspace=self.data_manager.workspace)
-            )
+            output_queue.put(FrameDTO(item_id=item['id'], workspace=self.data_manager.workspace))
         output_queue.put(None)

@@ -16,10 +16,10 @@ class BBoxAnnotation:
         return AnnotationType.BBOX
 
     def to_yolo_line(self) -> str:
-        return f"{self.class_index} {self.x} {self.y} {self.width} {self.height}"
+        return f'{self.class_index} {self.x} {self.y} {self.width} {self.height}'
 
     @classmethod
-    def from_yolo_line(cls, line: str) -> "BBoxAnnotation":
+    def from_yolo_line(cls, line: str) -> 'BBoxAnnotation':
         parts = line.strip().split()
         return cls(
             class_index=int(parts[0]),

@@ -7,3 +7,4 @@ PyQt6
 fastapi
 uvicorn
 dependency-injector
+ruff

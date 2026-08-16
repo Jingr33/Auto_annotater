@@ -8,5 +8,6 @@ class Step(ABC):
     def process(self, dto: FrameDTO) -> FrameDTO | None:
         pass
 
+    @abstractmethod
     def postprocess(self) -> None:
         pass

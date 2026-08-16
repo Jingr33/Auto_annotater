@@ -26,7 +26,10 @@ Implement task $ARGUMENTS from `dev_items/`.
 - Follow the appropriate coding standards:
   - Python backend code: `instructions/coding-standards-python.md`
   - React TypeScript frontend code: `instructions/coding-standards-react.md`
-- You may introduce new packages. **Do not** install them. Add every new dependency to the relevant requirements/package file.
+- You may introduce new packages. **Do not** install them, except `@mui/material`, which you **may** install via npm. Add every new dependency to the relevant requirements/package file.
+
+### Styling
+- Use **Material UI only** (`@mui/material`).
 
 ### 4. Document
 - Review the changes you made. Update relevant documentation in `docs/` if anything changed.
@@ -34,9 +37,12 @@ Implement task $ARGUMENTS from `dev_items/`.
 ### 5. Finish
 - Transition status to `done`.
 - Write `summary.md` in the task folder using `.opencode/templates/summary.md`.
-- `git add` + `git commit` with a descriptive message.
+- **Never commit** — leave the changes uncommitted in the working tree.
 
 ### 6. Push & PR (only if user says "force")
 - `git push origin <branch>`
 - Check `gh pr list --head <branch>` — skip if PR exists.
 - Create PR with `gh pr create --title "<title>" --body "<summary.md content>"`
+
+## Important: no commits
+- Never run `git commit`. The implementation must be left as uncommitted working-tree changes for the user to review and commit themselves.

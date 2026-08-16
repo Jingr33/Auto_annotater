@@ -1,5 +1,6 @@
-import { ReactNode } from 'react'
+import type { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
+import { AppBar, Box, Button, Container, Toolbar, Typography } from '@mui/material'
 
 export interface AppLayoutProps {
   children: ReactNode
@@ -10,16 +11,20 @@ export const AppLayout = ({ children, onLogout }: AppLayoutProps) => {
   const { t } = useTranslation()
 
   return (
-    <div className="app">
-      <header className="app-header">
-        <h1>{t('app.title')}</h1>
-        <button className="logout-button" onClick={onLogout}>
-          {t('app.logout')}
-        </button>
-      </header>
-      <main className="app-main">
+    <Box sx={{ maxWidth: '1200px', mx: 'auto', px: 2, display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+      <AppBar>
+        <Toolbar>
+          <Typography variant="h6" sx={{ flexGrow: 1, textAlign: 'center' }}>
+            {t('app.title')}
+          </Typography>
+
+          <Button onClick={onLogout}>{t('app.logout')}</Button>
+        </Toolbar>
+      </AppBar>
+
+      <Container maxWidth="lg" sx={{ flexGrow: 1 }}>
         {children}
-      </main>
-    </div>
+      </Container>
+    </Box>
   )
 }

@@ -1,6 +1,3 @@
-import os
-
-
 class YOLOConfig:
-    MODEL_PATH = ""
+    MODEL_PATH = ''
     CLASSES_OF_INTEREST = []

@@ -6,9 +6,9 @@ from src.backend.config.annotate_step_config import AnnotateStepConfig
 from src.backend.config.image_loader_config import ImageLoaderConfig
 from src.backend.config.ssh_config import SSHConfig
 from src.backend.core.pipeline_manager import PipelineManager
+from src.backend.core.registry import StepRegistry
 from src.backend.enums.model_type import ModelType
 from src.backend.enums.step_type import StepType
-from src.backend.core.registry import StepRegistry
 from src.frontend_open.pyqt.pyqt_frontend import PyQtFrontend
 
 
@@ -71,15 +71,19 @@ class Runner:
             )
         elif name is StepType.ANNOTATE:
             model_type = ModelType(self.args.model) if self.args.model else None
-            ssh = SSHConfig(
-                host=self.args.ssh_host or "",
-                port=self.args.ssh_port,
-                user=self.args.ssh_user or "",
-                key_path=self.args.ssh_key_path or "",
-                remote_work_dir=self.args.remote_work_dir,
-                remote_model_path=self.args.remote_model_path or "",
-                remote_python=self.args.remote_python,
-            ) if self.args.ssh_host else None
+            ssh = (
+                SSHConfig(
+                    host=self.args.ssh_host or '',
+                    port=self.args.ssh_port,
+                    user=self.args.ssh_user or '',
+                    key_path=self.args.ssh_key_path or '',
+                    remote_work_dir=self.args.remote_work_dir,
+                    remote_model_path=self.args.remote_model_path or '',
+                    remote_python=self.args.remote_python,
+                )
+                if self.args.ssh_host
+                else None
+            )
             return AnnotateStepConfig(
                 model_type=model_type,
                 model_path=self.args.model_path,

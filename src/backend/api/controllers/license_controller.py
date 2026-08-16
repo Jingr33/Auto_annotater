@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 
-from backend.license.license_manager import LicenseManager
 from backend.api.dto.license_activate_request import LicenseActivateRequest
-from backend.api.dto.license_dto import LicenseStatusResponseDTO, LicenseActivateResponseDTO
+from backend.api.dto.license_dto import LicenseActivateResponseDTO, LicenseStatusResponseDTO
+from backend.license.license_manager import LicenseManager
 
 
 class LicenseController:
@@ -16,8 +16,8 @@ class LicenseController:
         return self._router
 
     def _setup_routes(self) -> None:
-        self._router.get("/license/status")(self.get_license_status)
-        self._router.post("/license/activate")(self.activate_license)
+        self._router.get('/license/status')(self.get_license_status)
+        self._router.post('/license/activate')(self.activate_license)
 
     def get_license_status(self) -> LicenseStatusResponseDTO:
         status = self._license_manager.get_status()
@@ -32,10 +32,6 @@ class LicenseController:
         result = self._license_manager.activate(request.token)
         return LicenseActivateResponseDTO(
             valid=result.valid,
-            features=(
-                [f.value for f in result.license_status.features]
-                if result.license_status
-                else []
-            ),
+            features=([f.value for f in result.license_status.features] if result.license_status else []),
             error=result.error,
         )

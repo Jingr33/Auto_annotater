@@ -1,5 +1,3 @@
-from typing import List, Tuple
-
 import cv2 as cv
 from ultralytics import YOLO
 
@@ -14,23 +12,19 @@ class YOLOAnnotator(BaseAnnotator):
         self.model_path = config.model_path or YOLOConfig.MODEL_PATH
         self.model = YOLO(self.model_path)
 
-    def annotate(self, image_path: str) -> List[BBoxAnnotation]:
+    def annotate(self, image_path: str) -> list[BBoxAnnotation]:
         image = cv.imread(image_path)
         results = self.model.predict(image)
         return self._extract_best_per_class(results)
 
-    def annotate_with_bbox(
-        self, image_path: str, bbox: Tuple[float, float, float, float]
-    ) -> List[BBoxAnnotation]:
+    def annotate_with_bbox(self, image_path: str, bbox: tuple[float, float, float, float]) -> list[BBoxAnnotation]:
         image = cv.imread(image_path)
         x, y, w, h = bbox
         h_img, w_img = image.shape[:2]
-        results = self.model.predict(
-            image, crops=False, rect=False, conf=0.25, imgsz=max(h_img, w_img)
-        )
+        results = self.model.predict(image, crops=False, rect=False, conf=0.25, imgsz=max(h_img, w_img))
         return self._extract_best_per_class(results)
 
-    def _extract_best_per_class(self, results) -> List[BBoxAnnotation]:
+    def _extract_best_per_class(self, results) -> list[BBoxAnnotation]:
         confs = {}
         coords = {}
         for result in results:

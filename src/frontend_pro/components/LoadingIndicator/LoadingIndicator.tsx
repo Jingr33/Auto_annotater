@@ -1,4 +1,5 @@
 import { useTranslation } from 'react-i18next'
+import { Box, CircularProgress, Typography } from '@mui/material'
 
 export interface LoadingIndicatorProps {
   message?: string
@@ -8,8 +9,20 @@ export const LoadingIndicator = ({ message }: LoadingIndicatorProps) => {
   const { t } = useTranslation()
 
   return (
-    <div className="loading-indicator">
-      <p>{message ?? t('loading.default')}</p>
-    </div>
+    <Box
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexDirection: 'column',
+        gap: 1,
+        p: 2,
+      }}
+    >
+      <CircularProgress />
+      <Typography variant="body2" color="text.secondary">
+        {message ?? t('loading.default')}
+      </Typography>
+    </Box>
   )
 }

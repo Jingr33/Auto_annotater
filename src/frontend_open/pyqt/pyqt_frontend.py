@@ -1,14 +1,18 @@
+from frontend.pyqt.config import MIN_HEIGHT, MIN_WIDTH, WINDOW_TITLE
 from PyQt6.QtCore import Qt, QTimer
 from PyQt6.QtGui import QAction, QColor, QImage, QKeySequence, QPainter, QPen, QPixmap
 from PyQt6.QtWidgets import (
-    QHBoxLayout, QLabel, QMainWindow, QPushButton,
-    QVBoxLayout, QWidget,
+    QHBoxLayout,
+    QLabel,
+    QMainWindow,
+    QPushButton,
+    QVBoxLayout,
+    QWidget,
 )
 
-from backend.enums.annotation_type import AnnotationType
 from backend.config.selector_config import SelectorConfig as CFG
 from backend.core.prediction import Prediction
-from frontend.pyqt.config import WINDOW_TITLE, MIN_WIDTH, MIN_HEIGHT
+from backend.enums.annotation_type import AnnotationType
 
 
 class PyQtFrontend(QMainWindow):
@@ -29,24 +33,24 @@ class PyQtFrontend(QMainWindow):
 
         self.image_label = QLabel()
         self.image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.image_label.setStyleSheet("background-color: #333;")
+        self.image_label.setStyleSheet('background-color: #333;')
         self.image_label.setFixedSize(CFG.WIN_WIDTH - 2 * CFG.BAR_WIDTH, CFG.WIN_HEIGHT - CFG.BAR_HEIGHT)
 
         side = QVBoxLayout()
-        self.stats_label = QLabel("Total: 0\nAccepted: 0\nRejected: 0")
-        self.stats_label.setStyleSheet("font-size: 14px; padding: 10px;")
+        self.stats_label = QLabel('Total: 0\nAccepted: 0\nRejected: 0')
+        self.stats_label.setStyleSheet('font-size: 14px; padding: 10px;')
 
-        self.waiting_label = QLabel("")
+        self.waiting_label = QLabel('')
         self.waiting_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.waiting_label.setStyleSheet("font-size: 18px; color: #666;")
+        self.waiting_label.setStyleSheet('font-size: 18px; color: #666;')
 
-        btn_accept = QPushButton("Accept  (D)")
+        btn_accept = QPushButton('Accept  (D)')
         btn_accept.clicked.connect(self._accept)
-        btn_reject = QPushButton("Reject  (A)")
+        btn_reject = QPushButton('Reject  (A)')
         btn_reject.clicked.connect(self._reject)
-        btn_skip = QPushButton("Skip  (S)")
+        btn_skip = QPushButton('Skip  (S)')
         btn_skip.clicked.connect(self._skip)
-        btn_back = QPushButton("Back  (W)")
+        btn_back = QPushButton('Back  (W)')
         btn_back.clicked.connect(self._back)
 
         side.addWidget(self.stats_label)
@@ -101,8 +105,8 @@ class PyQtFrontend(QMainWindow):
         return Prediction(obj.item_id, obj.workspace)
 
     def _update(self) -> None:
-        waiting = getattr(self.manager, "is_waiting", lambda: False)()
-        self.waiting_label.setText("Waiting for annotation..." if waiting else "")
+        waiting = getattr(self.manager, 'is_waiting', lambda: False)()
+        self.waiting_label.setText('Waiting for annotation...' if waiting else '')
 
         if self._prediction is None:
             raw = self.manager.get_current()
@@ -112,8 +116,8 @@ class PyQtFrontend(QMainWindow):
         self._render()
 
     def _update_stats(self) -> None:
-        total = getattr(self.manager, "get_total", lambda: 0)()
-        self.stats_label.setText(f"Total: {total}\nAccepted: -\nRejected: -")
+        total = getattr(self.manager, 'get_total', lambda: 0)()
+        self.stats_label.setText(f'Total: {total}\nAccepted: -\nRejected: -')
 
     def _render(self) -> None:
         pred = self._prediction
@@ -127,8 +131,9 @@ class PyQtFrontend(QMainWindow):
 
         label_w = self.image_label.width()
         label_h = self.image_label.height()
-        scaled = qimage.scaled(label_w, label_h, Qt.AspectRatioMode.KeepAspectRatio,
-                               Qt.TransformationMode.FastTransformation)
+        scaled = qimage.scaled(
+            label_w, label_h, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.FastTransformation
+        )
 
         pixmap = QPixmap.fromImage(scaled)
         painter = QPainter(pixmap)
@@ -150,15 +155,10 @@ class PyQtFrontend(QMainWindow):
                 painter.drawRect(x1, y1, x2 - x1, y2 - y1)
 
             elif annot.annotation_type == AnnotationType.POLYGON:
-                pts = [
-                    (int(x * w * scale_x), int(y * h * scale_y))
-                    for x, y in annot.points
-                ]
+                pts = [(int(x * w * scale_x), int(y * h * scale_y)) for x, y in annot.points]
                 if len(pts) >= 2:
                     for i in range(len(pts)):
-                        painter.drawLine(pts[i][0], pts[i][1],
-                                         pts[(i + 1) % len(pts)][0],
-                                         pts[(i + 1) % len(pts)][1])
+                        painter.drawLine(pts[i][0], pts[i][1], pts[(i + 1) % len(pts)][0], pts[(i + 1) % len(pts)][1])
 
         painter.end()
         self.image_label.setPixmap(pixmap)
