@@ -17,4 +17,4 @@ class AnnotatorFactory:
                 run=RunMode.REMOTE if config.ssh and config.ssh.host else RunMode.LOCAL,
                 ssh=config.ssh,
             )
-        raise ValueError(f"Unknown model type: {config.model_type}")
+        raise ValueError(f'Unknown model type: {config.model_type}')
