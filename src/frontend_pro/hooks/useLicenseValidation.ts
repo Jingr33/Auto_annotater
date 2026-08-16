@@ -1,71 +1,74 @@
-import { useCallback, useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useCallback, useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
-const LICENSE_STORAGE_KEY = 'licenseToken'
+const LICENSE_STORAGE_KEY = "licenseToken";
 
 export const useLicenseValidation = () => {
-  const { t } = useTranslation()
-  const [licenseValid, setLicenseValid] = useState<boolean | null>(null)
-  const [licenseToken, setLicenseToken] = useState<string | null>(null)
-  const [licenseError, setLicenseError] = useState<string | null>(null)
+  const { t } = useTranslation();
+  const [licenseValid, setLicenseValid] = useState<boolean | null>(null);
+  const [licenseToken, setLicenseToken] = useState<string | null>(null);
+  const [licenseError, setLicenseError] = useState<string | null>(null);
 
-  const validateToken = useCallback(async (token: string) => {
-    try {
-      setLicenseError(null)
-      const response = await fetch('/api/license/status', {
-        headers: {
-          'X-License-Token': token,
-        },
-      })
-      const data = await response.json()
+  const validateToken = useCallback(
+    async (token: string) => {
+      try {
+        setLicenseError(null);
+        const response = await fetch("/api/license/status", {
+          headers: {
+            "X-License-Token": token,
+          },
+        });
+        const data = await response.json();
 
-      if (data.valid && data.features.includes('react_ui')) {
-        setLicenseValid(true)
-        setLicenseToken(token)
-        localStorage.setItem(LICENSE_STORAGE_KEY, token)
-      } else {
-        setLicenseValid(false)
-        setLicenseToken(null)
-        localStorage.removeItem(LICENSE_STORAGE_KEY)
-        setLicenseError(t('license.invalidError'))
+        if (data.valid && data.features.includes("react_ui")) {
+          setLicenseValid(true);
+          setLicenseToken(token);
+          localStorage.setItem(LICENSE_STORAGE_KEY, token);
+        } else {
+          setLicenseValid(false);
+          setLicenseToken(null);
+          localStorage.removeItem(LICENSE_STORAGE_KEY);
+          setLicenseError(t("license.invalidError"));
+        }
+      } catch {
+        setLicenseValid(false);
+        setLicenseToken(null);
+        setLicenseError(t("license.validationError"));
       }
-    } catch {
-      setLicenseValid(false)
-      setLicenseToken(null)
-      setLicenseError(t('license.validationError'))
-    }
-  }, [t])
+    },
+    [t],
+  );
 
   useEffect(() => {
-    const storedToken = localStorage.getItem(LICENSE_STORAGE_KEY)
+    const storedToken = localStorage.getItem(LICENSE_STORAGE_KEY);
     if (storedToken) {
-      validateToken(storedToken)
+      validateToken(storedToken);
     } else {
-      setLicenseValid(false)
+      setLicenseValid(false);
     }
-  }, [validateToken])
+  }, [validateToken]);
 
   const handleActivate = useCallback(
     async (token: string) => {
-      await validateToken(token)
+      await validateToken(token);
     },
-    [validateToken]
-  )
+    [validateToken],
+  );
 
   const handleTokenChange = useCallback((newToken: string | null) => {
-    setLicenseToken(newToken)
+    setLicenseToken(newToken);
     if (newToken) {
-      localStorage.setItem(LICENSE_STORAGE_KEY, newToken)
+      localStorage.setItem(LICENSE_STORAGE_KEY, newToken);
     } else {
-      localStorage.removeItem(LICENSE_STORAGE_KEY)
+      localStorage.removeItem(LICENSE_STORAGE_KEY);
     }
-  }, [])
+  }, []);
 
   const handleLogout = useCallback(() => {
-    setLicenseToken(null)
-    setLicenseValid(false)
-    localStorage.removeItem(LICENSE_STORAGE_KEY)
-  }, [])
+    setLicenseToken(null);
+    setLicenseValid(false);
+    localStorage.removeItem(LICENSE_STORAGE_KEY);
+  }, []);
 
   return {
     licenseValid,
@@ -74,5 +77,5 @@ export const useLicenseValidation = () => {
     handleActivate,
     handleTokenChange,
     handleLogout,
-  }
-}
+  };
+};

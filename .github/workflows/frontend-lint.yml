@@ -1,0 +1,31 @@
+name: Frontend Lint
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    name: Biome
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src/frontend_pro
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: src/frontend_pro/package-lock.json
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Biome check
+        run: npx biome check .
