@@ -8,7 +8,7 @@ from PyQt6.QtWidgets import (
 from backend.enums.annotation_type import AnnotationType
 from backend.config.selector_config import SelectorConfig as CFG
 from backend.core.prediction import Prediction
-from frontend.pyqt.config import WINDOW_TITLE, MIN_WIDTH, MIN_HEIGHT
+from frontend_open.pyqt.config import WINDOW_TITLE, MIN_WIDTH, MIN_HEIGHT
 
 
 class PyQtFrontend(QMainWindow):

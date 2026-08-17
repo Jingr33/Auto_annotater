@@ -2,4 +2,4 @@
 # Temporary configuration file for licensing
 # TODO: Remove this file when real licensing is implemented
 
-PRO_LICENSE = True  # Set to False to test unlicensed behavior
+PRO_LICENSE = False  # Set to False to test unlicensed behavior

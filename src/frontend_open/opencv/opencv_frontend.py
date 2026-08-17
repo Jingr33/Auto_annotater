@@ -4,7 +4,7 @@ import cv2 as cv
 from backend.enums.annotation_type import AnnotationType
 from backend.config.selector_config import SelectorConfig as CFG
 from backend.core.prediction import Prediction
-from frontend.opencv.config import BARS, FONT, FONT_SCL, TXT_CLR, THICK
+from frontend_open.opencv.config import BARS, FONT, FONT_SCL, TXT_CLR, THICK
 
 
 class OpenCVFrontend:
