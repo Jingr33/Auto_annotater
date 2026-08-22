@@ -1,3 +1,7 @@
+---
+description: Start the React frontend via npm
+---
+
 Start the React development server. The frontend will open in your browser automatically (typically at http://localhost:5173).
 
 ## Prerequisites

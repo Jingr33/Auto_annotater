@@ -1,19 +1,31 @@
-Start both the backend API server and the React frontend concurrently.
+---
+description: Start both frontend and backend simultaneously
+---
 
-## Backend
+Start both the backend API server and the React frontend concurrently. This is the recommended way to launch the full application.
 
-From the project root:
+## License Configuration
+
+The backend license mode is read from `.opencode/license_mode` (default `open`). You can override it by passing `--license-mode open|pro` as the first argument.
+
+## Usage
+
+Run the script with optional license mode:
 
 ```bash
-python main.py --steps LOAD ANNOTATE SELECT --output ./workspace
+python scripts/start_all.py [--license-mode open|pro]
 ```
 
-## Frontend
+Any additional arguments after `--license-mode` are forwarded to the backend script. The frontend does not accept additional arguments.
+
+## Clean Termination
+
+The script handles SIGINT/SIGTERM signals and ensures both the backend and frontend processes (and their children) are properly terminated. No orphaned processes will be left running.
+
+## Example
 
 ```bash
-cd src/frontend_pro && npm run dev
+python scripts/start_all.py --license-mode pro
 ```
 
-## Both
-
-Run both commands in separate terminals.
+This starts the backend with pro license and the React frontend. The frontend will open in your browser automatically.
