@@ -12,9 +12,9 @@ from backend.enums.image_prediction_status import ImagePredictionStatus
 class DataManager:
     def __init__(self, workspace: str):
         self.workspace = os.path.abspath(workspace)
-        os.makedirs(os.path.join(self.workspace, 'items'), exist_ok=True)
-        self._conn = sqlite3.connect(os.path.join(self.workspace, 'items.db'))
-        self._conn.execute('PRAGMA journal_mode=WAL')
+        os.makedirs(os.path.join(self.workspace, "items"), exist_ok=True)
+        self._conn = sqlite3.connect(os.path.join(self.workspace, "items.db"), check_same_thread=False)
+        self._conn.execute("PRAGMA journal_mode=WAL")
         self._init_db()
 
     def _init_db(self) -> None:

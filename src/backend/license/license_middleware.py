@@ -2,8 +2,8 @@ import logging
 from dataclasses import asdict
 
 from fastapi import Request
-from fastapi.middleware.base import BaseHTTPMiddleware
 from fastapi.responses import JSONResponse
+from starlette.middleware.base import BaseHTTPMiddleware
 
 from backend.license.license_manager import LicenseManager
 from backend.license.models import LicenseErrorResponse

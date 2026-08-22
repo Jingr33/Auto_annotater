@@ -46,3 +46,17 @@ class JWTValidator(LicenseProvider):
 
     def activate(self, token: str) -> LicenseValidationResult:
         return self.validate_token(token)
+
+    def get_current_status(self) -> LicenseStatus:
+        if PRO_LICENSE:
+            return LicenseStatus(
+                valid=True,
+                features=[
+                    Feature.PRO,
+                    Feature.API,
+                    Feature.REACT_UI,
+                    Feature.ADVANCED_ANNOTATION,
+                ],
+                email="licensed@auto-annotater.local",
+            )
+        return LicenseStatus(valid=False, features=[])

@@ -24,6 +24,7 @@ class PipelineManager:
         self.only_pending = only_pending
 
         n_queues = len(pipeline_steps) + (1 if with_frontend else 0)
+        # Ensure at least one queue if there's a source step (source needs somewhere to write)
         if n_queues == 0:
             n_queues = 1
         queues = [queue.Queue(maxsize=QUEUE_MAXSIZE) for _ in range(n_queues)]
@@ -35,7 +36,7 @@ class PipelineManager:
                 daemon=True,
             )
         else:
-            self._source_runner = SourceRunner(source_step, queues[0])
+            self._source_runner = SourceRunner(source_step, queues[0], self._set_total)
 
         self._step_runners: list[StepRunner] = []
         for i, step in enumerate(pipeline_steps):
@@ -98,6 +99,9 @@ class PipelineManager:
 
     def get_total(self) -> int:
         return self._total
+
+    def _set_total(self, total: int) -> None:
+        self._total = total
 
     def accept(self) -> None:
         dto = self._current_dto
