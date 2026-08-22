@@ -17,13 +17,13 @@ from backend.credentials_management.ssh_credentials import SSHCredentials
 
 
 class WindowsCredentialManager:
-    _target_prefix = "AutoAnnotater/SSH"
+    _target_prefix = 'AutoAnnotater/SSH'
 
     def __init__(self) -> None:
-        if os.name != "nt":
-            raise OSError("Windows Credential Manager is available only on Windows")
-        self._advapi32 = ctypes.WinDLL("advapi32", use_last_error=True)
-        self._credui = ctypes.WinDLL("credui", use_last_error=True)
+        if os.name != 'nt':
+            raise OSError('Windows Credential Manager is available only on Windows')
+        self._advapi32 = ctypes.WinDLL('advapi32', use_last_error=True)
+        self._credui = ctypes.WinDLL('credui', use_last_error=True)
         self._configure_api()
 
     def get_or_prompt(
@@ -45,7 +45,7 @@ class WindowsCredentialManager:
         self._advapi32.CredDeleteW(target, CRED_TYPE_GENERIC, 0)
 
     def _target(self, host: str, port: int, username: str) -> str:
-        return f"{self._target_prefix}/{host}:{port}/{username}"
+        return f'{self._target_prefix}/{host}:{port}/{username}'
 
     def _configure_api(self) -> None:
         self._advapi32.CredReadW.argtypes = [
@@ -97,28 +97,24 @@ class WindowsCredentialManager:
                 value.credential_blob_size,
             )
             return SSHCredentials(
-                username=value.user_name or "",
-                password=password_bytes.decode("utf-8"),
+                username=value.user_name or '',
+                password=password_bytes.decode('utf-8'),
             )
         finally:
             self._advapi32.CredFree(credential)
 
     def _prompt(self, target: str, username: str) -> SSHCredentials:
         username_buffer = ctypes.create_unicode_buffer(username, 513)
-        password_buffer = ctypes.create_unicode_buffer("", 513)
+        password_buffer = ctypes.create_unicode_buffer('', 513)
         save = wintypes.BOOL(True)
         info = _CredentialUIInfo(
             cb_size=ctypes.sizeof(_CredentialUIInfo),
             parent=None,
-            message="Enter SSH credentials for Auto-Annotater.",
-            caption="Auto-Annotater SSH credentials",
+            message='Enter SSH credentials for Auto-Annotater.',
+            caption='Auto-Annotater SSH credentials',
             banner=None,
         )
-        flags = (
-            CREDUI_FLAGS_ALWAYS_SHOW_UI
-            | CREDUI_FLAGS_GENERIC_CREDENTIALS
-            | CREDUI_FLAGS_SHOW_SAVE_CHECK_BOX
-        )
+        flags = CREDUI_FLAGS_ALWAYS_SHOW_UI | CREDUI_FLAGS_GENERIC_CREDENTIALS | CREDUI_FLAGS_SHOW_SAVE_CHECK_BOX
         result = self._credui.CredUIPromptForCredentialsW(
             ctypes.byref(info),
             target,
@@ -132,7 +128,7 @@ class WindowsCredentialManager:
             flags,
         )
         if result == ERROR_CANCELLED:
-            raise PermissionError("SSH credential prompt was cancelled")
+            raise PermissionError('SSH credential prompt was cancelled')
         if result != 0:
             raise ctypes.WinError(result)
 
@@ -140,14 +136,12 @@ class WindowsCredentialManager:
             username=username_buffer.value,
             password=password_buffer.value,
         )
-        user_target = f"{target.rsplit('/', 1)[0]}/{credentials.username}"
+        user_target = f'{target.rsplit("/", 1)[0]}/{credentials.username}'
         self._write(user_target, credentials)
         return credentials
 
     def _write(self, target: str, credentials: SSHCredentials) -> None:
-        password_buffer = ctypes.create_string_buffer(
-            credentials.password.encode("utf-8")
-        )
+        password_buffer = ctypes.create_string_buffer(credentials.password.encode('utf-8'))
         credential = _Credential(
             credential_type=CRED_TYPE_GENERIC,
             target_name=target,

@@ -26,5 +26,5 @@ class SourceRunner(threading.Thread):
             self.queue_out.put(None)
         except Exception as e:
             self.exception = e
-            logger.error("Source step failed: %s", e)
+            logger.error('Source step failed: %s', e)
             self.queue_out.put(None)

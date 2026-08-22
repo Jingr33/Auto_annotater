@@ -1,8 +1,8 @@
 import os
 import sys
 
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
 
 from src.cli_argument_parser import CLIArgumentParser
 from src.runner import Runner
@@ -14,5 +14,5 @@ def main() -> None:
     Runner(args).run()
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

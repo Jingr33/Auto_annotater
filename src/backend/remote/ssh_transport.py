@@ -34,12 +34,10 @@ class SSHTransport:
     def run(self, command: str) -> str:
         _, stdout, stderr = self._client.exec_command(command)
         exit_code = stdout.channel.recv_exit_status()
-        output = stdout.read().decode("utf-8")
-        error = stderr.read().decode("utf-8")
+        output = stdout.read().decode('utf-8')
+        error = stderr.read().decode('utf-8')
         if exit_code != 0:
-            raise RuntimeError(
-                f"Remote command failed with exit code {exit_code}: {error.strip()}"
-            )
+            raise RuntimeError(f'Remote command failed with exit code {exit_code}: {error.strip()}')
         return output
 
     def close(self) -> None:

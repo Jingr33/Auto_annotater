@@ -19,9 +19,9 @@ class ImageLoaderStep(SourceStep):
         root = self.config.source_path
 
         image_files = DatasetValidator().validate(root, self.config.model_type)
-        source_dir = os.path.join(root, "images")
+        source_dir = os.path.join(root, 'images')
 
-        labels_dir = os.path.join(root, "labels") if os.path.isdir(os.path.join(root, "labels")) else None
+        labels_dir = os.path.join(root, 'labels') if os.path.isdir(os.path.join(root, 'labels')) else None
         need_bbox = self.config.model_type == ModelType.MEDSAM2 and labels_dir is not None
 
         for img_file in sorted(image_files):
@@ -30,9 +30,9 @@ class ImageLoaderStep(SourceStep):
 
             if need_bbox:
                 name_no_ext = os.path.splitext(img_file)[0]
-                txt_path = os.path.join(labels_dir, name_no_ext + ".txt")
+                txt_path = os.path.join(labels_dir, name_no_ext + '.txt')
                 if os.path.exists(txt_path):
-                    dst = os.path.join(dm.workspace, "items", item_id, "yolo.txt")
+                    dst = os.path.join(dm.workspace, 'items', item_id, 'yolo.txt')
                     shutil.copy2(txt_path, dst)
 
             yield FrameDTO(item_id=item_id, workspace=self.config.output_path)

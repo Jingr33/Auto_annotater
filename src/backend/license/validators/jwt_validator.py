@@ -57,6 +57,6 @@ class JWTValidator(LicenseProvider):
                     Feature.REACT_UI,
                     Feature.ADVANCED_ANNOTATION,
                 ],
-                email="licensed@auto-annotater.local",
+                email='licensed@auto-annotater.local',
             )
         return LicenseStatus(valid=False, features=[])

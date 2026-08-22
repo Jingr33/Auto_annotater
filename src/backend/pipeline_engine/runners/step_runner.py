@@ -37,6 +37,6 @@ class StepRunner(threading.Thread):
                 self.queue_out.put(None)
         except Exception as e:
             self.exception = e
-            logger.error("Step %s failed: %s", type(self.step).__name__, e)
+            logger.error('Step %s failed: %s', type(self.step).__name__, e)
             if self.queue_out is not None:
                 self.queue_out.put(None)

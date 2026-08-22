@@ -49,7 +49,9 @@ class CLIArgumentParser:
         parser.add_argument(
             '--remote-python', default='python3', help='Python executable on remote server (default: python3)'
         )
-        parser.add_argument('--inference-script', default=None, help='Path to custom inference script (default: built-in)')
+        parser.add_argument(
+            '--inference-script', default=None, help='Path to custom inference script (default: built-in)'
+        )
 
         parser.add_argument(
             '--only-pending',
