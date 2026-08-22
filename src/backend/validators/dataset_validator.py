@@ -1,8 +1,7 @@
 import os
 
 from backend.enums.model_type import ModelType
-
-IMAGE_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.bmp', '.tif', '.tiff'}
+from backend.enums.image_extensions import SUPPORTED_IMAGE_EXTENSIONS
 
 
 class DatasetValidator:
@@ -18,11 +17,11 @@ class DatasetValidator:
             filename
             for filename in os.listdir(images_dir)
             if os.path.isfile(os.path.join(images_dir, filename))
-            and os.path.splitext(filename)[1].lower() in IMAGE_EXTENSIONS
+            and os.path.splitext(filename)[1].lower() in SUPPORTED_IMAGE_EXTENSIONS
         ]
         if not image_files:
             raise FileNotFoundError(
-                f'No image files found in {images_dir}. Supported formats: {", ".join(sorted(IMAGE_EXTENSIONS))}'
+                f'No image files found in {images_dir}. Supported formats: {", ".join(sorted(SUPPORTED_IMAGE_EXTENSIONS))}'
             )
 
         if model_type == ModelType.MEDSAM2:
