@@ -1,9 +1,9 @@
 import cv2 as cv
 import numpy as np
-from frontend.opencv.config import BARS, FONT, FONT_SCL, THICK, TXT_CLR
+from frontend_open.opencv.config import BARS, FONT, FONT_SCL, THICK, TXT_CLR
 
 from backend.config.selector_config import SelectorConfig as CFG
-from backend.core.prediction import Prediction
+from backend.pipeline_engine.prediction import Prediction
 from backend.enums.annotation_type import AnnotationType
 
 

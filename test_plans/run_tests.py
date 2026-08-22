@@ -40,6 +40,8 @@ class TestCase:
     expected_items: int = 0
     annotation_file: str | None = None
     expected_error_msg: str | None = None  # substring expected in stderr
+    interactive: bool = False
+    allow_empty_annotation: bool = False
 
 
 @dataclass
@@ -67,7 +69,12 @@ def count_images_in_dataset(dataset_name: str) -> int:
     return len([f for f in os.listdir(images_dir) if f.lower().endswith((".jpg", ".jpeg", ".png"))])
 
 
-def validate_output(out_dir: str, expected_items: int, annotation_file: str | None) -> list[str]:
+def validate_output(
+    out_dir: str,
+    expected_items: int,
+    annotation_file: str | None,
+    allow_empty_annotation: bool = False,
+) -> list[str]:
     errors = []
 
     db_path = os.path.join(out_dir, "items.db")
@@ -107,7 +114,7 @@ def validate_output(out_dir: str, expected_items: int, annotation_file: str | No
             annot_path = os.path.join(item_dir, annotation_file)
             if not os.path.exists(annot_path):
                 errors.append(f"{item_id}/{annotation_file} missing")
-            elif os.path.getsize(annot_path) == 0:
+            elif os.path.getsize(annot_path) == 0 and not allow_empty_annotation:
                 errors.append(f"{item_id}/{annotation_file} is empty")
 
     return errors
@@ -116,6 +123,16 @@ def validate_output(out_dir: str, expected_items: int, annotation_file: str | No
 def build_test_cases() -> list[TestCase]:
     yolo_3 = count_images_in_dataset("valid_images_only")
     yolo_3_labels = count_images_in_dataset("valid_with_labels")
+    medsam_3_junk = count_images_in_dataset("valid_with_labels_and_junk")
+    medsam_3_optional = count_images_in_dataset("valid_medsam_optional_labels")
+    medsam_remote_args = [
+        "--ssh-host", "446-a336-j4.vscht.cz",
+        "--ssh-port", "22",
+        "--ssh-user", "ingrj",
+        "--remote-work-dir", "/disk2/ingrj/medsam/MedSAM",
+        "--remote-model-path", "/disk2/ingrj/medsam/MedSAM/work_dir/custom_seg_model_2/medsam_best.pth",
+        "--remote-python", "/disk2/ingrj/medsam/venv/bin/python",
+    ]
     return [
         # --- YOLO valid structure, no model available ---
         TestCase(
@@ -152,80 +169,81 @@ def build_test_cases() -> list[TestCase]:
             annotation_file="yolo.txt",
         ),
 
-        # --- MEDSAM2 valid structure ---
+        # --- Positive MEDSAM2 flows ---
         TestCase(
-            id="TC-S7",
-            description="MEDSAM2: valid images/ only",
-            args=["--steps", "LOAD", "ANNOTATE", "--model", "MEDSAM2",
-                  "--source", dataset_path("valid_images_only"),
-                  "--output", output_path("tc_s7")],
-            dataset="valid_images_only",
-            expected_items=yolo_3,
-            annotation_file="sam_polygon.txt",
-        ),
-        TestCase(
-            id="TC-S8",
+            id="TC-S4",
             description="MEDSAM2: valid images/ + labels/",
             args=["--steps", "LOAD", "ANNOTATE", "--model", "MEDSAM2",
                   "--source", dataset_path("valid_with_labels"),
-                  "--output", output_path("tc_s8")],
+                  "--output", output_path("tc_s4")] + medsam_remote_args,
             dataset="valid_with_labels",
             expected_items=yolo_3_labels,
             annotation_file="sam_polygon.txt",
+            interactive=True,
         ),
         TestCase(
-            id="TC-S10",
-            description="MEDSAM2: valid images/ + junk files",
+            id="TC-S5",
+            description="MEDSAM2: valid images/ + labels/ + junk files",
             args=["--steps", "LOAD", "ANNOTATE", "--model", "MEDSAM2",
-                  "--source", dataset_path("valid_images_only"),
-                  "--output", output_path("tc_s10")],
-            dataset="valid_images_only",
-            expected_items=yolo_3,
+                  "--source", dataset_path("valid_with_labels_and_junk"),
+                  "--output", output_path("tc_s5")] + medsam_remote_args,
+            dataset="valid_with_labels_and_junk",
+            expected_items=medsam_3_junk,
             annotation_file="sam_polygon.txt",
+            interactive=True,
+        ),
+        TestCase(
+            id="TC-S6",
+            description="MEDSAM2: labels/ exists, one image has no object",
+            args=["--steps", "LOAD", "ANNOTATE", "--model", "MEDSAM2",
+                  "--source", dataset_path("valid_medsam_optional_labels"),
+                  "--output", output_path("tc_s6")] + medsam_remote_args,
+            dataset="valid_medsam_optional_labels",
+            expected_items=medsam_3_optional,
+            annotation_file="sam_polygon.txt",
+            interactive=True,
+            allow_empty_annotation=True,
         ),
 
-        # --- YOLO invalid structure ---
+        # --- Negative dataset flows ---
         TestCase(
-            id="TC-S4",
+            id="TC-S7",
+            description="MEDSAM2: labels/ missing -> ERROR",
+            args=["--steps", "LOAD", "ANNOTATE", "--model", "MEDSAM2",
+                  "--source", dataset_path("medsam_without_labels"),
+                  "--output", output_path("tc_s7")] + medsam_remote_args,
+            dataset="medsam_without_labels",
+            expect_error=True,
+            expected_error_msg="MEDSAM2 dataset requires a labels/ folder",
+        ),
+        TestCase(
+            id="TC-S8",
             description="YOLO: no images/ folder -> ERROR",
             args=["--steps", "LOAD", "ANNOTATE", "--model", "YOLO",
                   "--source", dataset_path("no_images_folder"),
-                  "--output", output_path("tc_s4")],
+                  "--output", output_path("tc_s8")],
             dataset="no_images_folder",
             expect_error=True,
         ),
         TestCase(
-            id="TC-S5",
+            id="TC-S9",
             description="YOLO: empty images/ -> ERROR",
             args=["--steps", "LOAD", "ANNOTATE", "--model", "YOLO",
                   "--source", dataset_path("empty_images"),
-                  "--output", output_path("tc_s5")],
+                  "--output", output_path("tc_s9")],
             dataset="empty_images",
             expect_error=True,
             expected_error_msg="No image files found",
         ),
         TestCase(
-            id="TC-S6",
-            description="YOLO: images/ missing entirely -> ERROR",
-            args=["--steps", "LOAD", "ANNOTATE", "--model", "YOLO",
-                  "--source", dataset_path("no_images_folder"),
-                  "--output", output_path("tc_s6")],
-            dataset="no_images_folder",
-            expect_error=True,
-        ),
-
-        # --- MEDSAM2 invalid structure ---
-        TestCase(
-            id="TC-S9",
+            id="TC-S10",
             description="MEDSAM2: images/ missing -> ERROR",
             args=["--steps", "LOAD", "ANNOTATE", "--model", "MEDSAM2",
                   "--source", dataset_path("no_images_folder"),
-                  "--output", output_path("tc_s9")],
+                  "--output", output_path("tc_s10")],
             dataset="no_images_folder",
             expect_error=True,
         ),
-
-        # --- Edge ---
         TestCase(
             id="TC-S11",
             description="Empty source directory -> ERROR",
@@ -234,7 +252,7 @@ def build_test_cases() -> list[TestCase]:
                   "--output", output_path("tc_s11")],
             dataset="empty_dataset",
             expect_error=True,
-            expected_error_msg="No image files found",
+            expected_error_msg="Required images/ folder not found",
         ),
         TestCase(
             id="TC-S12",
@@ -244,6 +262,26 @@ def build_test_cases() -> list[TestCase]:
                   "--output", output_path("tc_s12")],
             dataset="",
             expect_error=True,
+        ),
+        TestCase(
+            id="TC-S13",
+            description="MEDSAM2: bbox label empty -> ERROR",
+            args=["--steps", "LOAD", "ANNOTATE", "--model", "MEDSAM2",
+                  "--source", dataset_path("medsam_empty_label"),
+                  "--output", output_path("tc_s13")] + medsam_remote_args,
+            dataset="medsam_empty_label",
+            expect_error=True,
+            expected_error_msg="MEDSAM2 label is empty",
+        ),
+        TestCase(
+            id="TC-S14",
+            description="MEDSAM2: bbox outside image bounds -> ERROR",
+            args=["--steps", "LOAD", "ANNOTATE", "--model", "MEDSAM2",
+                  "--source", dataset_path("medsam_invalid_label"),
+                  "--output", output_path("tc_s14")] + medsam_remote_args,
+            dataset="medsam_invalid_label",
+            expect_error=True,
+            expected_error_msg="between 0 and 1",
         ),
     ]
 
@@ -275,9 +313,9 @@ def run_test(case: TestCase) -> TestResult:
         result = subprocess.run(
             cmd,
             cwd=SRC_DIR,
-            capture_output=True,
+            capture_output=not case.interactive,
             text=True,
-            timeout=60,
+            timeout=300 if case.interactive else 60,
         )
         duration = time.time() - start
 
@@ -313,7 +351,10 @@ def run_test(case: TestCase) -> TestResult:
                         print(f"  > {line}")
             else:
                 validation_errors = validate_output(
-                    out, case.expected_items, case.annotation_file
+                    out,
+                    case.expected_items,
+                    case.annotation_file,
+                    case.allow_empty_annotation,
                 )
                 passed = len(validation_errors) == 0
                 status = "PASS" if passed else "FAIL"

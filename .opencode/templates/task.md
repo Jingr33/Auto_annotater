@@ -1,9 +1,6 @@
----
-title:
-type: feature    # feature | bug | hotfix
-status: new      # new | commited | done | block
-scope: backend   # backend | frontend | both
----
+## Metadata
+- **Type**: feature       # feature | bug | hotfix
+- **Scope**: backend      # backend | frontend | both
 
 ## Description
 
@@ -17,7 +14,7 @@ scope: backend   # backend | frontend | both
 
 
 
-<!-- only for bug type -->
+<!-- only for bug/hotfix type -->
 ## Repro Steps
 
 1. 

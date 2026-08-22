@@ -1,12 +1,12 @@
 import queue
 import threading
 
-from backend.core.data_manager import DataManager
-from backend.core.frame_dto import FrameDTO
-from backend.core.runners.source_runner import SourceRunner
-from backend.core.runners.step_runner import StepRunner
-from backend.core.steps.source_step import SourceStep
-from backend.core.steps.step import Step
+from backend.pipeline_engine.data_manager import DataManager
+from backend.pipeline_engine.frame_dto import FrameDTO
+from backend.pipeline_engine.runners.source_runner import SourceRunner
+from backend.pipeline_engine.runners.step_runner import StepRunner
+from backend.pipeline_engine.steps.source_step import SourceStep
+from backend.pipeline_engine.steps.step import Step
 from backend.enums.image_prediction_status import ImagePredictionStatus
 from config import QUEUE_MAXSIZE
 
@@ -24,6 +24,8 @@ class PipelineManager:
         self.only_pending = only_pending
 
         n_queues = len(pipeline_steps) + (1 if with_frontend else 0)
+        if n_queues == 0:
+            n_queues = 1
         queues = [queue.Queue(maxsize=QUEUE_MAXSIZE) for _ in range(n_queues)]
 
         if source_step is None:
@@ -60,6 +62,12 @@ class PipelineManager:
         self._source_runner.join()
         for runner in self._step_runners:
             runner.join()
+
+        if isinstance(self._source_runner, SourceRunner) and self._source_runner.exception:
+            raise self._source_runner.exception
+        for runner in self._step_runners:
+            if runner.exception:
+                raise runner.exception
 
     def finalize(self) -> None:
         self.data_manager.close()

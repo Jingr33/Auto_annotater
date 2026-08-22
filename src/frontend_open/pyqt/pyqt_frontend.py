@@ -1,4 +1,4 @@
-from frontend.pyqt.config import MIN_HEIGHT, MIN_WIDTH, WINDOW_TITLE
+from frontend_open.pyqt.config import MIN_HEIGHT, MIN_WIDTH, WINDOW_TITLE
 from PyQt6.QtCore import Qt, QTimer
 from PyQt6.QtGui import QAction, QColor, QImage, QKeySequence, QPainter, QPen, QPixmap
 from PyQt6.QtWidgets import (
@@ -11,7 +11,7 @@ from PyQt6.QtWidgets import (
 )
 
 from backend.config.selector_config import SelectorConfig as CFG
-from backend.core.prediction import Prediction
+from backend.pipeline_engine.prediction import Prediction
 from backend.enums.annotation_type import AnnotationType
 
 

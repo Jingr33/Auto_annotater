@@ -40,3 +40,6 @@ class YOLOAnnotator(BaseAnnotator):
             BBoxAnnotation(class_index=cls_idx, x=c[0], y=c[1], width=c[2], height=c[3])
             for cls_idx, c in coords.items()
         ]
+
+    def cleanup(self) -> None:
+        self.model = None

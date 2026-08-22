@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from backend.core.frame_dto import FrameDTO
+from backend.pipeline_engine.frame_dto import FrameDTO
 
 
 class Step(ABC):

@@ -6,4 +6,9 @@ output
 src/frontend_pro/node_modules
 src/frontend_pro/dist
 dev_items/
+dev_support/
 .vscode/settings.json
+test_plans
+test_results.json
+stderr.txt
+stdout.txt
