@@ -18,6 +18,7 @@ Output format (written to --result):
     Coordinates are normalized to [0, 1] relative to original image size.
 """
 
+import argparse
 import json
 import os
 from typing import Any
@@ -26,9 +27,7 @@ import cv2
 import numpy as np
 import torch
 import torch.nn.functional as F
-
 from src.custom_seg_model import MedSAMCustom, load_sam_checkpoint
-
 
 IMAGE_SIZE = 1024
 DEVICE = 'cuda:0'

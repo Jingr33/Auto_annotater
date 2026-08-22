@@ -2,7 +2,6 @@ import os
 
 from backend.enums.model_type import ModelType
 
-
 IMAGE_EXTENSIONS = {'.jpg', '.jpeg', '.png', '.bmp', '.tif', '.tiff'}
 
 

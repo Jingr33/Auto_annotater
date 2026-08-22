@@ -3,10 +3,10 @@ import shutil
 from collections.abc import Generator
 
 from backend.config.image_loader_config import ImageLoaderConfig
+from backend.enums.model_type import ModelType
 from backend.pipeline_engine.data_manager import DataManager
 from backend.pipeline_engine.frame_dto import FrameDTO
 from backend.pipeline_engine.steps.source_step import SourceStep
-from backend.enums.model_type import ModelType
 from backend.validators.dataset_validator import DatasetValidator
 
 

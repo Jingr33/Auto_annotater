@@ -1,10 +1,10 @@
 from backend.annotators.annotator_factory import AnnotatorFactory
 from backend.config.annotate_step_config import AnnotateStepConfig
+from backend.enums.annotation_label import AnnotationLabel
+from backend.enums.model_type import ModelType
 from backend.pipeline_engine.data_manager import DataManager
 from backend.pipeline_engine.frame_dto import FrameDTO
 from backend.pipeline_engine.steps.step import Step
-from backend.enums.annotation_label import AnnotationLabel
-from backend.enums.model_type import ModelType
 
 
 class AnnotateStep(Step):

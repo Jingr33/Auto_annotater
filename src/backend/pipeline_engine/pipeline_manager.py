@@ -1,13 +1,13 @@
 import queue
 import threading
 
+from backend.enums.image_prediction_status import ImagePredictionStatus
 from backend.pipeline_engine.data_manager import DataManager
 from backend.pipeline_engine.frame_dto import FrameDTO
 from backend.pipeline_engine.runners.source_runner import SourceRunner
 from backend.pipeline_engine.runners.step_runner import StepRunner
 from backend.pipeline_engine.steps.source_step import SourceStep
 from backend.pipeline_engine.steps.step import Step
-from backend.enums.image_prediction_status import ImagePredictionStatus
 from config import QUEUE_MAXSIZE
 
 

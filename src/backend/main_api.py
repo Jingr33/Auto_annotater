@@ -1,5 +1,5 @@
-import sys
 import os
+import sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
@@ -9,9 +9,9 @@ from dependency_injector import providers
 
 from src.backend.api.app import app
 from src.backend.api.containers import Container, register_routes
-from src.runner import Runner
-from src.cli_argument_parser import CLIArgumentParser
 from src.backend.enums.step_type import StepType
+from src.cli_argument_parser import CLIArgumentParser
+from src.runner import Runner
 
 
 def main() -> None:

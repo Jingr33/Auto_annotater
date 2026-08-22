@@ -1,8 +1,8 @@
 import cv2 as cv
 
-from backend.pipeline_engine.data_manager import DataManager
 from backend.enums.annotation_label import AnnotationLabel
 from backend.enums.annotation_type import AnnotationType
+from backend.pipeline_engine.data_manager import DataManager
 
 
 class Prediction:
