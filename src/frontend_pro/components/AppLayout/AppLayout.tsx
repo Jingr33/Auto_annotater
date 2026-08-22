@@ -1,13 +1,12 @@
-import { AppBar, Box, Button, Container, Toolbar, Typography } from "@mui/material";
+import { AppBar, Box, Container, Toolbar, Typography } from "@mui/material";
 import type { ReactNode } from "react";
 import { useTranslation } from "react-i18next";
 
 export interface AppLayoutProps {
   children: ReactNode;
-  onLogout: () => void;
 }
 
-export const AppLayout = ({ children, onLogout }: AppLayoutProps) => {
+export const AppLayout = ({ children }: AppLayoutProps) => {
   const { t } = useTranslation();
 
   return (
@@ -26,8 +25,6 @@ export const AppLayout = ({ children, onLogout }: AppLayoutProps) => {
           <Typography variant="h6" sx={{ flexGrow: 1, textAlign: "center" }}>
             {t("app.title")}
           </Typography>
-
-          <Button onClick={onLogout}>{t("app.logout")}</Button>
         </Toolbar>
       </AppBar>
 

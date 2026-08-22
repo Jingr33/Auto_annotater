@@ -1,7 +1,7 @@
 import os
 
-from backend.enums.model_type import ModelType
 from backend.enums.image_extensions import SUPPORTED_IMAGE_EXTENSIONS
+from backend.enums.model_type import ModelType
 
 
 class DatasetValidator:

@@ -2,7 +2,6 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from backend.api.containers import Container
-from backend.license.license_middleware import LicenseMiddleware
 
 
 def create_app() -> FastAPI:
@@ -17,10 +16,7 @@ def create_app() -> FastAPI:
         allow_credentials=True,
         allow_methods=['*'],
         allow_headers=['*'],
-        expose_headers=['X-License-Token'],
     )
-
-    app.add_middleware(LicenseMiddleware)
 
     return app
 
