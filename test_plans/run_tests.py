@@ -13,15 +13,14 @@ Usage:
 """
 
 import argparse
+import json
 import os
 import shutil
 import sqlite3
 import subprocess
 import sys
 import time
-import json
 from dataclasses import dataclass, field
-
 
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 SRC_DIR = os.path.join(PROJECT_ROOT)
@@ -337,7 +336,7 @@ def run_test(case: TestCase) -> TestResult:
                 for err in validation_errors:
                     print(f"  > {err}")
             elif not passed:
-                print(f"  Expected non-zero exit code but got 0")
+                print("  Expected non-zero exit code but got 0")
             elif result.stderr:
                 err_lines = result.stderr.strip().split("\n")[-3:]
                 for line in err_lines:
@@ -381,6 +380,16 @@ def run_test(case: TestCase) -> TestResult:
             stderr="Timeout",
             duration=duration,
         )
+    except KeyboardInterrupt:
+        duration = time.time() - start
+        print(f"  [INTERRUPTED] after {duration:.1f}s")
+        return TestResult(
+            test_id=case.id,
+            passed=False,
+            exit_code=-1,
+            stderr="Interrupted",
+            duration=duration,
+        )
 
 
 def main() -> None:
@@ -407,8 +416,12 @@ def main() -> None:
     print()
 
     results = []
-    for case in cases:
-        results.append(run_test(case))
+    try:
+        for case in cases:
+            results.append(run_test(case))
+    except KeyboardInterrupt:
+        print("\n  [INTERRUPTED] Tests cancelled by user")
+        sys.exit(1)
 
     passed = sum(1 for r in results if r.passed)
     total = len(results)

@@ -2,6 +2,7 @@ import queue
 import threading
 
 from backend.enums.image_prediction_status import ImagePredictionStatus
+from backend.errors.user_facing_error import UserFacingError
 from backend.pipeline_engine.data_manager import DataManager
 from backend.pipeline_engine.frame_dto import FrameDTO
 from backend.pipeline_engine.runners.source_runner import SourceRunner
@@ -36,7 +37,7 @@ class PipelineManager:
                 daemon=True,
             )
         else:
-            self._source_runner = SourceRunner(source_step, queues[0], self._set_total)
+            self._source_runner = SourceRunner(source_step, queues[0])
 
         self._step_runners: list[StepRunner] = []
         for i, step in enumerate(pipeline_steps):
@@ -65,10 +66,16 @@ class PipelineManager:
             runner.join()
 
         if isinstance(self._source_runner, SourceRunner) and self._source_runner.exception:
-            raise self._source_runner.exception
+            self._raise_failure(self._source_runner.exception)
         for runner in self._step_runners:
             if runner.exception:
-                raise runner.exception
+                self._raise_failure(runner.exception)
+
+    @staticmethod
+    def _raise_failure(error: Exception) -> None:
+        if isinstance(error, UserFacingError):
+            raise SystemExit(1) from None
+        raise error
 
     def finalize(self) -> None:
         self.data_manager.close()
