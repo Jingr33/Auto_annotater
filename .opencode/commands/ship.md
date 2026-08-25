@@ -9,7 +9,8 @@ Stage all changes, commit with descriptive message, push, and create PR if not e
 ## Setup
 
 1. Load the **project-management** skill.
-2. Load the **github-operations** skill.
+2. Load the **manager** skill — it provides the `Fetch dev item` capability.
+3. Load the **github-operations** skill.
 
 ## Workflow
 
@@ -19,11 +20,15 @@ Run `git status` to see all changes.
 
 ### 2. Identify task
 
-- Read current branch name (e.g. `feature/001-add-data-loader`)
-- Extract task number from it (e.g. `001`)
-- Locate matching `dev_items/<task-number>-*/` folder
-- Read `task.md` — get `type` and `title` from frontmatter
-- Read `summary.md` — this will be the PR body (if exists)
+- Read current branch name (e.g. `feature/42-add-data-loader`)
+- Extract issue number from it (e.g. `42`)
+- Fetch the issue using manager skill's `Fetch dev item`:
+  ```bash
+  gh issue view <number> --repo Jingr33/Auto_annotater --json title,body
+  ```
+- Parse Type from `## Metadata` section
+- Parse Title from issue title
+- If `dev_support/<issue-number>/summary.md` exists, use it as PR body
 
 ### 3. Stage all changes
 
@@ -34,10 +39,10 @@ git add -A
 ### 4. Generate commit message
 
 Analyze staged changes and generate a descriptive commit message:
-- Use type from task.md (feature/bug/hotfix)
-- Include task number
+- Use type from issue metadata (feature/bug/hotfix)
+- Include issue number
 - Add short description based on what changed
-- Format: `<type>: <short-description> (#<task-number>)`
+- Format: `<type>: <short-description> (#<issue-number>)`
 
 ### 5. Commit
 
@@ -55,6 +60,6 @@ git push origin <current-branch>
 
 - Check: `gh pr list --head <current-branch> --json number`
 - If no PR exists, create one:
-  - PR title format: `<type>/<task-number>: <title>` (from `.opencode/templates/pr-title.md`)
-  - PR body: content of `summary.md`
+  - PR title format: `<type>/<issue-number>: <title>` (from `.opencode/templates/pr-title.md`)
+  - PR body: content of `dev_support/<issue-number>/summary.md` if it exists, otherwise issue body
   - Command: `gh pr create --title "<title>" --body "<body>"`

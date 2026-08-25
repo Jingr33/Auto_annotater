@@ -39,10 +39,18 @@ class CLIArgumentParser:
         parser.add_argument('--ssh-port', type=int, default=22, help='SSH port (default: 22)')
         parser.add_argument('--ssh-user', default=None, help='SSH username')
         parser.add_argument('--ssh-key-path', default=None, help='Path to SSH private key')
+        parser.add_argument(
+            '--force-ssh-credentials',
+            action='store_true',
+            help='Always open Windows Credential Manager for SSH credentials',
+        )
         parser.add_argument('--remote-work-dir', default='/tmp/medsam2', help='Working directory on remote server')
         parser.add_argument('--remote-model-path', default=None, help='Model path on remote server')
         parser.add_argument(
             '--remote-python', default='python3', help='Python executable on remote server (default: python3)'
+        )
+        parser.add_argument(
+            '--inference-script', default=None, help='Path to custom inference script (default: built-in)'
         )
 
         parser.add_argument(

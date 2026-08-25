@@ -10,17 +10,9 @@ Ensure npm dependencies are installed in `src/frontend_pro/`. If not, run `npm i
 
 ## Usage
 
-Run the script:
-
 ```bash
-python scripts/start_frontend.py
+cd src/frontend_pro && npm run dev
 ```
-
-No additional arguments are needed; the script runs `npm run dev` in the frontend directory.
-
-## Clean Termination
-
-The script handles SIGINT/SIGTERM signals and ensures the npm process and its children are properly terminated. No orphaned processes will be left running.
 
 ## Note
 

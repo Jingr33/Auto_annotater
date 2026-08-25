@@ -1,2 +1,0 @@
-class LicenseError(Exception):
-    pass

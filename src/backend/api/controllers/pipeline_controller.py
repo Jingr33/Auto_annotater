@@ -8,7 +8,7 @@ from backend.api.dto.annotation_item_dto import AnnotationItemDTO
 from backend.api.dto.annotation_item_list_response_dto import AnnotationItemListResponseDTO
 from backend.api.dto.image_dto import ImageUrlResponseDTO
 from backend.api.dto.pipeline_dto import PipelineStatusResponseDTO
-from backend.core.pipeline_manager import PipelineManager
+from backend.pipeline_engine.pipeline_manager import PipelineManager
 
 
 class PipelineController:

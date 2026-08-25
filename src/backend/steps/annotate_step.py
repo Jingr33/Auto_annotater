@@ -1,9 +1,10 @@
 from backend.annotators.annotator_factory import AnnotatorFactory
 from backend.config.annotate_step_config import AnnotateStepConfig
-from backend.core.data_manager import DataManager
-from backend.core.frame_dto import FrameDTO
-from backend.core.steps.step import Step
 from backend.enums.annotation_label import AnnotationLabel
+from backend.enums.model_type import ModelType
+from backend.pipeline_engine.data_manager import DataManager
+from backend.pipeline_engine.frame_dto import FrameDTO
+from backend.pipeline_engine.steps.step import Step
 
 
 class AnnotateStep(Step):
@@ -20,7 +21,18 @@ class AnnotateStep(Step):
         dm = DataManager(dto.workspace)
         image_path = dm.image_path(dto.item_id)
         annotator = self._lazy_init()
-        annotations = annotator.annotate(image_path)
+        if self.config.model_type == ModelType.MEDSAM2:
+            bboxes = dm.load_annotation(dto.item_id, AnnotationLabel.YOLO)
+            annotations = []
+            for bbox in bboxes:
+                annotations.extend(
+                    annotator.annotate_with_bbox(
+                        image_path,
+                        (bbox.x, bbox.y, bbox.width, bbox.height),
+                    )
+                )
+        else:
+            annotations = annotator.annotate(image_path)
         label = AnnotationLabel.from_model(self.config.model_type)
         dm.save_annotation(dto.item_id, annotations, label=label)
         return dto

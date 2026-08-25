@@ -10,3 +10,5 @@ class SSHConfig:
     remote_work_dir: str = '/tmp/medsam2'
     remote_model_path: str = ''
     remote_python: str = 'python3'
+    inference_script: str = ''
+    force_credentials: bool = False

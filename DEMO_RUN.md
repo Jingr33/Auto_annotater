@@ -98,6 +98,12 @@ python main.py --steps LOAD ANNOTATE SELECT \
     --remote-python /opt/venv/medsam/bin/python3
 ```
 
+SSH credentials are stored in Windows Credential Manager by host, port, and
+username. The first remote run opens the Windows credentials dialog; later
+runs reuse the saved credential and one persistent SSH connection is used for
+all image transfers and remote commands. Use `--force-ssh-credentials` to
+replace the saved credential.
+
 ## Workspace struktura
 
 ```

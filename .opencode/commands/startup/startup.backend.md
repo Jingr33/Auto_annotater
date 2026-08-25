@@ -1,29 +1,27 @@
 ---
-description: Start the backend API server with optional parameters and license mode
+description: Start the backend API server
 ---
 
 Start the backend API server. The server will run on http://0.0.0.0:8000.
 
-## License Configuration
-
-Before starting, the script reads the license mode from `.opencode/license_mode` (if exists) or uses the default `open` mode. You can override the license mode by passing `--license-mode open` or `--license-mode pro`.
-
 ## Usage
 
-Run the script with optional arguments that are forwarded to `main_api.py`:
+Run in a new console window:
 
 ```bash
-python scripts/start_backend.py [--license-mode open|pro] [MAIN_API_ARGS...]
+python src/backend/main_api.py --steps LOAD ANNOTATE SELECT --output ./workspace
 ```
 
-If no arguments are provided, the backend starts with default parameters (`--steps SELECT --output ./workspace`).
+### Parameters
 
-## Clean Termination
+- `--steps` — Pipeline steps in order (LOAD, ANNOTATE, SELECT)
+- `--output` — Workspace folder for results
+- `--source` — Dataset root (optional)
+- `--model` — Model type: YOLO or MEDSAM2 (optional)
+- `--model-path` — Path to model weights (optional)
 
-The script handles SIGINT/SIGTERM signals and ensures the child process is properly terminated. No orphaned processes will be left running.
-
-## Example
+### Example
 
 ```bash
-python scripts/start_backend.py --license-mode pro --steps LOAD ANNOTATE SELECT --source ./dataset --output ./workspace
+python src/backend/main_api.py --steps LOAD ANNOTATE SELECT --source ./data --output ./workspace --model YOLO
 ```
