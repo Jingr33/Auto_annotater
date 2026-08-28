@@ -128,3 +128,15 @@ Install test dependencies:
 ```bash
 pip install pytest pytest-asyncio pytest-cov
 ```
+
+## Troubleshooting
+
+### Command not found: pytest
+
+If you get a "command not found" error when running `pytest`, it means pytest is installed but not available on your system PATH. Use the following alternative:
+
+```bash
+python -m pytest
+```
+
+This works even when the `pytest` command is not directly accessible. Make sure you're running this command within your virtual environment where pytest is installed.
