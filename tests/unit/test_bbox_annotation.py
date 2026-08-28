@@ -1,5 +1,5 @@
-from src.backend.annotations.bbox_annotation import BBoxAnnotation
-from src.backend.enums.annotation_type import AnnotationType
+from backend.annotations.bbox_annotation import BBoxAnnotation
+from backend.enums.annotation_type import AnnotationType
 
 
 def test_bbox_annotation_creation() -> None:

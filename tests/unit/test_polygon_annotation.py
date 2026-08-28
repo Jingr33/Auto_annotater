@@ -1,5 +1,5 @@
-from src.backend.annotations.polygon_annotation import PolygonAnnotation
-from src.backend.enums.annotation_type import AnnotationType
+from backend.annotations.polygon_annotation import PolygonAnnotation
+from backend.enums.annotation_type import AnnotationType
 
 
 def test_polygon_annotation_creation() -> None:

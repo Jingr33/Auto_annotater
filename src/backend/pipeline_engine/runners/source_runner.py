@@ -2,8 +2,8 @@ import logging
 import queue
 import threading
 
-from src.backend.pipeline_engine.frame_dto import FrameDTO
-from src.backend.pipeline_engine.steps.source_step import SourceStep
+from backend.pipeline_engine.frame_dto import FrameDTO
+from backend.pipeline_engine.steps.source_step import SourceStep
 
 logger = logging.getLogger(__name__)
 

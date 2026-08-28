@@ -1,12 +1,12 @@
 import importlib
 
-from src.backend.enums.step_type import StepType
+from backend.enums.step_type import StepType
 
 
 class StepRegistry:
     _registry = {
-        StepType.LOAD: ('src.backend.steps.image_loader_step', 'ImageLoaderStep'),
-        StepType.ANNOTATE: ('src.backend.steps.annotate_step', 'AnnotateStep'),
+        StepType.LOAD: ('backend.steps.image_loader_step', 'ImageLoaderStep'),
+        StepType.ANNOTATE: ('backend.steps.annotate_step', 'AnnotateStep'),
     }
 
     @staticmethod

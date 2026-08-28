@@ -1,10 +1,10 @@
-from src.backend.enums.annotation_label import AnnotationLabel
-from src.backend.enums.annotation_type import AnnotationType
-from src.backend.enums.image_extensions import SUPPORTED_IMAGE_EXTENSIONS
-from src.backend.enums.image_prediction_status import ImagePredictionStatus
-from src.backend.enums.model_type import ModelType
-from src.backend.enums.run_mode import RunMode
-from src.backend.enums.step_type import StepType
+from backend.enums.annotation_label import AnnotationLabel
+from backend.enums.annotation_type import AnnotationType
+from backend.enums.image_extensions import SUPPORTED_IMAGE_EXTENSIONS
+from backend.enums.image_prediction_status import ImagePredictionStatus
+from backend.enums.model_type import ModelType
+from backend.enums.run_mode import RunMode
+from backend.enums.step_type import StepType
 
 
 def test_step_type_values() -> None:

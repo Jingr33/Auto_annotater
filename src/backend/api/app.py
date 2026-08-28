@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from src.backend.api.containers import Container
+from backend.api.containers import Container
 
 
 def create_app() -> FastAPI:

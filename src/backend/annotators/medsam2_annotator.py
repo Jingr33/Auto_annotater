@@ -5,12 +5,12 @@ import os
 import shlex
 import tempfile
 
-from src.backend.annotations.polygon_annotation import PolygonAnnotation
-from src.backend.annotators.base_annotator import BaseAnnotator
-from src.backend.config.medsam2_config import MedSAM2Config
-from src.backend.config.ssh_config import SSHConfig
-from src.backend.enums.run_mode import RunMode
-from src.backend.remote.remote_inference import RemoteInference
+from backend.annotations.polygon_annotation import PolygonAnnotation
+from backend.annotators.base_annotator import BaseAnnotator
+from backend.config.medsam2_config import MedSAM2Config
+from backend.config.ssh_config import SSHConfig
+from backend.enums.run_mode import RunMode
+from backend.remote.remote_inference import RemoteInference
 
 
 class MedSAM2Annotator(BaseAnnotator):

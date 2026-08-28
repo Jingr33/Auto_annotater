@@ -1,6 +1,6 @@
 import sys
 
-from src.cli_argument_parser import CLIArgumentParser
+from cli_argument_parser import CLIArgumentParser
 
 
 def test_cli_parser_creates_parser() -> None:

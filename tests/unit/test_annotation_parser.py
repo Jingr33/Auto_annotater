@@ -1,9 +1,9 @@
 import os
 import tempfile
 
-from src.backend.annotations.annotation_parser import AnnotationParser
-from src.backend.annotations.bbox_annotation import BBoxAnnotation
-from src.backend.annotations.polygon_annotation import PolygonAnnotation
+from backend.annotations.annotation_parser import AnnotationParser
+from backend.annotations.bbox_annotation import BBoxAnnotation
+from backend.annotations.polygon_annotation import PolygonAnnotation
 
 
 def test_load_nonexistent_file() -> None:

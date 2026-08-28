@@ -1,4 +1,4 @@
-from src.backend.pipeline_engine.frame_dto import FrameDTO
+from backend.pipeline_engine.frame_dto import FrameDTO
 
 
 def test_frame_dto_creation() -> None:

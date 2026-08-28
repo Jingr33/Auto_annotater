@@ -2,12 +2,12 @@ import gc
 import os
 import tempfile
 
-from src.backend.config.image_loader_config import ImageLoaderConfig
-from src.backend.enums.image_prediction_status import ImagePredictionStatus
-from src.backend.enums.model_type import ModelType
-from src.backend.pipeline_engine.data_manager import DataManager
-from src.backend.pipeline_engine.pipeline_manager import PipelineManager
-from src.backend.steps.image_loader_step import ImageLoaderStep
+from backend.config.image_loader_config import ImageLoaderConfig
+from backend.enums.image_prediction_status import ImagePredictionStatus
+from backend.enums.model_type import ModelType
+from backend.pipeline_engine.data_manager import DataManager
+from backend.pipeline_engine.pipeline_manager import PipelineManager
+from backend.steps.image_loader_step import ImageLoaderStep
 
 
 def test_pipeline_with_source_step() -> None:

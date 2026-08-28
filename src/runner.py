@@ -2,14 +2,14 @@ import sys
 
 from PyQt6.QtWidgets import QApplication
 
-from src.backend.config.annotate_step_config import AnnotateStepConfig
-from src.backend.config.image_loader_config import ImageLoaderConfig
-from src.backend.config.ssh_config import SSHConfig
-from src.backend.enums.model_type import ModelType
-from src.backend.enums.step_type import StepType
-from src.backend.pipeline_engine.pipeline_manager import PipelineManager
-from src.backend.pipeline_engine.registry import StepRegistry
-from src.frontend_open.pyqt.pyqt_frontend import PyQtFrontend
+from backend.config.annotate_step_config import AnnotateStepConfig
+from backend.config.image_loader_config import ImageLoaderConfig
+from backend.config.ssh_config import SSHConfig
+from backend.enums.model_type import ModelType
+from backend.enums.step_type import StepType
+from backend.pipeline_engine.pipeline_manager import PipelineManager
+from backend.pipeline_engine.registry import StepRegistry
+from frontend_open.pyqt.pyqt_frontend import PyQtFrontend
 
 
 class Runner:

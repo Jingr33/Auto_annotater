@@ -3,10 +3,10 @@ import tempfile
 
 import pytest
 
-from src.backend.annotations.bbox_annotation import BBoxAnnotation
-from src.backend.enums.annotation_label import AnnotationLabel
-from src.backend.enums.image_prediction_status import ImagePredictionStatus
-from src.backend.pipeline_engine.data_manager import DataManager
+from backend.annotations.bbox_annotation import BBoxAnnotation
+from backend.enums.annotation_label import AnnotationLabel
+from backend.enums.image_prediction_status import ImagePredictionStatus
+from backend.pipeline_engine.data_manager import DataManager
 
 
 def test_data_manager_creates_workspace() -> None:

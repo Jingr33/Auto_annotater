@@ -2,12 +2,12 @@ import os
 import shutil
 from collections.abc import Generator
 
-from src.backend.config.image_loader_config import ImageLoaderConfig
-from src.backend.enums.model_type import ModelType
-from src.backend.pipeline_engine.data_manager import DataManager
-from src.backend.pipeline_engine.frame_dto import FrameDTO
-from src.backend.pipeline_engine.steps.source_step import SourceStep
-from src.backend.validators.dataset_validator import DatasetValidator
+from backend.config.image_loader_config import ImageLoaderConfig
+from backend.enums.model_type import ModelType
+from backend.pipeline_engine.data_manager import DataManager
+from backend.pipeline_engine.frame_dto import FrameDTO
+from backend.pipeline_engine.steps.source_step import SourceStep
+from backend.validators.dataset_validator import DatasetValidator
 
 
 class ImageLoaderStep(SourceStep):

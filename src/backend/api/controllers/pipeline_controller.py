@@ -3,12 +3,12 @@ import os
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import FileResponse
 
-from src.backend.api.dto.action_dto import ActionResultDTO
-from src.backend.api.dto.annotation_item_dto import AnnotationItemDTO
-from src.backend.api.dto.annotation_item_list_response_dto import AnnotationItemListResponseDTO
-from src.backend.api.dto.image_dto import ImageUrlResponseDTO
-from src.backend.api.dto.pipeline_dto import PipelineStatusResponseDTO
-from src.backend.pipeline_engine.pipeline_manager import PipelineManager
+from backend.api.dto.action_dto import ActionResultDTO
+from backend.api.dto.annotation_item_dto import AnnotationItemDTO
+from backend.api.dto.annotation_item_list_response_dto import AnnotationItemListResponseDTO
+from backend.api.dto.image_dto import ImageUrlResponseDTO
+from backend.api.dto.pipeline_dto import PipelineStatusResponseDTO
+from backend.pipeline_engine.pipeline_manager import PipelineManager
 
 
 class PipelineController:

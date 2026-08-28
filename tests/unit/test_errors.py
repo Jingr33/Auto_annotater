@@ -1,6 +1,6 @@
 import pytest
 
-from src.backend.errors.user_facing_error import UserFacingError
+from backend.errors.user_facing_error import UserFacingError
 
 
 def test_user_facing_error_is_exception() -> None:

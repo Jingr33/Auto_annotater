@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from collections.abc import Generator
 
-from src.backend.pipeline_engine.frame_dto import FrameDTO
+from backend.pipeline_engine.frame_dto import FrameDTO
 
 
 class SourceStep(ABC):

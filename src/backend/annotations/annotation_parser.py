@@ -1,8 +1,8 @@
 import os
 
-from src.backend.annotations import Annotation
-from src.backend.annotations.bbox_annotation import BBoxAnnotation
-from src.backend.annotations.polygon_annotation import PolygonAnnotation
+from backend.annotations import Annotation
+from backend.annotations.bbox_annotation import BBoxAnnotation
+from backend.annotations.polygon_annotation import PolygonAnnotation
 
 
 class AnnotationParser:

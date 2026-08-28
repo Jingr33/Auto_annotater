@@ -3,8 +3,8 @@ import tempfile
 
 import pytest
 
-from src.backend.enums.model_type import ModelType
-from src.backend.validators.dataset_validator import DatasetValidator
+from backend.enums.model_type import ModelType
+from backend.validators.dataset_validator import DatasetValidator
 
 
 def test_validate_nonexistent_path() -> None:

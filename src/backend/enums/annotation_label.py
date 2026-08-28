@@ -1,6 +1,6 @@
 from enum import Enum
 
-from src.backend.enums.model_type import ModelType
+from backend.enums.model_type import ModelType
 
 
 class AnnotationLabel(str, Enum):

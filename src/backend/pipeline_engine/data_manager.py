@@ -3,10 +3,10 @@ import shutil
 import sqlite3
 from datetime import datetime, timezone
 
-from src.backend.annotations import Annotation
-from src.backend.annotations.annotation_parser import AnnotationParser
-from src.backend.enums.annotation_label import AnnotationLabel
-from src.backend.enums.image_prediction_status import ImagePredictionStatus
+from backend.annotations import Annotation
+from backend.annotations.annotation_parser import AnnotationParser
+from backend.enums.annotation_label import AnnotationLabel
+from backend.enums.image_prediction_status import ImagePredictionStatus
 
 
 class DataManager:

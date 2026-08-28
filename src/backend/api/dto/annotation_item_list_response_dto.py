@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from src.backend.api.dto.annotation_item_dto import AnnotationItemDTO
+from backend.api.dto.annotation_item_dto import AnnotationItemDTO
 
 
 @dataclass

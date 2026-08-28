@@ -1,10 +1,10 @@
 import os
 import posixpath
 
-from src.backend.config.ssh_config import SSHConfig
-from src.backend.credentials_management.windows_credential_manager import WindowsCredentialManager
-from src.backend.remote.remote_connection_error import RemoteConnectionError
-from src.backend.remote.ssh_transport import SSHTransport
+from backend.config.ssh_config import SSHConfig
+from backend.credentials_management.windows_credential_manager import WindowsCredentialManager
+from backend.remote.remote_connection_error import RemoteConnectionError
+from backend.remote.ssh_transport import SSHTransport
 
 
 class RemoteInference:

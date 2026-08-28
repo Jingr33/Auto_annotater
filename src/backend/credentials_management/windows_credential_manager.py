@@ -2,9 +2,9 @@ import ctypes
 import os
 from ctypes import wintypes
 
-from src.backend.credentials_management._credential import _Credential
-from src.backend.credentials_management._credential_ui_info import _CredentialUIInfo
-from src.backend.credentials_management.credential_constants import (
+from backend.credentials_management._credential import _Credential
+from backend.credentials_management._credential_ui_info import _CredentialUIInfo
+from backend.credentials_management.credential_constants import (
     CRED_PERSIST_LOCAL_MACHINE,
     CRED_TYPE_GENERIC,
     CREDUI_FLAGS_ALWAYS_SHOW_UI,
@@ -13,7 +13,7 @@ from src.backend.credentials_management.credential_constants import (
     ERROR_CANCELLED,
     ERROR_NOT_FOUND,
 )
-from src.backend.credentials_management.ssh_credentials import SSHCredentials
+from backend.credentials_management.ssh_credentials import SSHCredentials
 
 
 class WindowsCredentialManager:

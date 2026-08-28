@@ -1,7 +1,7 @@
 from dependency_injector import containers, providers
 from fastapi import FastAPI
 
-from src.backend.api.controllers.pipeline_controller import PipelineController
+from backend.api.controllers.pipeline_controller import PipelineController
 
 
 class Container(containers.DeclarativeContainer):
