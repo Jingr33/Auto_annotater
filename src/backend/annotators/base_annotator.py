@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from backend.annotations import Annotation
+from src.backend.annotations import Annotation
 
 
 class BaseAnnotator(ABC):

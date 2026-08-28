@@ -1,4 +1,4 @@
-from backend.errors.user_facing_error import UserFacingError
+from src.backend.errors.user_facing_error import UserFacingError
 
 
 class RemoteConnectionError(UserFacingError):

@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from backend.enums.model_type import ModelType
+from src.backend.enums.model_type import ModelType
 
 
 @dataclass

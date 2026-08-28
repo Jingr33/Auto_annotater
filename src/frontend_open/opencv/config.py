@@ -1,6 +1,6 @@
 import cv2 as cv
 
-from backend.config.selector_config import SelectorConfig as CFG
+from src.backend.config.selector_config import SelectorConfig as CFG
 
 FONT = cv.FONT_HERSHEY_SIMPLEX
 FONT_SCL = 0.6

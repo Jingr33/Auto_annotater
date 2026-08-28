@@ -1,7 +1,7 @@
 import argparse
 
-from backend.enums.model_type import ModelType
-from backend.enums.step_type import StepType
+from src.backend.enums.model_type import ModelType
+from src.backend.enums.step_type import StepType
 
 
 class CLIArgumentParser:

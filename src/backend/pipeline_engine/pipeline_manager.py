@@ -1,15 +1,15 @@
 import queue
 import threading
 
-from backend.enums.image_prediction_status import ImagePredictionStatus
-from backend.errors.user_facing_error import UserFacingError
-from backend.pipeline_engine.data_manager import DataManager
-from backend.pipeline_engine.frame_dto import FrameDTO
-from backend.pipeline_engine.runners.source_runner import SourceRunner
-from backend.pipeline_engine.runners.step_runner import StepRunner
-from backend.pipeline_engine.steps.source_step import SourceStep
-from backend.pipeline_engine.steps.step import Step
-from config import QUEUE_MAXSIZE
+from src.backend.enums.image_prediction_status import ImagePredictionStatus
+from src.backend.errors.user_facing_error import UserFacingError
+from src.backend.pipeline_engine.data_manager import DataManager
+from src.backend.pipeline_engine.frame_dto import FrameDTO
+from src.backend.pipeline_engine.runners.source_runner import SourceRunner
+from src.backend.pipeline_engine.runners.step_runner import StepRunner
+from src.backend.pipeline_engine.steps.source_step import SourceStep
+from src.backend.pipeline_engine.steps.step import Step
+from src.config import QUEUE_MAXSIZE
 
 
 class PipelineManager:

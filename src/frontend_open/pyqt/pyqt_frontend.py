@@ -9,10 +9,10 @@ from PyQt6.QtWidgets import (
     QWidget,
 )
 
-from backend.config.selector_config import SelectorConfig as CFG
-from backend.enums.annotation_type import AnnotationType
-from backend.pipeline_engine.prediction import Prediction
-from frontend_open.pyqt.config import MIN_HEIGHT, MIN_WIDTH, WINDOW_TITLE
+from src.backend.config.selector_config import SelectorConfig as CFG
+from src.backend.enums.annotation_type import AnnotationType
+from src.backend.pipeline_engine.prediction import Prediction
+from src.frontend_open.pyqt.config import MIN_HEIGHT, MIN_WIDTH, WINDOW_TITLE
 
 
 class PyQtFrontend(QMainWindow):

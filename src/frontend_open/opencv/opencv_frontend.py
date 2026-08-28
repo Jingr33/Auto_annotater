@@ -1,10 +1,10 @@
 import cv2 as cv
 import numpy as np
 
-from backend.config.selector_config import SelectorConfig as CFG
-from backend.enums.annotation_type import AnnotationType
-from backend.pipeline_engine.prediction import Prediction
-from frontend_open.opencv.config import BARS, FONT, FONT_SCL, THICK, TXT_CLR
+from src.backend.config.selector_config import SelectorConfig as CFG
+from src.backend.enums.annotation_type import AnnotationType
+from src.backend.pipeline_engine.prediction import Prediction
+from src.frontend_open.opencv.config import BARS, FONT, FONT_SCL, THICK, TXT_CLR
 
 
 class OpenCVFrontend:

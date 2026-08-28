@@ -2,8 +2,8 @@ import os
 
 import paramiko
 
-from backend.config.ssh_config import SSHConfig
-from backend.credentials_management.ssh_credentials import SSHCredentials
+from src.backend.config.ssh_config import SSHConfig
+from src.backend.credentials_management.ssh_credentials import SSHCredentials
 
 
 class SSHTransport:

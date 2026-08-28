@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
 
-from backend.enums.annotation_type import AnnotationType
+from src.backend.enums.annotation_type import AnnotationType
 
 
 @dataclass

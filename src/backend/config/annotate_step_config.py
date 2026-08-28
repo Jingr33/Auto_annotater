@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
-from backend.config.ssh_config import SSHConfig
-from backend.enums.model_type import ModelType
+from src.backend.config.ssh_config import SSHConfig
+from src.backend.enums.model_type import ModelType
 
 
 @dataclass

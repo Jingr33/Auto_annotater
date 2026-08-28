@@ -3,10 +3,10 @@ import shutil
 import sqlite3
 from datetime import datetime, timezone
 
-from backend.annotations import Annotation
-from backend.annotations.annotation_parser import AnnotationParser
-from backend.enums.annotation_label import AnnotationLabel
-from backend.enums.image_prediction_status import ImagePredictionStatus
+from src.backend.annotations import Annotation
+from src.backend.annotations.annotation_parser import AnnotationParser
+from src.backend.enums.annotation_label import AnnotationLabel
+from src.backend.enums.image_prediction_status import ImagePredictionStatus
 
 
 class DataManager:
@@ -14,6 +14,7 @@ class DataManager:
         self.workspace = os.path.abspath(workspace)
         os.makedirs(os.path.join(self.workspace, 'items'), exist_ok=True)
         self._conn = sqlite3.connect(os.path.join(self.workspace, 'items.db'), check_same_thread=False)
+        self._conn.row_factory = sqlite3.Row
         self._conn.execute('PRAGMA journal_mode=WAL')
         self._init_db()
 

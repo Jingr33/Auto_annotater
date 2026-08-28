@@ -1,9 +1,9 @@
-from backend.annotators.base_annotator import BaseAnnotator
-from backend.annotators.medsam2_annotator import MedSAM2Annotator
-from backend.annotators.yolo_annotator import YOLOAnnotator
-from backend.config.annotate_step_config import AnnotateStepConfig
-from backend.enums.model_type import ModelType
-from backend.enums.run_mode import RunMode
+from src.backend.annotators.base_annotator import BaseAnnotator
+from src.backend.annotators.medsam2_annotator import MedSAM2Annotator
+from src.backend.annotators.yolo_annotator import YOLOAnnotator
+from src.backend.config.annotate_step_config import AnnotateStepConfig
+from src.backend.enums.model_type import ModelType
+from src.backend.enums.run_mode import RunMode
 
 
 class AnnotatorFactory:
