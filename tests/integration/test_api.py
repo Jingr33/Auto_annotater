@@ -20,7 +20,9 @@ def _create_test_client(tmpdir: str) -> tuple[TestClient, DataManager, PipelineM
         dm.import_image(img_path)
     dm.close()
 
-    args = type('Args', (), {'model': 'YOLO', 'dataset_output': os.path.join(tmpdir, 'dataset'), 'only_pending': False})()
+    args = type(
+        'Args', (), {'model': 'YOLO', 'dataset_output': os.path.join(tmpdir, 'dataset'), 'only_pending': False}
+    )()
     manager = PipelineManager(args, with_frontend=True)
 
     app = create_app()

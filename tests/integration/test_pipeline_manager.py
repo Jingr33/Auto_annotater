@@ -19,7 +19,9 @@ def test_pipeline_manager_accept() -> None:
             dm.import_image(img_path)
             dm.close()
 
-        args = type('Args', (), {'model': 'YOLO', 'dataset_output': os.path.join(tmpdir, 'dataset'), 'only_pending': True})()
+        args = type(
+            'Args', (), {'model': 'YOLO', 'dataset_output': os.path.join(tmpdir, 'dataset'), 'only_pending': True}
+        )()
         manager = PipelineManager(args, with_frontend=True)
 
         manager.start()
@@ -49,7 +51,9 @@ def test_pipeline_manager_reject() -> None:
             dm.import_image(img_path)
             dm.close()
 
-        args = type('Args', (), {'model': 'YOLO', 'dataset_output': os.path.join(tmpdir, 'dataset'), 'only_pending': True})()
+        args = type(
+            'Args', (), {'model': 'YOLO', 'dataset_output': os.path.join(tmpdir, 'dataset'), 'only_pending': True}
+        )()
         manager = PipelineManager(args, with_frontend=True)
 
         manager.start()
@@ -79,7 +83,9 @@ def test_pipeline_manager_skip() -> None:
             dm.import_image(img_path)
             dm.close()
 
-        args = type('Args', (), {'model': 'YOLO', 'dataset_output': os.path.join(tmpdir, 'dataset'), 'only_pending': True})()
+        args = type(
+            'Args', (), {'model': 'YOLO', 'dataset_output': os.path.join(tmpdir, 'dataset'), 'only_pending': True}
+        )()
         manager = PipelineManager(args, with_frontend=True)
 
         manager.start()
@@ -110,7 +116,9 @@ def test_pipeline_manager_back() -> None:
             dm.import_image(img_path)
             dm.close()
 
-        args = type('Args', (), {'model': 'YOLO', 'dataset_output': os.path.join(tmpdir, 'dataset'), 'only_pending': True})()
+        args = type(
+            'Args', (), {'model': 'YOLO', 'dataset_output': os.path.join(tmpdir, 'dataset'), 'only_pending': True}
+        )()
         manager = PipelineManager(args, with_frontend=True)
 
         manager.start()
