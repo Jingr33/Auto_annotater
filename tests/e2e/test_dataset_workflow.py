@@ -1,5 +1,6 @@
 import os
 import tempfile
+from unittest.mock import patch
 
 from backend.config.image_loader_config import ImageLoaderConfig
 from backend.enums.model_type import ModelType
@@ -20,19 +21,19 @@ def test_yolo_annotation_workflow() -> None:
         output_dir = os.path.join(tmpdir, 'output')
         config = ImageLoaderConfig(
             source_path=source_dir,
-            output_path=output_dir,
             model_type=ModelType.YOLO,
         )
 
         step = ImageLoaderStep(config)
-        frames = list(step.run())
-        assert len(frames) == 2
-        step.close()
+        with patch('backend.pipeline_engine.data_manager.WORKSPACE_DIR', output_dir):
+            frames = list(step.run())
+            assert len(frames) == 2
+            step.close()
 
-        dm = DataManager(output_dir)
-        items = dm.get_items()
-        assert len(items) == 2
-        dm.close()
+            dm = DataManager()
+            items = dm.get_items()
+            assert len(items) == 2
+            dm.close()
 
 
 def test_image_loader_with_valid_dataset() -> None:
@@ -48,19 +49,19 @@ def test_image_loader_with_valid_dataset() -> None:
         output_dir = os.path.join(tmpdir, 'output')
         config = ImageLoaderConfig(
             source_path=source_dir,
-            output_path=output_dir,
             model_type=ModelType.YOLO,
         )
 
         step = ImageLoaderStep(config)
-        frames = list(step.run())
-        assert len(frames) == 3
-        step.close()
+        with patch('backend.pipeline_engine.data_manager.WORKSPACE_DIR', output_dir):
+            frames = list(step.run())
+            assert len(frames) == 3
+            step.close()
 
-        dm = DataManager(output_dir)
-        items = dm.get_items()
-        assert len(items) == 3
-        dm.close()
+            dm = DataManager()
+            items = dm.get_items()
+            assert len(items) == 3
+            dm.close()
 
 
 def test_image_loader_with_medsam2_and_labels() -> None:
@@ -80,16 +81,16 @@ def test_image_loader_with_medsam2_and_labels() -> None:
         output_dir = os.path.join(tmpdir, 'output')
         config = ImageLoaderConfig(
             source_path=source_dir,
-            output_path=output_dir,
             model_type=ModelType.MEDSAM2,
         )
 
         step = ImageLoaderStep(config)
-        frames = list(step.run())
-        assert len(frames) == 2
-        step.close()
+        with patch('backend.pipeline_engine.data_manager.WORKSPACE_DIR', output_dir):
+            frames = list(step.run())
+            assert len(frames) == 2
+            step.close()
 
-        dm = DataManager(output_dir)
-        items = dm.get_items()
-        assert len(items) == 2
-        dm.close()
+            dm = DataManager()
+            items = dm.get_items()
+            assert len(items) == 2
+            dm.close()

@@ -27,7 +27,7 @@ def test_pipeline_with_source_step() -> None:
         )
         source_step = ImageLoaderStep(loader_config)
 
-        args = type('Args', (), {'model': 'YOLO', 'dataset_output': None, 'only_pending': True})()
+        args = type('Args', (), {'model': 'YOLO', 'dataset_output': os.path.join(tmpdir, 'dataset'), 'only_pending': True})()
         with patch('backend.pipeline_engine.data_manager.WORKSPACE_DIR', output_dir):
             manager = PipelineManager(args, source_step=source_step, with_frontend=True)
             manager.start()
@@ -59,7 +59,7 @@ def test_pipeline_accept_reject_workflow() -> None:
         )
         source_step = ImageLoaderStep(loader_config)
 
-        args = type('Args', (), {'model': 'YOLO', 'dataset_output': None, 'only_pending': True})()
+        args = type('Args', (), {'model': 'YOLO', 'dataset_output': os.path.join(tmpdir, 'dataset'), 'only_pending': True})()
         with patch('backend.pipeline_engine.data_manager.WORKSPACE_DIR', output_dir):
             manager = PipelineManager(args, source_step=source_step, with_frontend=True)
             manager.start()

@@ -8,6 +8,7 @@ src/frontend_pro/dist
 dev_items/
 dev_support/
 issues/
+workspace/
 .vscode/settings.json
 test_plans
 test_results.json
