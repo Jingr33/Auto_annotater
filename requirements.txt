@@ -9,3 +9,5 @@ uvicorn
 dependency-injector
 ruff
 paramiko
+pytest
+pytest-asyncio

@@ -13,9 +13,11 @@ from backend.validators.dataset_validator import DatasetValidator
 class ImageLoaderStep(SourceStep):
     def __init__(self, config: ImageLoaderConfig):
         self.config = config
+        self._dm: DataManager | None = None
 
     def run(self) -> Generator[FrameDTO, None, None]:
         dm = DataManager(self.config.output_path)
+        self._dm = dm
         root = self.config.source_path
 
         image_files = DatasetValidator().validate(root, self.config.model_type)
@@ -36,3 +38,8 @@ class ImageLoaderStep(SourceStep):
                     shutil.copy2(txt_path, dst)
 
             yield FrameDTO(item_id=item_id, workspace=self.config.output_path)
+
+    def close(self) -> None:
+        if self._dm is not None:
+            self._dm.close()
+            self._dm = None

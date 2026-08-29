@@ -14,6 +14,7 @@ class DataManager:
         self.workspace = os.path.abspath(workspace)
         os.makedirs(os.path.join(self.workspace, 'items'), exist_ok=True)
         self._conn = sqlite3.connect(os.path.join(self.workspace, 'items.db'), check_same_thread=False)
+        self._conn.row_factory = sqlite3.Row
         self._conn.execute('PRAGMA journal_mode=WAL')
         self._init_db()
 
