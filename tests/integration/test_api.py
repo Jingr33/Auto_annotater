@@ -5,7 +5,6 @@ from fastapi.testclient import TestClient
 
 from backend.api.app import create_app
 from backend.api.containers import Container
-from backend.enums.image_prediction_status import ImagePredictionStatus
 from backend.pipeline_engine.data_manager import DataManager
 from backend.pipeline_engine.pipeline_manager import PipelineManager
 

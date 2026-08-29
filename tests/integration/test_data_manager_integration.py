@@ -24,7 +24,7 @@ def test_data_manager_full_workflow() -> None:
         assert len(dm.get_items()) == 5
         assert len(dm.get_items(ImagePredictionStatus.PENDING)) == 5
 
-        for i, item_id in enumerate(images[:2]):
+        for _i, item_id in enumerate(images[:2]):
             dm.set_status(item_id, ImagePredictionStatus.ACCEPTED)
 
         dm.set_status(images[2], ImagePredictionStatus.REJECTED)

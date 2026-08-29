@@ -38,6 +38,6 @@ def sample_dataset_with_labels(temp_dir):
         with open(os.path.join(images_dir, f'img{i}.jpg'), 'w') as f:
             f.write(f'fake image {i}')
         with open(os.path.join(labels_dir, f'img{i}.txt'), 'w') as f:
-            f.write(f'0 0.5 0.5 0.2 0.3')
+            f.write('0 0.5 0.5 0.2 0.3')
 
     return source_dir

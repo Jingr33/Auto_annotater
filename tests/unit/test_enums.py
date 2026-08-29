@@ -46,7 +46,7 @@ def test_run_mode_values() -> None:
 
 def test_supported_image_extensions() -> None:
     expected = {'.jpg', '.jpeg', '.png', '.bmp', '.tif', '.tiff'}
-    assert SUPPORTED_IMAGE_EXTENSIONS == expected
+    assert expected == SUPPORTED_IMAGE_EXTENSIONS
     assert '.jpg' in SUPPORTED_IMAGE_EXTENSIONS
     assert '.png' in SUPPORTED_IMAGE_EXTENSIONS
     assert '.gif' not in SUPPORTED_IMAGE_EXTENSIONS

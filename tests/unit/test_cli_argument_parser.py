@@ -1,5 +1,3 @@
-import sys
-
 from cli_argument_parser import CLIArgumentParser
 
 
@@ -18,10 +16,15 @@ def test_cli_parser_has_model_argument() -> None:
     parser = CLIArgumentParser()
     args = parser.parser.parse_args(
         [
-            '--steps', 'LOAD', 'ANNOTATE',
-            '--source', '/data',
-            '--output', '/output',
-            '--model', 'YOLO',
+            '--steps',
+            'LOAD',
+            'ANNOTATE',
+            '--source',
+            '/data',
+            '--output',
+            '/output',
+            '--model',
+            'YOLO',
         ]
     )
     assert args.model == 'YOLO'
@@ -31,12 +34,19 @@ def test_cli_parser_has_ssh_arguments() -> None:
     parser = CLIArgumentParser()
     args = parser.parser.parse_args(
         [
-            '--steps', 'LOAD', 'ANNOTATE',
-            '--source', '/data',
-            '--output', '/output',
-            '--ssh-host', 'example.com',
-            '--ssh-port', '2222',
-            '--ssh-user', 'admin',
+            '--steps',
+            'LOAD',
+            'ANNOTATE',
+            '--source',
+            '/data',
+            '--output',
+            '/output',
+            '--ssh-host',
+            'example.com',
+            '--ssh-port',
+            '2222',
+            '--ssh-user',
+            'admin',
         ]
     )
     assert args.ssh_host == 'example.com'

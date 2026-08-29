@@ -1,8 +1,6 @@
 import os
 import tempfile
 
-import pytest
-
 from backend.annotations.bbox_annotation import BBoxAnnotation
 from backend.enums.annotation_label import AnnotationLabel
 from backend.enums.image_prediction_status import ImagePredictionStatus
