@@ -8,7 +8,19 @@ def test_cli_parser_creates_parser() -> None:
 
 def test_cli_parser_has_steps_argument() -> None:
     parser = CLIArgumentParser()
-    args = parser.parser.parse_args(['--steps', 'LOAD', 'ANNOTATE', '--source', '/data', '--output', '/output'])
+    args = parser.parser.parse_args(
+        [
+            '--steps',
+            'LOAD',
+            'ANNOTATE',
+            '--source',
+            '/data',
+            '--model',
+            'YOLO',
+            '--dataset-output',
+            '/output',
+        ]
+    )
     assert args.steps == ['LOAD', 'ANNOTATE']
 
 
@@ -21,10 +33,10 @@ def test_cli_parser_has_model_argument() -> None:
             'ANNOTATE',
             '--source',
             '/data',
-            '--output',
-            '/output',
             '--model',
             'YOLO',
+            '--dataset-output',
+            '/output',
         ]
     )
     assert args.model == 'YOLO'
@@ -39,7 +51,9 @@ def test_cli_parser_has_ssh_arguments() -> None:
             'ANNOTATE',
             '--source',
             '/data',
-            '--output',
+            '--model',
+            'YOLO',
+            '--dataset-output',
             '/output',
             '--ssh-host',
             'example.com',

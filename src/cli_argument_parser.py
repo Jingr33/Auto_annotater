@@ -28,10 +28,12 @@ class CLIArgumentParser:
         parser.add_argument(
             '--source', default=None, help='Dataset root (images/ + labels/) or folder with images directly'
         )
-        parser.add_argument('--output', required=True, help='Workspace folder for results (items/ + items.db)')
+        parser.add_argument(
+            '--dataset-output', required=True, help='Dataset output folder for accepted/rejected images'
+        )
 
         parser.add_argument(
-            '--model', choices=[e.value for e in ModelType], default=None, help='Model type for annotate step'
+            '--model', choices=[e.value for e in ModelType], required=True, help='Model type for annotate step'
         )
         parser.add_argument('--model-path', default=None, help='Path to model weights (default: hardcoded per model)')
 

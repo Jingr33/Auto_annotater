@@ -7,7 +7,7 @@ from backend.steps.image_loader_step import ImageLoaderStep
 def test_registry_creates_load_step() -> None:
     from backend.config.image_loader_config import ImageLoaderConfig
 
-    config = ImageLoaderConfig(source_path='/data', output_path='/output')
+    config = ImageLoaderConfig(source_path='/data')
     step = StepRegistry.create_step(StepType.LOAD, config)
     assert isinstance(step, ImageLoaderStep)
 

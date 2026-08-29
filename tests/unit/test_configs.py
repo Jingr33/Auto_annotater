@@ -5,16 +5,14 @@ from backend.enums.model_type import ModelType
 
 
 def test_image_loader_config_defaults() -> None:
-    config = ImageLoaderConfig(source_path='/data', output_path='/output')
+    config = ImageLoaderConfig(source_path='/data')
     assert config.source_path == '/data'
-    assert config.output_path == '/output'
     assert config.model_type is None
 
 
 def test_image_loader_config_with_model() -> None:
     config = ImageLoaderConfig(
         source_path='/data',
-        output_path='/output',
         model_type=ModelType.YOLO,
     )
     assert config.model_type == ModelType.YOLO

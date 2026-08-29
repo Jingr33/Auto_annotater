@@ -16,7 +16,7 @@ class ImageLoaderStep(SourceStep):
         self._dm: DataManager | None = None
 
     def run(self) -> Generator[FrameDTO, None, None]:
-        dm = DataManager(self.config.output_path)
+        dm = DataManager()
         self._dm = dm
         root = self.config.source_path
 
@@ -37,7 +37,7 @@ class ImageLoaderStep(SourceStep):
                     dst = os.path.join(dm.workspace, 'items', item_id, 'yolo.txt')
                     shutil.copy2(txt_path, dst)
 
-            yield FrameDTO(item_id=item_id, workspace=self.config.output_path)
+            yield FrameDTO(item_id=item_id)
 
     def close(self) -> None:
         if self._dm is not None:

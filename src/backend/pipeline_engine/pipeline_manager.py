@@ -2,8 +2,10 @@ import queue
 import threading
 
 from backend.enums.image_prediction_status import ImagePredictionStatus
+from backend.enums.model_type import ModelType
 from backend.errors.user_facing_error import UserFacingError
 from backend.pipeline_engine.data_manager import DataManager
+from backend.pipeline_engine.dataset_exporter import DatasetExporter
 from backend.pipeline_engine.frame_dto import FrameDTO
 from backend.pipeline_engine.runners.source_runner import SourceRunner
 from backend.pipeline_engine.runners.step_runner import StepRunner
@@ -15,17 +17,18 @@ from config import QUEUE_MAXSIZE
 class PipelineManager:
     def __init__(
         self,
-        source_step: SourceStep | None,
-        pipeline_steps: list[Step],
-        workspace: str,
+        args,
+        source_step: SourceStep | None = None,
+        pipeline_steps: list[Step] | None = None,
         with_frontend: bool = False,
-        only_pending: bool = True,
     ):
-        self.data_manager = DataManager(workspace)
-        self.only_pending = only_pending
+        self.args = args
+        self.data_manager = DataManager()
+        self.only_pending = args.only_pending
+        self.dataset_exporter = DatasetExporter(args.dataset_output, ModelType(args.model))
 
+        pipeline_steps = pipeline_steps or []
         n_queues = len(pipeline_steps) + (1 if with_frontend else 0)
-        # Ensure at least one queue if there's a source step (source needs somewhere to write)
         if n_queues == 0:
             n_queues = 1
         queues = [queue.Queue(maxsize=QUEUE_MAXSIZE) for _ in range(n_queues)]
@@ -116,6 +119,7 @@ class PipelineManager:
             return
         self._history.append(dto.item_id)
         self.data_manager.set_status(dto.item_id, ImagePredictionStatus.ACCEPTED)
+        self.dataset_exporter.export_item(dto.item_id, ImagePredictionStatus.ACCEPTED)
         self._current_dto = None
 
     def reject(self) -> None:
@@ -124,6 +128,7 @@ class PipelineManager:
             return
         self._history.append(dto.item_id)
         self.data_manager.set_status(dto.item_id, ImagePredictionStatus.REJECTED)
+        self.dataset_exporter.export_item(dto.item_id, ImagePredictionStatus.REJECTED)
         self._current_dto = None
 
     def skip(self) -> None:
@@ -137,7 +142,7 @@ class PipelineManager:
             return False
         item_id = self._history.pop()
         self.data_manager.set_status(item_id, ImagePredictionStatus.PENDING)
-        self._current_dto = FrameDTO(item_id=item_id, workspace=self.data_manager.workspace)
+        self._current_dto = FrameDTO(item_id=item_id)
         return True
 
     def _enqueue_pending_items(self, output_queue: queue.Queue) -> None:
@@ -147,5 +152,5 @@ class PipelineManager:
             items = self.data_manager.get_items()
         self._total = len(items)
         for item in items:
-            output_queue.put(FrameDTO(item_id=item['id'], workspace=self.data_manager.workspace))
+            output_queue.put(FrameDTO(item_id=item['id']))
         output_queue.put(None)
