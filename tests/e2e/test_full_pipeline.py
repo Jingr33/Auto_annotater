@@ -1,5 +1,6 @@
 import os
 import tempfile
+from unittest.mock import patch
 
 from backend.config.image_loader_config import ImageLoaderConfig
 from backend.enums.image_prediction_status import ImagePredictionStatus
@@ -22,27 +23,23 @@ def test_pipeline_with_source_step() -> None:
         output_dir = os.path.join(tmpdir, 'output')
         loader_config = ImageLoaderConfig(
             source_path=source_dir,
-            output_path=output_dir,
             model_type=ModelType.YOLO,
         )
         source_step = ImageLoaderStep(loader_config)
 
-        manager = PipelineManager(
-            source_step=source_step,
-            pipeline_steps=[],
-            workspace=output_dir,
-            with_frontend=True,
-        )
-        manager.start()
-        manager.wait()
-        manager.accept()
-        manager.finalize()
-        source_step.close()
+        args = type('Args', (), {'model': 'YOLO', 'dataset_output': None, 'only_pending': True})()
+        with patch('backend.pipeline_engine.data_manager.WORKSPACE_DIR', output_dir):
+            manager = PipelineManager(args, source_step=source_step, with_frontend=True)
+            manager.start()
+            manager.wait()
+            manager.accept()
+            manager.finalize()
+            source_step.close()
 
-        dm = DataManager(output_dir)
-        items = dm.get_items()
-        assert len(items) == 2
-        dm.close()
+            dm = DataManager()
+            items = dm.get_items()
+            assert len(items) == 2
+            dm.close()
 
 
 def test_pipeline_accept_reject_workflow() -> None:
@@ -58,39 +55,35 @@ def test_pipeline_accept_reject_workflow() -> None:
         output_dir = os.path.join(tmpdir, 'output')
         loader_config = ImageLoaderConfig(
             source_path=source_dir,
-            output_path=output_dir,
             model_type=ModelType.YOLO,
         )
         source_step = ImageLoaderStep(loader_config)
 
-        manager = PipelineManager(
-            source_step=source_step,
-            pipeline_steps=[],
-            workspace=output_dir,
-            with_frontend=True,
-        )
-        manager.start()
-        manager.wait()
+        args = type('Args', (), {'model': 'YOLO', 'dataset_output': None, 'only_pending': True})()
+        with patch('backend.pipeline_engine.data_manager.WORKSPACE_DIR', output_dir):
+            manager = PipelineManager(args, source_step=source_step, with_frontend=True)
+            manager.start()
+            manager.wait()
 
-        dm = DataManager(output_dir)
+            dm = DataManager()
 
-        first = manager.get_current()
-        assert first is not None
-        manager.accept()
+            first = manager.get_current()
+            assert first is not None
+            manager.accept()
 
-        second = manager.get_current()
-        assert second is not None
-        manager.reject()
+            second = manager.get_current()
+            assert second is not None
+            manager.reject()
 
-        third = manager.get_current()
-        assert third is not None
-        manager.accept()
+            third = manager.get_current()
+            assert third is not None
+            manager.accept()
 
-        manager.finalize()
-        source_step.close()
+            manager.finalize()
+            source_step.close()
 
-        accepted = dm.get_items(ImagePredictionStatus.ACCEPTED)
-        rejected = dm.get_items(ImagePredictionStatus.REJECTED)
-        assert len(accepted) == 2
-        assert len(rejected) == 1
-        dm.close()
+            accepted = dm.get_items(ImagePredictionStatus.ACCEPTED)
+            rejected = dm.get_items(ImagePredictionStatus.REJECTED)
+            assert len(accepted) == 2
+            assert len(rejected) == 1
+            dm.close()

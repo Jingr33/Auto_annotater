@@ -7,11 +7,12 @@ from backend.annotations import Annotation
 from backend.annotations.annotation_parser import AnnotationParser
 from backend.enums.annotation_label import AnnotationLabel
 from backend.enums.image_prediction_status import ImagePredictionStatus
+from config import WORKSPACE_DIR
 
 
 class DataManager:
-    def __init__(self, workspace: str):
-        self.workspace = os.path.abspath(workspace)
+    def __init__(self):
+        self.workspace = os.path.abspath(WORKSPACE_DIR)
         os.makedirs(os.path.join(self.workspace, 'items'), exist_ok=True)
         self._conn = sqlite3.connect(os.path.join(self.workspace, 'items.db'), check_same_thread=False)
         self._conn.row_factory = sqlite3.Row

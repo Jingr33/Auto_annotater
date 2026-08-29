@@ -32,11 +32,8 @@ class Runner:
 
         if steps == [StepType.SELECT]:
             self.manager = PipelineManager(
-                source_step=None,
-                pipeline_steps=[],
-                workspace=self.args.output,
+                self.args,
                 with_frontend=True,
-                only_pending=self.args.only_pending,
             )
             self._has_frontend = True
         else:
@@ -53,9 +50,9 @@ class Runner:
                     step_instances.append(instance)
 
             self.manager = PipelineManager(
-                source_step,
-                step_instances,
-                workspace=self.args.output,
+                self.args,
+                source_step=source_step,
+                pipeline_steps=step_instances,
                 with_frontend=self._has_frontend,
             )
 
@@ -66,7 +63,6 @@ class Runner:
             model_type = ModelType(self.args.model) if self.args.model else None
             return ImageLoaderConfig(
                 source_path=self.args.source,
-                output_path=self.args.output,
                 model_type=model_type,
             )
         elif name == StepType.ANNOTATE:

@@ -18,7 +18,7 @@ class AnnotateStep(Step):
         return self._annotator
 
     def process(self, dto: FrameDTO) -> FrameDTO | None:
-        dm = DataManager(dto.workspace)
+        dm = DataManager()
         image_path = dm.image_path(dto.item_id)
         annotator = self._lazy_init()
         if self.config.model_type == ModelType.MEDSAM2:

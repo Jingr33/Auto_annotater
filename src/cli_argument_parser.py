@@ -28,7 +28,7 @@ class CLIArgumentParser:
         parser.add_argument(
             '--source', default=None, help='Dataset root (images/ + labels/) or folder with images directly'
         )
-        parser.add_argument('--output', required=True, help='Workspace folder for results (items/ + items.db)')
+        parser.add_argument('--dataset-output', default=None, help='Dataset output folder for accepted/rejected images')
 
         parser.add_argument(
             '--model', choices=[e.value for e in ModelType], default=None, help='Model type for annotate step'

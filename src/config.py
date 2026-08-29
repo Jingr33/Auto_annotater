@@ -1,1 +1,2 @@
 QUEUE_MAXSIZE = 200
+WORKSPACE_DIR = 'workspace'

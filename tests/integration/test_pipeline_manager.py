@@ -1,5 +1,6 @@
 import os
 import tempfile
+from unittest.mock import patch
 
 from backend.enums.image_prediction_status import ImagePredictionStatus
 from backend.pipeline_engine.data_manager import DataManager
@@ -9,20 +10,17 @@ from backend.pipeline_engine.pipeline_manager import PipelineManager
 def test_pipeline_manager_accept() -> None:
     with tempfile.TemporaryDirectory() as tmpdir:
         workspace = os.path.join(tmpdir, 'workspace')
-        dm = DataManager(workspace)
+        with patch('backend.pipeline_engine.data_manager.WORKSPACE_DIR', workspace):
+            dm = DataManager()
 
-        img_path = os.path.join(tmpdir, 'test.jpg')
-        with open(img_path, 'w') as f:
-            f.write('fake image')
-        dm.import_image(img_path)
-        dm.close()
+            img_path = os.path.join(tmpdir, 'test.jpg')
+            with open(img_path, 'w') as f:
+                f.write('fake image')
+            dm.import_image(img_path)
+            dm.close()
 
-        manager = PipelineManager(
-            source_step=None,
-            pipeline_steps=[],
-            workspace=workspace,
-            with_frontend=True,
-        )
+        args = type('Args', (), {'model': None, 'dataset_output': None, 'only_pending': True})()
+        manager = PipelineManager(args, with_frontend=True)
 
         manager.start()
         manager.wait()
@@ -30,10 +28,11 @@ def test_pipeline_manager_accept() -> None:
         dto = manager.get_current()
         if dto is not None:
             manager.accept()
-            dm2 = DataManager(workspace)
-            items = dm2.get_items(ImagePredictionStatus.ACCEPTED)
-            assert len(items) == 1
-            dm2.close()
+            with patch('backend.pipeline_engine.data_manager.WORKSPACE_DIR', workspace):
+                dm2 = DataManager()
+                items = dm2.get_items(ImagePredictionStatus.ACCEPTED)
+                assert len(items) == 1
+                dm2.close()
 
         manager.finalize()
 
@@ -41,20 +40,17 @@ def test_pipeline_manager_accept() -> None:
 def test_pipeline_manager_reject() -> None:
     with tempfile.TemporaryDirectory() as tmpdir:
         workspace = os.path.join(tmpdir, 'workspace')
-        dm = DataManager(workspace)
+        with patch('backend.pipeline_engine.data_manager.WORKSPACE_DIR', workspace):
+            dm = DataManager()
 
-        img_path = os.path.join(tmpdir, 'test.jpg')
-        with open(img_path, 'w') as f:
-            f.write('fake image')
-        dm.import_image(img_path)
-        dm.close()
+            img_path = os.path.join(tmpdir, 'test.jpg')
+            with open(img_path, 'w') as f:
+                f.write('fake image')
+            dm.import_image(img_path)
+            dm.close()
 
-        manager = PipelineManager(
-            source_step=None,
-            pipeline_steps=[],
-            workspace=workspace,
-            with_frontend=True,
-        )
+        args = type('Args', (), {'model': None, 'dataset_output': None, 'only_pending': True})()
+        manager = PipelineManager(args, with_frontend=True)
 
         manager.start()
         manager.wait()
@@ -62,10 +58,11 @@ def test_pipeline_manager_reject() -> None:
         dto = manager.get_current()
         if dto is not None:
             manager.reject()
-            dm2 = DataManager(workspace)
-            items = dm2.get_items(ImagePredictionStatus.REJECTED)
-            assert len(items) == 1
-            dm2.close()
+            with patch('backend.pipeline_engine.data_manager.WORKSPACE_DIR', workspace):
+                dm2 = DataManager()
+                items = dm2.get_items(ImagePredictionStatus.REJECTED)
+                assert len(items) == 1
+                dm2.close()
 
         manager.finalize()
 
@@ -73,20 +70,17 @@ def test_pipeline_manager_reject() -> None:
 def test_pipeline_manager_skip() -> None:
     with tempfile.TemporaryDirectory() as tmpdir:
         workspace = os.path.join(tmpdir, 'workspace')
-        dm = DataManager(workspace)
+        with patch('backend.pipeline_engine.data_manager.WORKSPACE_DIR', workspace):
+            dm = DataManager()
 
-        img_path = os.path.join(tmpdir, 'test.jpg')
-        with open(img_path, 'w') as f:
-            f.write('fake image')
-        dm.import_image(img_path)
-        dm.close()
+            img_path = os.path.join(tmpdir, 'test.jpg')
+            with open(img_path, 'w') as f:
+                f.write('fake image')
+            dm.import_image(img_path)
+            dm.close()
 
-        manager = PipelineManager(
-            source_step=None,
-            pipeline_steps=[],
-            workspace=workspace,
-            with_frontend=True,
-        )
+        args = type('Args', (), {'model': None, 'dataset_output': None, 'only_pending': True})()
+        manager = PipelineManager(args, with_frontend=True)
 
         manager.start()
         manager.wait()
@@ -95,10 +89,11 @@ def test_pipeline_manager_skip() -> None:
         if dto is not None:
             manager.skip()
 
-        dm2 = DataManager(workspace)
-        items = dm2.get_items(ImagePredictionStatus.PENDING)
-        assert len(items) == 1
-        dm2.close()
+        with patch('backend.pipeline_engine.data_manager.WORKSPACE_DIR', workspace):
+            dm2 = DataManager()
+            items = dm2.get_items(ImagePredictionStatus.PENDING)
+            assert len(items) == 1
+            dm2.close()
 
         manager.finalize()
 
@@ -106,20 +101,17 @@ def test_pipeline_manager_skip() -> None:
 def test_pipeline_manager_back() -> None:
     with tempfile.TemporaryDirectory() as tmpdir:
         workspace = os.path.join(tmpdir, 'workspace')
-        dm = DataManager(workspace)
+        with patch('backend.pipeline_engine.data_manager.WORKSPACE_DIR', workspace):
+            dm = DataManager()
 
-        img_path = os.path.join(tmpdir, 'test.jpg')
-        with open(img_path, 'w') as f:
-            f.write('fake image')
-        dm.import_image(img_path)
-        dm.close()
+            img_path = os.path.join(tmpdir, 'test.jpg')
+            with open(img_path, 'w') as f:
+                f.write('fake image')
+            dm.import_image(img_path)
+            dm.close()
 
-        manager = PipelineManager(
-            source_step=None,
-            pipeline_steps=[],
-            workspace=workspace,
-            with_frontend=True,
-        )
+        args = type('Args', (), {'model': None, 'dataset_output': None, 'only_pending': True})()
+        manager = PipelineManager(args, with_frontend=True)
 
         manager.start()
         manager.wait()

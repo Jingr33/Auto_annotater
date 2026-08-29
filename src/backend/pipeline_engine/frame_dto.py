@@ -1,7 +1,9 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+
+from config import WORKSPACE_DIR
 
 
 @dataclass
 class FrameDTO:
     item_id: str
-    workspace: str
+    workspace: str = field(default=WORKSPACE_DIR)
