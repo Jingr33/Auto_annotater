@@ -59,14 +59,14 @@ class Runner:
         self.manager.start()
 
     def _build_config(self, name: StepType):
+        model_type = ModelType(self.args.model) if self.args.model else None
+
         if name == StepType.LOAD:
-            model_type = ModelType(self.args.model) if self.args.model else None
             return ImageLoaderConfig(
                 source_path=self.args.source,
                 model_type=model_type,
             )
         elif name == StepType.ANNOTATE:
-            model_type = ModelType(self.args.model) if self.args.model else None
             ssh = (
                 SSHConfig(
                     host=self.args.ssh_host or '',
