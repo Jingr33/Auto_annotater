@@ -17,7 +17,7 @@ class OpenCVFrontend:
             return None
         if isinstance(obj, Prediction):
             return obj
-        return Prediction(obj.item_id, obj.workspace)
+        return Prediction(obj.item_id)
 
     def run(self) -> None:
         while True:

@@ -1,3 +1,5 @@
+import pytest
+
 from backend.config.annotate_step_config import AnnotateStepConfig
 from backend.config.image_loader_config import ImageLoaderConfig
 from backend.config.ssh_config import SSHConfig
@@ -67,3 +69,16 @@ def test_ssh_config_custom() -> None:
     assert config.remote_python == 'python3.10'
     assert config.inference_script == '/scripts/run.py'
     assert config.force_credentials is True
+
+
+def test_ssh_config_restores_msys_converted_remote_paths(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv('MSYSTEM', 'MINGW64')
+    config = SSHConfig(
+        remote_work_dir='C:/Program Files/Git/disk2/ingrj/medsam/MedSAM',
+        remote_model_path='C:/Program Files/Git/disk2/ingrj/model.pth',
+        remote_python='C:/Program Files/Git/disk2/ingrj/venv/bin/python3.12',
+    )
+
+    assert config.remote_work_dir == '/disk2/ingrj/medsam/MedSAM'
+    assert config.remote_model_path == '/disk2/ingrj/model.pth'
+    assert config.remote_python == '/disk2/ingrj/venv/bin/python3.12'

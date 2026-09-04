@@ -102,7 +102,7 @@ class PyQtFrontend(QMainWindow):
             return None
         if isinstance(obj, Prediction):
             return obj
-        return Prediction(obj.item_id, obj.workspace)
+        return Prediction(obj.item_id)
 
     def _update(self) -> None:
         waiting = getattr(self.manager, 'is_waiting', lambda: False)()

@@ -54,7 +54,6 @@ class CLIArgumentParser:
         parser.add_argument(
             '--inference-script', default=None, help='Path to custom inference script (default: built-in)'
         )
-
         parser.add_argument(
             '--only-pending',
             action='store_true',
