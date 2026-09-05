@@ -50,17 +50,34 @@ class DatasetValidator:
 
         for line_number, line in enumerate(lines, start=1):
             parts = line.split()
-            if len(parts) != 5:
-                raise ValueError(f'Invalid YOLO bbox in {label_file} line {line_number}: expected 5 values')
-            class_index = int(parts[0])
-            x, y, width, height = (float(value) for value in parts[1:])
-            if class_index < 0:
-                raise ValueError(f'Invalid class index in {label_file} line {line_number}')
-            if not all(0.0 <= value <= 1.0 for value in (x, y, width, height)):
-                raise ValueError(f'YOLO bbox values must be between 0 and 1 in {label_file} line {line_number}')
-            if width == 0.0 or height == 0.0:
+            num_coords = len(parts) - 1
+            if num_coords == 4:
+                self._validate_bbox(parts, label_file, line_number)
+            elif num_coords >= 6 and num_coords % 2 == 0:
+                self._validate_polygon(parts, label_file, line_number)
+            else:
                 raise ValueError(
-                    f'YOLO bbox width and height must be greater than zero in {label_file} line {line_number}'
+                    f'Invalid YOLO annotation in {label_file} line {line_number}: '
+                    f'expected 4 coordinates after the class index (bbox) or at least 6 even-numbered coordinates '
+                    f'(polygon)'
                 )
-            if x - width / 2.0 < 0.0 or y - height / 2.0 < 0.0 or x + width / 2.0 > 1.0 or y + height / 2.0 > 1.0:
-                raise ValueError(f'YOLO bbox must remain within image bounds in {label_file} line {line_number}')
+
+    def _validate_bbox(self, parts: list[str], label_file: str, line_number: int) -> None:
+        class_index = int(parts[0])
+        x, y, width, height = (float(value) for value in parts[1:])
+        if class_index < 0:
+            raise ValueError(f'Invalid class index in {label_file} line {line_number}')
+        if not all(0.0 <= value <= 1.0 for value in (x, y, width, height)):
+            raise ValueError(f'YOLO bbox values must be between 0 and 1 in {label_file} line {line_number}')
+        if width == 0.0 or height == 0.0:
+            raise ValueError(f'YOLO bbox width and height must be greater than zero in {label_file} line {line_number}')
+        if x - width / 2.0 < 0.0 or y - height / 2.0 < 0.0 or x + width / 2.0 > 1.0 or y + height / 2.0 > 1.0:
+            raise ValueError(f'YOLO bbox must remain within image bounds in {label_file} line {line_number}')
+
+    def _validate_polygon(self, parts: list[str], label_file: str, line_number: int) -> None:
+        class_index = int(parts[0])
+        coords = [float(value) for value in parts[1:]]
+        if class_index < 0:
+            raise ValueError(f'Invalid class index in {label_file} line {line_number}')
+        if not all(0.0 <= value <= 1.0 for value in coords):
+            raise ValueError(f'YOLO polygon values must be between 0 and 1 in {label_file} line {line_number}')

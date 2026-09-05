@@ -17,9 +17,9 @@ def test_bbox_annotation_type() -> None:
 
 
 def test_bbox_to_yolo_line() -> None:
-    bbox = BBoxAnnotation(class_index=1, x=0.5, y=0.5, width=0.2, height=0.3)
+    bbox = BBoxAnnotation(class_index=1, x=0.123456, y=0.987654, width=0.111111, height=0.99999)
     yolo_line = bbox.to_yolo_line()
-    assert yolo_line == '1 0.5 0.5 0.2 0.3'
+    assert yolo_line == '1 0.1235 0.9877 0.1111 1.0000'
 
 
 def test_bbox_from_yolo_line() -> None:

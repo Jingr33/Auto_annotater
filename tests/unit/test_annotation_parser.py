@@ -79,7 +79,7 @@ def test_format_string() -> None:
         PolygonAnnotation(class_index=1, points=[(0.1, 0.2), (0.3, 0.4)]),
     ]
     result = AnnotationParser.format_string(annotations)
-    expected = '0 0.5 0.5 0.2 0.3\n1 0.1 0.2 0.3 0.4\n'
+    expected = '0 0.5000 0.5000 0.2000 0.3000\n1 0.1000 0.2000 0.3000 0.4000\n'
     assert result == expected
 
 

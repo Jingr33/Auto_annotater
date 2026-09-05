@@ -13,7 +13,7 @@ class PolygonAnnotation:
         return AnnotationType.POLYGON
 
     def to_yolo_line(self) -> str:
-        coords = ' '.join(f'{x} {y}' for x, y in self.points)
+        coords = ' '.join(f'{x:.4f} {y:.4f}' for x, y in self.points)
         return f'{self.class_index} {coords}'
 
     @classmethod

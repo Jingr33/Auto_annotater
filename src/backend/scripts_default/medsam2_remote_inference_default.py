@@ -19,15 +19,38 @@ Output format (written to --result):
 """
 
 import argparse
+import importlib
 import json
 import os
+import sys
+import types
 from typing import Any
 
 import cv2
 import numpy as np
 import torch
 import torch.nn.functional as F
-from src.custom_seg_model import MedSAMCustom, load_sam_checkpoint
+
+MODEL_ARCHITECTURE_PATH = os.environ.get(
+    'MEDSAM2_ARCHITECTURE_PATH',
+    '/disk2/ingrj/medsam/MedSAM/src/custom_seg_model',
+)
+MODEL_SOURCE_PATH = os.path.dirname(MODEL_ARCHITECTURE_PATH)
+MODEL_PROJECT_PATH = os.path.dirname(MODEL_SOURCE_PATH)
+sys.path.insert(0, MODEL_SOURCE_PATH)
+sys.path.insert(0, MODEL_PROJECT_PATH)
+custom_seg_model = importlib.import_module('custom_seg_model')
+
+# Keep compatibility with model files that still import the old src package path.
+legacy_src = types.ModuleType('src')
+legacy_src.__path__ = []
+sys.modules['src'] = legacy_src
+sys.modules['src.custom_seg_model'] = custom_seg_model
+
+medsam_model_module = importlib.import_module('custom_seg_model.medsam_model')
+checkpoint_loader_module = importlib.import_module('custom_seg_model.checkpoint_loader')
+MedSAMCustom = medsam_model_module.MedSAMCustom
+load_sam_checkpoint = checkpoint_loader_module.load_sam_checkpoint
 
 IMAGE_SIZE = 1024
 DEVICE = 'cuda:0'
@@ -77,8 +100,7 @@ def infer(args: argparse.Namespace) -> None:
         freeze_prompt_encoder=True,
     ).to(DEVICE)
     load_sam_checkpoint(model, args.base_model, DEVICE)
-    checkpoint = torch.load(args.model, map_location=DEVICE)
-    model.load_state_dict(checkpoint['model'])
+    load_sam_checkpoint(model, args.model, DEVICE)
     model.eval()
 
     image_tensor, (width, height) = load_image(args.image)
