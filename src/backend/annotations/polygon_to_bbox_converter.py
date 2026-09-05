@@ -21,11 +21,13 @@ class PolygonToBboxConverter:
         max_x = max(x_coords)
         min_y = min(y_coords)
         max_y = max(y_coords)
+        center_x = (min_x + max_x) / 2.0
+        center_y = (min_y + max_y) / 2.0
 
         return BBoxAnnotation(
             class_index=polygon.class_index,
-            x=min_x,
-            y=min_y,
+            x=center_x,
+            y=center_y,
             width=max_x - min_x,
             height=max_y - min_y,
         )

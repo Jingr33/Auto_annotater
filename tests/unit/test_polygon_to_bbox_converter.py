@@ -11,8 +11,8 @@ def test_convert_polygon_to_bbox_basic() -> None:
     bbox = PolygonToBboxConverter.convert(polygon)
     assert isinstance(bbox, BBoxAnnotation)
     assert bbox.class_index == 0
-    assert bbox.x == pytest.approx(0.1)
-    assert bbox.y == pytest.approx(0.2)
+    assert bbox.x == pytest.approx(0.3)
+    assert bbox.y == pytest.approx(0.4)
     assert bbox.width == pytest.approx(0.4)
     assert bbox.height == pytest.approx(0.4)
 
@@ -42,7 +42,7 @@ def test_convert_polygon_to_bbox_negative_coords() -> None:
     points = [(-0.5, -0.3), (0.2, 0.4)]
     polygon = PolygonAnnotation(class_index=3, points=points)
     bbox = PolygonToBboxConverter.convert(polygon)
-    assert bbox.x == pytest.approx(-0.5)
-    assert bbox.y == pytest.approx(-0.3)
+    assert bbox.x == pytest.approx(-0.15)
+    assert bbox.y == pytest.approx(0.05)
     assert bbox.width == pytest.approx(0.7)
     assert bbox.height == pytest.approx(0.7)

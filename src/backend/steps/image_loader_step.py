@@ -1,7 +1,7 @@
 import os
-import shutil
 from collections.abc import Generator
 
+from backend.annotations.annotation_parser import AnnotationParser
 from backend.config.image_loader_config import ImageLoaderConfig
 from backend.enums.model_type import ModelType
 from backend.pipeline_engine.data_manager import DataManager
@@ -35,7 +35,7 @@ class ImageLoaderStep(SourceStep):
                 txt_path = os.path.join(labels_dir, name_no_ext + '.txt')
                 if os.path.exists(txt_path):
                     dst = os.path.join(dm.workspace, 'items', item_id, 'yolo.txt')
-                    shutil.copy2(txt_path, dst)
+                    AnnotationParser.save(dst, AnnotationParser.load(txt_path))
 
             yield FrameDTO(item_id=item_id)
 

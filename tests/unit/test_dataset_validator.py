@@ -207,5 +207,5 @@ def test_validate_medsam2_invalid_annotation_format() -> None:
             f.write('0 0.1 0.2 0.3')
 
         validator = DatasetValidator()
-        with pytest.raises(ValueError, match='expected 5 values'):
+        with pytest.raises(ValueError, match='expected 4 coordinates'):
             validator.validate(tmpdir, ModelType.MEDSAM2)

@@ -58,7 +58,8 @@ class DatasetValidator:
             else:
                 raise ValueError(
                     f'Invalid YOLO annotation in {label_file} line {line_number}: '
-                    f'expected 5 values (bbox) or 6+ even values (polygon)'
+                    f'expected 4 coordinates after the class index (bbox) or at least 6 even-numbered coordinates '
+                    f'(polygon)'
                 )
 
     def _validate_bbox(self, parts: list[str], label_file: str, line_number: int) -> None:
@@ -69,9 +70,7 @@ class DatasetValidator:
         if not all(0.0 <= value <= 1.0 for value in (x, y, width, height)):
             raise ValueError(f'YOLO bbox values must be between 0 and 1 in {label_file} line {line_number}')
         if width == 0.0 or height == 0.0:
-            raise ValueError(
-                f'YOLO bbox width and height must be greater than zero in {label_file} line {line_number}'
-            )
+            raise ValueError(f'YOLO bbox width and height must be greater than zero in {label_file} line {line_number}')
         if x - width / 2.0 < 0.0 or y - height / 2.0 < 0.0 or x + width / 2.0 > 1.0 or y + height / 2.0 > 1.0:
             raise ValueError(f'YOLO bbox must remain within image bounds in {label_file} line {line_number}')
 
