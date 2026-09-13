@@ -15,10 +15,10 @@ def test_polygon_annotation_type() -> None:
 
 
 def test_polygon_to_yolo_line() -> None:
-    points = [(0.1, 0.2), (0.3, 0.4)]
+    points = [(0.123456, 0.987654), (0.3, 0.4)]
     polygon = PolygonAnnotation(class_index=1, points=points)
     yolo_line = polygon.to_yolo_line()
-    assert yolo_line == '1 0.1 0.2 0.3 0.4'
+    assert yolo_line == '1 0.1235 0.9877 0.3000 0.4000'
 
 
 def test_polygon_from_yolo_line() -> None:

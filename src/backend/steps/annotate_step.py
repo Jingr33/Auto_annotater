@@ -1,3 +1,7 @@
+from backend.annotations import Annotation
+from backend.annotations.bbox_annotation import BBoxAnnotation
+from backend.annotations.polygon_annotation import PolygonAnnotation
+from backend.annotations.polygon_to_bbox_converter import PolygonToBboxConverter
 from backend.annotators.annotator_factory import AnnotatorFactory
 from backend.config.annotate_step_config import AnnotateStepConfig
 from backend.enums.annotation_label import AnnotationLabel
@@ -22,20 +26,29 @@ class AnnotateStep(Step):
         image_path = dm.image_path(dto.item_id)
         annotator = self._lazy_init()
         if self.config.model_type == ModelType.MEDSAM2:
-            bboxes = dm.load_annotation(dto.item_id, AnnotationLabel.YOLO)
-            annotations = []
+            annotations = dm.load_annotation(dto.item_id, AnnotationLabel.YOLO)
+            bboxes = [self._to_bbox(a) for a in annotations]
+            result = []
             for bbox in bboxes:
-                annotations.extend(
+                result.extend(
                     annotator.annotate_with_bbox(
                         image_path,
                         (bbox.x, bbox.y, bbox.width, bbox.height),
                     )
                 )
         else:
-            annotations = annotator.annotate(image_path)
+            result = annotator.annotate(image_path)
         label = AnnotationLabel.from_model(self.config.model_type)
-        dm.save_annotation(dto.item_id, annotations, label=label)
+        dm.save_annotation(dto.item_id, result, label=label)
         return dto
+
+    @staticmethod
+    def _to_bbox(annotation: Annotation) -> BBoxAnnotation:
+        if isinstance(annotation, BBoxAnnotation):
+            return annotation
+        if isinstance(annotation, PolygonAnnotation):
+            return PolygonToBboxConverter.convert(annotation)
+        raise TypeError(f'Unsupported annotation type: {type(annotation)}')
 
     def postprocess(self) -> None:
         if self._annotator is not None:

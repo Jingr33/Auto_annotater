@@ -6,10 +6,9 @@ from backend.pipeline_engine.data_manager import DataManager
 
 
 class Prediction:
-    def __init__(self, item_id: str, workspace: str):
+    def __init__(self, item_id: str):
         self.item_id = item_id
-        self.workspace = workspace
-        self.dm = DataManager(workspace)
+        self.dm = DataManager()
         self.image = cv.imread(self.dm.image_path(item_id))
 
         self.annotations = []

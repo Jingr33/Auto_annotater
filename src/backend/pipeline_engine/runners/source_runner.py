@@ -1,6 +1,8 @@
 import logging
 import queue
+import sys
 import threading
+import traceback
 
 from backend.pipeline_engine.frame_dto import FrameDTO
 from backend.pipeline_engine.steps.source_step import SourceStep
@@ -18,6 +20,7 @@ class SourceRunner(threading.Thread):
         self.step = step
         self.queue_out = queue_out
         self.exception: Exception | None = None
+        self.formatted_traceback: str | None = None
 
     def run(self) -> None:
         try:
@@ -26,5 +29,7 @@ class SourceRunner(threading.Thread):
             self.queue_out.put(None)
         except Exception as e:
             self.exception = e
-            logger.error('Source step failed: %s', e)
+            self.formatted_traceback = ''.join(traceback.format_exception(type(e), e, e.__traceback__))
+            logger.error('Source step failed:')
+            traceback.print_exception(type(e), e, e.__traceback__, file=sys.stderr)
             self.queue_out.put(None)

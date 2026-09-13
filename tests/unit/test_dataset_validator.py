@@ -157,3 +157,55 @@ def test_validate_dataset_with_mixed_extensions() -> None:
         validator = DatasetValidator()
         result = validator.validate(tmpdir, ModelType.YOLO)
         assert len(result) == 3
+
+
+def test_validate_medsam2_valid_polygon_dataset() -> None:
+    with tempfile.TemporaryDirectory() as tmpdir:
+        images_dir = os.path.join(tmpdir, 'images')
+        labels_dir = os.path.join(tmpdir, 'labels')
+        os.makedirs(images_dir)
+        os.makedirs(labels_dir)
+
+        with open(os.path.join(images_dir, 'img.jpg'), 'w') as f:
+            f.write('fake image')
+        with open(os.path.join(labels_dir, 'img.txt'), 'w') as f:
+            f.write('0 0.1 0.2 0.3 0.4 0.5 0.6')
+
+        validator = DatasetValidator()
+        result = validator.validate(tmpdir, ModelType.MEDSAM2)
+        assert len(result) == 1
+        assert 'img.jpg' in result
+
+
+def test_validate_medsam2_polygon_out_of_bounds() -> None:
+    with tempfile.TemporaryDirectory() as tmpdir:
+        images_dir = os.path.join(tmpdir, 'images')
+        labels_dir = os.path.join(tmpdir, 'labels')
+        os.makedirs(images_dir)
+        os.makedirs(labels_dir)
+
+        with open(os.path.join(images_dir, 'img.jpg'), 'w') as f:
+            f.write('fake image')
+        with open(os.path.join(labels_dir, 'img.txt'), 'w') as f:
+            f.write('0 0.1 0.2 1.5 0.4 0.5 0.6')
+
+        validator = DatasetValidator()
+        with pytest.raises(ValueError, match='between 0 and 1'):
+            validator.validate(tmpdir, ModelType.MEDSAM2)
+
+
+def test_validate_medsam2_invalid_annotation_format() -> None:
+    with tempfile.TemporaryDirectory() as tmpdir:
+        images_dir = os.path.join(tmpdir, 'images')
+        labels_dir = os.path.join(tmpdir, 'labels')
+        os.makedirs(images_dir)
+        os.makedirs(labels_dir)
+
+        with open(os.path.join(images_dir, 'img.jpg'), 'w') as f:
+            f.write('fake image')
+        with open(os.path.join(labels_dir, 'img.txt'), 'w') as f:
+            f.write('0 0.1 0.2 0.3')
+
+        validator = DatasetValidator()
+        with pytest.raises(ValueError, match='expected 4 coordinates'):
+            validator.validate(tmpdir, ModelType.MEDSAM2)

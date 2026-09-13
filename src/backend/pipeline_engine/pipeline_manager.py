@@ -1,4 +1,5 @@
 import queue
+import sys
 import threading
 
 from backend.enums.image_prediction_status import ImagePredictionStatus
@@ -69,15 +70,17 @@ class PipelineManager:
             runner.join()
 
         if isinstance(self._source_runner, SourceRunner) and self._source_runner.exception:
-            self._raise_failure(self._source_runner.exception)
+            self._raise_failure(self._source_runner.exception, self._source_runner.formatted_traceback)
         for runner in self._step_runners:
             if runner.exception:
-                self._raise_failure(runner.exception)
+                self._raise_failure(runner.exception, runner.formatted_traceback)
 
     @staticmethod
-    def _raise_failure(error: Exception) -> None:
+    def _raise_failure(error: Exception, formatted_traceback: str | None = None) -> None:
         if isinstance(error, UserFacingError):
             raise SystemExit(1) from None
+        if formatted_traceback:
+            print(formatted_traceback, file=sys.stderr)
         raise error
 
     def finalize(self) -> None:

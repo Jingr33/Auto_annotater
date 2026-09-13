@@ -24,6 +24,7 @@ class MedSAM2Annotator(BaseAnnotator):
         self.run = run
         self.ssh = ssh or SSHConfig()
         self._remote = RemoteInference(self.ssh) if run is RunMode.REMOTE else None
+        self._remote_model_path: str | None = None
 
     def annotate(self, image_path: str) -> list[PolygonAnnotation]:
         remote_img = self._transfer_image(image_path)
@@ -40,6 +41,7 @@ class MedSAM2Annotator(BaseAnnotator):
     def cleanup(self) -> None:
         if self._remote is not None:
             self._remote.close()
+        self._remote_model_path = None
         tmp = self._local_tmp_dir
         if os.path.isdir(tmp):
             for f in os.listdir(tmp):
@@ -62,6 +64,7 @@ class MedSAM2Annotator(BaseAnnotator):
         return self._get_remote().upload_file(local_path)
 
     def _ensure_remote_runner(self) -> str:
+        remote = self._get_remote()
         if self.ssh.inference_script:
             local_runner = os.path.abspath(self.ssh.inference_script)
         else:
@@ -73,10 +76,19 @@ class MedSAM2Annotator(BaseAnnotator):
                     'medsam2_remote_inference_default.py',
                 )
             )
-        return self._get_remote().upload_inference_script(
-            local_runner,
-            'auto_annotater_medsam2_inference.py',
-        )
+        return remote.upload_inference_script(local_runner, os.path.basename(local_runner))
+
+    def _ensure_remote_model(self) -> str:
+        if self.ssh.remote_model_path:
+            return self.ssh.remote_model_path
+        if self._remote_model_path is not None:
+            return self._remote_model_path
+        if not os.path.exists(self.model_path):
+            raise RuntimeError(
+                'MedSAM2 remote model is not configured. Set --remote-model-path or provide an existing --model-path.'
+            )
+        self._remote_model_path = self._get_remote().upload_file(self.model_path, os.path.basename(self.model_path))
+        return self._remote_model_path
 
     def _run_prediction(
         self,
@@ -94,10 +106,10 @@ class MedSAM2Annotator(BaseAnnotator):
         output_path = remote_image_path.rsplit('.', 1)[0] + '_result.json'
         bbox_value = bbox or (0.5, 0.5, 1.0, 1.0)
         bbox_argument = ','.join(str(value) for value in bbox_value)
-        runner = self._ensure_remote_runner()
         remote = self._get_remote()
+        model = self._ensure_remote_model()
+        runner = self._ensure_remote_runner()
         base_model = remote.remote_path('medsam_vit_b.pth')
-        model = self.ssh.remote_model_path
         command = [
             self.ssh.remote_python,
             runner,
@@ -112,7 +124,10 @@ class MedSAM2Annotator(BaseAnnotator):
             '--bbox',
             bbox_argument,
         ]
-        return f'cd {shlex.quote(remote.remote_work_dir)} && {shlex.join(command)}'
+        return (
+            "export MSYS_NO_PATHCONV=1 MSYS2_ARG_CONV_EXCL='*'; "
+            f'cd {shlex.quote(remote.remote_work_dir)} && {shlex.join(command)}'
+        )
 
     def _fetch_result(self, remote_image_path: str) -> str:
         result_name = os.path.basename(remote_image_path).rsplit('.', 1)[0] + '_result.json'

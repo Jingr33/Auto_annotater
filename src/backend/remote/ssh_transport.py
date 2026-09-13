@@ -24,7 +24,17 @@ class SSHTransport:
 
     def put(self, local_path: str, remote_path: str) -> None:
         with self._client.open_sftp() as sftp:
+            self._ensure_remote_dir(sftp, os.path.dirname(remote_path))
             sftp.put(local_path, remote_path)
+
+    def _ensure_remote_dir(self, sftp: paramiko.SFTPClient, remote_dir: str) -> None:
+        if not remote_dir:
+            return
+        try:
+            sftp.stat(remote_dir)
+        except FileNotFoundError:
+            self._ensure_remote_dir(sftp, os.path.dirname(remote_dir))
+            sftp.mkdir(remote_dir)
 
     def get(self, remote_path: str, local_path: str) -> None:
         os.makedirs(os.path.dirname(local_path), exist_ok=True)
@@ -32,12 +42,15 @@ class SSHTransport:
             sftp.get(remote_path, local_path)
 
     def run(self, command: str) -> str:
-        _, stdout, stderr = self._client.exec_command(command)
+        _, stdout, stderr = self._client.exec_command(command, environment={'MSYS_NO_PATHCONV': '1'})
         exit_code = stdout.channel.recv_exit_status()
         output = stdout.read().decode('utf-8')
         error = stderr.read().decode('utf-8')
         if exit_code != 0:
-            raise RuntimeError(f'Remote command failed with exit code {exit_code}: {error.strip()}')
+            details = '\n'.join(part for part in (error.strip(), output.strip()) if part)
+            if not details:
+                details = 'No output was returned by the remote command.'
+            raise RuntimeError(f'Remote command failed with exit code {exit_code}: {details}\nCommand: {command}')
         return output
 
     def close(self) -> None:
